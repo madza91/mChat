@@ -35,6 +35,8 @@ while (true) {
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
 		$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected'))); //prepare json data
 		send_message($response); //notify all users about new connection
+
+		echo "Connected new user\r\n";
 		
 		//make room for new socket
 		$found_socket = array_search($socket, $changed);
@@ -49,12 +51,16 @@ while (true) {
 		{
 			$received_text = unmask($buf); //unmask data
 			$tst_msg = json_decode($received_text); //json decode 
-			$user_name = $tst_msg->name; //sender name
-			$user_message = $tst_msg->message; //message text
-			$user_color = $tst_msg->color; //color
+			if ($tst_msg) {
+				$user_name = $tst_msg->name; //sender name
+				$user_message = $tst_msg->message; //message text
+				$user_color = $tst_msg->color; //color
+				
+				echo $tst_msg->name . " sends a message.\r";
+				//prepare data to be sent to client
+				$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
+			}
 			
-			//prepare data to be sent to client
-			$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
 			send_message($response_text); //send data
 			break 2; //exist this loop
 		}
