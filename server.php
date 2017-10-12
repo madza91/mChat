@@ -6,7 +6,7 @@ $length = 5000;
 
 //Create TCP/IP stream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-//reuseable port
+//reusable port
 socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
 
 //bind socket to specified host
@@ -20,7 +20,7 @@ $clients = array($socket);
 
 //start endless loop, so that our script doesn't stop
 while (true) {
-	//manage multipal connections
+	//manage multiple connections
 	$changed = $clients;
 	//returns the socket resources in $changed array
 	socket_select($changed, $null, $null, 0, 10);
@@ -31,7 +31,7 @@ while (true) {
 		$clients[] = $socket_new; //add socket to client array
 		
 		$header = socket_read($socket_new, $length); //read data sent by the socket
-		perform_handshaking($header, $socket_new, $host, $port); //perform websocket handshake
+		perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
 		
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
 		$response = mask(array('type'=>'system', 'message'=>$ip.' connected')); //prepare json data
@@ -45,9 +45,9 @@ while (true) {
 	}
 	
 	//loop through all connected sockets
-	foreach ($changed as $changed_socket) {	
+	foreach ($changed as $changed_socket) {
 		
-		//check for any incomming data
+		//check for any incoming data
 		while(socket_recv($changed_socket, $buf, $length, 0) >= 1)
 		{
 			$received_text = unmask($buf); //unmask data
@@ -60,7 +60,7 @@ while (true) {
 				debug($tst_msg->name . ' sends a message.');
 				//prepare data to be sent to client
 				$response_text = mask(array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color));
-        send_message($response_text); //send data
+                send_message($response_text); //send data
 			}
 			break 2; //exist this loop
 		}
@@ -72,7 +72,7 @@ while (true) {
 			socket_getpeername($changed_socket, $ip);
 			unset($clients[$found_socket]);
 
-      debug('Disconnected user');
+            debug('Disconnected user');
 			
 			//notify all users about disconnected connection
 			$response = mask(array('type'=>'system', 'message'=>$ip.' disconnected'));
@@ -133,10 +133,10 @@ function mask($text)
 }
 
 //handshake new client.
-function perform_handshaking($receved_header,$client_conn, $host, $port)
+function perform_handshaking($received_header,$client_conn, $host, $port)
 {
 	$headers = array();
-	$lines = preg_split("/\r\n/", $receved_header);
+	$lines = preg_split("/\r\n/", $received_header);
 	foreach($lines as $line)
 	{
 		$line = chop($line);
