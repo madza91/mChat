@@ -58,7 +58,7 @@ while (true) {
 				
 				debug($tst_msg->name . ' sends a message.');
 				//prepare data to be sent to client
-				$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
+				$response_text = mask(json_encode(array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
 			}
 			
 			send_message($response_text); //send data

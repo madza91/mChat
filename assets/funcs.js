@@ -4,11 +4,6 @@ websocket = new WebSocket(wsUri);
 
 var myColour = randomColor();
 
-// connection is open
-websocket.onopen = function (ev) {
-    writeMessage('system_msg', 'Connected!'); //notify user
-}
-
 $('#send-btn').click(function () { //use clicks message send button
     var mymessage = $('#message').val(); //get message text
     var myname = $('#name').val(); //get user name
@@ -35,31 +30,33 @@ $('#send-btn').click(function () { //use clicks message send button
     websocket.send(JSON.stringify(msg));
 });
 
-//#### Message received from server?
+// Connection is open
+websocket.onopen = function (ev) {
+    writeMessage('system_msg', 'Connected!'); //notify user
+}
+
+// Message received from server?
 websocket.onmessage = function (ev) {
     var msg = JSON.parse(ev.data); //PHP sends Json data
-    var type = msg.type; //message type
-    var umsg = msg.message; //message text
-    var uname = msg.name; //user name
-    var ucolor = msg.color; //color
 
-    if (type == 'usermsg') {
-        $('#message_box').append("<div><span class=\"user_name\" style=\"color:#" + ucolor + "\">" + uname + "</span> : <span class=\"user_message\">" + umsg + "</span></div>");
+    if (type == 'user') {
+        writeMessage('chat_msg', msg);
     }
     if (type == 'system') {
         writeMessage('system_msg', umsg);
     }
 
-    $('#message').val(''); //reset text
-
     var objDiv = document.getElementById("message_box");
     objDiv.scrollTop = objDiv.scrollHeight;
 };
 
+// Error
 websocket.onerror = function (ev) {
     writeMessage('system_error', 'Error Occured - ' + ev.data);
 
 };
+
+// Closed connection
 websocket.onclose = function (ev) {
     writeMessage('system_msg', 'Connection Closed');
 };
@@ -84,5 +81,12 @@ function writeMessage(type, message) {
         case 'system_error':
             $('#message_box').append('<div class="system_error">' + message + '</div>');
             break;
+        case 'chat_msg':
+            var umsg = message.message; //message text
+            var uname = message.name; //user name
+            var ucolor = message.color; //color
+
+            $('#message_box').append('<div><span class="user_name" style="color:#' + ucolor + '">' + uname + '</span> : <span class="user_message">' + umsg + '</span></div>');
+            $('#message').val(''); //reset text
     }
 }
