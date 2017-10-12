@@ -13,9 +13,7 @@
     <div class="message_box" id="message_box"></div>
     <div class="panel">
         <input type="text" name="name" id="name" placeholder="Your Name" maxlength="15"/>
-
-        <input type="text" name="message" id="message" placeholder="Message" maxlength="80"
-               onkeydown="onEnter()"/>
+        <input type="text" name="message" id="message" placeholder="Message" maxlength="80" onkeydown="onEnter()"/>
     </div>
     <button id="send-btn" class=button>Send</button>
 </div>
