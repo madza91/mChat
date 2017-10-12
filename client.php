@@ -15,7 +15,7 @@
         <input type="text" name="name" id="name" placeholder="Your Name" maxlength="15"/>
         <input type="text" name="message" id="message" placeholder="Message" maxlength="80" onkeydown="onEnter()"/>
     </div>
-    <button id="send-btn" class=button>Send</button>
+    <button id="send-btn" onclick="sendMessage()" class=button>Send</button>
 </div>
 
 </body>

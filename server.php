@@ -2,6 +2,7 @@
 $host = 'localhost'; //host
 $port = '9000'; //port
 $null = NULL; //null var
+$length = 5000;
 
 //Create TCP/IP sream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
@@ -9,7 +10,7 @@ $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
 
 //bind socket to specified host
-socket_bind($socket, 0, $port);
+socket_bind($socket, '0.0.0.0', $port);
 
 //listen to port
 socket_listen($socket);
@@ -29,7 +30,7 @@ while (true) {
 		$socket_new = socket_accept($socket); //accpet new socket
 		$clients[] = $socket_new; //add socket to client array
 		
-		$header = socket_read($socket_new, 1024); //read data sent by the socket
+		$header = socket_read($socket_new, $length); //read data sent by the socket
 		perform_handshaking($header, $socket_new, $host, $port); //perform websocket handshake
 		
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
@@ -47,7 +48,7 @@ while (true) {
 	foreach ($changed as $changed_socket) {	
 		
 		//check for any incomming data
-		while(socket_recv($changed_socket, $buf, 1024, 0) >= 1)
+		while(socket_recv($changed_socket, $buf, $length, 0) >= 1)
 		{
 			$received_text = unmask($buf); //unmask data
 			$tst_msg = json_decode($received_text); //json decode 

@@ -4,32 +4,6 @@ websocket = new WebSocket(wsUri);
 
 var myColour = randomColor();
 
-$('#send-btn').click(function () { //use clicks message send button
-    var mymessage = $('#message').val(); //get message text
-    var myname = $('#name').val(); //get user name
-
-    if (myname == "") { //empty name?
-        alert("Enter your Name please!");
-        return;
-    }
-    if (mymessage == "") { //emtpy message?
-        alert("Enter Some message Please!");
-        return;
-    }
-    document.getElementById("name").style.visibility = "hidden";
-
-    var objDiv = document.getElementById("message_box");
-    objDiv.scrollTop = objDiv.scrollHeight;
-    //prepare json data
-    var msg = {
-        message: mymessage,
-        name: myname,
-        color: myColour
-    };
-    //convert and send data to server
-    websocket.send(JSON.stringify(msg));
-});
-
 // Connection is open
 websocket.onopen = function (ev) {
     writeMessage('system_msg', 'Connected!'); //notify user
@@ -38,12 +12,13 @@ websocket.onopen = function (ev) {
 // Message received from server?
 websocket.onmessage = function (ev) {
     var msg = JSON.parse(ev.data); //PHP sends Json data
+    var type = msg.type;
 
     if (type == 'user') {
         writeMessage('chat_msg', msg);
     }
     if (type == 'system') {
-        writeMessage('system_msg', umsg);
+        writeMessage('system_msg', msg.message);
     }
 
     var objDiv = document.getElementById("message_box");
@@ -69,8 +44,34 @@ function randomColor() {
 
 function onEnter() {
     if (event.keyCode == 13) {
-        document.getElementById('send-btn').click();
+        sendMessage();
     }
+}
+
+function sendMessage() {
+    var mymessage = $('#message').val(); //get message text
+    var myname = $('#name').val(); //get user name
+
+    if (myname == "") { //empty name?
+        alert("Enter your Name please!");
+        return;
+    }
+    if (mymessage == "") { //emtpy message?
+        alert("Enter Some message Please!");
+        return;
+    }
+    document.getElementById("name").style.visibility = "hidden";
+
+    var objDiv = document.getElementById("message_box");
+    objDiv.scrollTop = objDiv.scrollHeight;
+    //prepare json data
+    var msg = {
+        message: mymessage,
+        name: myname,
+        color: myColour
+    };
+    //convert and send data to server
+    websocket.send(JSON.stringify(msg));
 }
 
 function writeMessage(type, message) {
