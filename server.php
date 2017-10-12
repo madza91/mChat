@@ -36,8 +36,8 @@ while (true) {
 		$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected'))); //prepare json data
 		send_message($response); //notify all users about new connection
 
-		echo "Connected new user\r\n";
-		
+		debug('Connected new user');
+
 		//make room for new socket
 		$found_socket = array_search($socket, $changed);
 		unset($changed[$found_socket]);
@@ -56,7 +56,7 @@ while (true) {
 				$user_message = $tst_msg->message; //message text
 				$user_color = $tst_msg->color; //color
 				
-				echo $tst_msg->name . " sends a message.\r";
+				debug($tst_msg->name . ' sends a message.');
 				//prepare data to be sent to client
 				$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
 			}
@@ -153,4 +153,8 @@ function perform_handshaking($receved_header,$client_conn, $host, $port)
 	"WebSocket-Location: ws://$host:$port/demo/server.php\r\n".
 	"Sec-WebSocket-Accept:$secAccept\r\n\r\n";
 	socket_write($client_conn,$upgrade,strlen($upgrade));
+}
+
+function debug($word) {
+  echo $word . "\r\n";
 }
