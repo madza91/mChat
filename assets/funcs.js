@@ -2,10 +2,13 @@
 var wsUri = "ws://localhost:9000/demo/server.php";
 websocket = new WebSocket(wsUri);
 
+var isConnected = false;
 var myColour = randomColor();
 
 // Connection is open
 websocket.onopen = function (ev) {
+    elementsDisable(false);
+    isConnected = true;
     writeMessage('system_msg', 'Connected!'); //notify user
 }
 
@@ -28,11 +31,11 @@ websocket.onmessage = function (ev) {
 // Error
 websocket.onerror = function (ev) {
     writeMessage('system_error', 'Error Occured - ' + ev.data);
-
 };
 
 // Closed connection
 websocket.onclose = function (ev) {
+    elementsDisable(true);
     writeMessage('system_msg', 'Connection Closed');
 };
 
@@ -90,4 +93,10 @@ function writeMessage(type, message) {
             $('#message_box').append('<div><span class="user_name" style="color:#' + ucolor + '">' + uname + '</span> : <span class="user_message">' + umsg + '</span></div>');
             $('#message').val(''); //reset text
     }
+}
+
+function elementsDisable(disabled) {
+    $("#name").prop('disabled', disabled);
+    $("#message").prop('disabled', disabled);
+    $("#send-btn").prop('disabled', disabled);
 }
