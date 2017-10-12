@@ -4,7 +4,7 @@ $port = '9000'; //port
 $null = NULL; //null var
 $length = 5000;
 
-//Create TCP/IP sream socket
+//Create TCP/IP stream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 //reuseable port
 socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
@@ -15,7 +15,7 @@ socket_bind($socket, '0.0.0.0', $port);
 //listen to port
 socket_listen($socket);
 
-//create & add listning socket to the list
+//create & add listening socket to the list
 $clients = array($socket);
 
 //start endless loop, so that our script doesn't stop
@@ -27,14 +27,14 @@ while (true) {
 	
 	//check for new socket
 	if (in_array($socket, $changed)) {
-		$socket_new = socket_accept($socket); //accpet new socket
+		$socket_new = socket_accept($socket); //accept new socket
 		$clients[] = $socket_new; //add socket to client array
 		
 		$header = socket_read($socket_new, $length); //read data sent by the socket
 		perform_handshaking($header, $socket_new, $host, $port); //perform websocket handshake
 		
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
-		$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected'))); //prepare json data
+		$response = mask(array('type'=>'system', 'message'=>$ip.' connected')); //prepare json data
 		send_message($response); //notify all users about new connection
 
 		debug('Connected new user');
@@ -59,10 +59,9 @@ while (true) {
 				
 				debug($tst_msg->name . ' sends a message.');
 				//prepare data to be sent to client
-				$response_text = mask(json_encode(array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
+				$response_text = mask(array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color));
+        send_message($response_text); //send data
 			}
-			
-			send_message($response_text); //send data
 			break 2; //exist this loop
 		}
 		
@@ -72,9 +71,11 @@ while (true) {
 			$found_socket = array_search($changed_socket, $clients);
 			socket_getpeername($changed_socket, $ip);
 			unset($clients[$found_socket]);
+
+      debug('Disconnected user');
 			
 			//notify all users about disconnected connection
-			$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' disconnected')));
+			$response = mask(array('type'=>'system', 'message'=>$ip.' disconnected'));
 			send_message($response);
 		}
 	}
@@ -118,8 +119,9 @@ function unmask($text) {
 //Encode message for transfer to client.
 function mask($text)
 {
-	$b1 = 0x80 | (0x1 & 0x0f);
+  $text = json_encode($text);
 	$length = strlen($text);
+  $b1 = 0x80 | (0x1 & 0x0f);
 	
 	if($length <= 125)
 		$header = pack('CC', $b1, $length);
