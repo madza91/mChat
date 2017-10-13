@@ -75,11 +75,10 @@ while (true) {
 
                     if (substr($user_message, 0, 1) === '/') {
                         //command
-//                        commands($user_message);
-                        $response_text = array('type'=>'system', 'message'=> 'Unknown command');
+                        $response_text = commands($user_message);
                         send_message($response_text, $changed_socket); //send data
                     } else {
-                        debug($tst_msg->name . ' sends a message.');
+                        debug($user_name . ' sends a message.');
                         //prepare data to be sent to client
                         $response_text = array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color);
                         send_message($response_text); //send data
@@ -193,20 +192,38 @@ function perform_handshaking($received_header,$client_conn, $host, $port)
 
 function commands($message) {
 
+    $return = [
+        'type' => 'system',
+        'message' => 'Unknown command'
+    ];
+
     if (substr($message, 0, 1) == '/') {
 
-        $command = ltrim($message, '/');
+        $message = ltrim($message, '/');
 
-        $exploded = explode(' ', $command);
+        $exploded = explode(' ', $message);
 
-        if ($exploded['0'] == 'nick') {
-            echo 'change nick to ' . $exploded[1];
+        if (!isset($exploded['0']))
+            return false;
+
+        $command = $exploded['0'];
+
+        switch ($command) {
+            case 'nick':
+                if (isset($exploded[1])) {
+                    $return = [
+                        'type' => 'command',
+                        'command' => 'nick',
+                        'nick' => trim($exploded[1])
+                    ];
+                }
+
+                break;
         }
-
 
     }
 
-    return false;
+    return $return;
 }
 
 function debug($word) {

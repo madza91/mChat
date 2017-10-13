@@ -13,7 +13,8 @@
         cacheDOM: function () {
             this.$chatHistory = $('.chat-history');
             this.$peopleList = $('.list');
-            this.$button = $('button');
+            this.$button = $('#btn_send');
+            this.$buttonConnect = $('#btn_send');
             this.$textarea = $('#message-to-send');
             this.$chatHistoryList = this.$chatHistory.find('ul');
         },
@@ -43,8 +44,12 @@
             }
 
         },
-        setNick: function () {
-            this.userNick = myNick = 'guest' + this.getRandomInt(1000, 5000);
+        setNick: function (newNick) {
+            if (typeof newNick === 'undefined') {
+                this.userNick = myNick = 'guest' + this.getRandomInt(1000, 5000);
+            } else {
+                this.userNick = newNick;
+            }
             $('.chat-with').html(this.userNick);
         },
         getNick: function () {
@@ -100,7 +105,7 @@
         },
         disableChat: function (disabled) {
             $("#message-to-send").prop('disabled', disabled);
-            $("button").prop('disabled', disabled);
+            $("#btn_send").prop('disabled', disabled);
         },
         scrollToBottom: function () {
             this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
@@ -120,7 +125,7 @@
     chat.init();
 
     var myColour = chat.randomColor();
-
+    chat.disableChat(true);
     //create a new WebSocket object.
     var wsUri = "ws://localhost:9000/demo/server.php";
     websocket = new WebSocket(wsUri);
@@ -171,6 +176,12 @@
                     }
                 });
                 searchFilter.init();
+                break;
+            case 'command':
+                if (msg.command === 'nick') {
+                    chat.setNick(msg.nick);
+                    chat.writeMessage('system_msg', 'Successfully changed nick to ' + msg.nick);
+                }
         }
 
     };
@@ -195,7 +206,7 @@
         var msg = {
             type: 'message',
             message: myMessage,
-            name: myNick,
+            name: chat.getNick(),
             color: myColour
         };
         //convert and send data to server
