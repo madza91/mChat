@@ -163,7 +163,6 @@
                 searchFilter.init();
                 break;
             case 'users_list':
-                console.log(msg.users);
                 jQuery.each(msg.users, function(index, item) {
                     if (index > 0) {
                         chat.addUser(this);
@@ -205,7 +204,6 @@
     options: { valueNames: ['name'] },
     init: function() {
       var userList = new List('people-list', this.options);
-      console.log(userList.items);
       var noItems = $('<li id="no-items-found">No items found</li>');
       
       userList.on('updated', function(list) {
