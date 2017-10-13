@@ -17,6 +17,7 @@ socket_listen($socket);
 
 //create & add listening socket to the list
 $clients = array($socket);
+$users = array('0');
 
 //start endless loop, so that our script doesn't stop
 while (true) {
@@ -34,8 +35,11 @@ while (true) {
 		perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
 		
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
-		$response = mask(array('type'=>'system', 'message'=>$ip.' connected')); //prepare json data
-		send_message($response); //notify all users about new connection
+		$response = array('type'=>'identify'); //prepare json data
+		send_message($response, $socket_new); //force client to identify himself
+
+        $response_text = array('type' => 'users_list', 'users' => $users);
+        send_message($response_text, $socket_new); //send user list
 
 		debug('Connected new user');
 
@@ -53,14 +57,35 @@ while (true) {
 			$received_text = unmask($buf); //unmask data
 			$tst_msg = json_decode($received_text); //json decode 
 			if ($tst_msg) {
-				$user_name = $tst_msg->name; //sender name
-				$user_message = $tst_msg->message; //message text
-				$user_color = $tst_msg->color; //color
-				
-				debug($tst_msg->name . ' sends a message.');
-				//prepare data to be sent to client
-				$response_text = mask(array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color));
-                send_message($response_text); //send data
+
+			    if ($tst_msg->type == 'identify') {
+
+			        if (in_array($tst_msg->name, $users)) {
+                        $users[] = $tst_msg->name;
+                        send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
+                    } else {
+                        $users[] = $tst_msg->name;
+                        send_message(['type' => 'join', 'nick' => $tst_msg->name]); //send join data
+                    }
+
+                } else if ($tst_msg->type == 'message') {
+                    $user_name = $tst_msg->name; //sender name
+                    $user_message = $tst_msg->message; //message text
+                    $user_color = $tst_msg->color; //color
+
+                    if (substr($user_message, 0, 1) === '/') {
+                        //command
+//                        commands($user_message);
+                        $response_text = array('type'=>'system', 'message'=> 'Unknown command');
+                        send_message($response_text, $changed_socket); //send data
+                    } else {
+                        debug($tst_msg->name . ' sends a message.');
+                        //prepare data to be sent to client
+                        $response_text = array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color);
+                        send_message($response_text); //send data
+                    }
+
+                }
 			}
 			break 2; //exist this loop
 		}
@@ -70,26 +95,34 @@ while (true) {
 			// remove client for $clients array
 			$found_socket = array_search($changed_socket, $clients);
 			socket_getpeername($changed_socket, $ip);
-			unset($clients[$found_socket]);
 
             debug('Disconnected user');
 			
 			//notify all users about disconnected connection
-			$response = mask(array('type'=>'system', 'message'=>$ip.' disconnected'));
-			send_message($response);
+			send_message(['type'=>'leave', 'nick'=> $users[$found_socket]]);
+
+            unset($clients[$found_socket]);
+            unset($users[$found_socket]);
 		}
 	}
 }
 // close the listening socket
 socket_close($socket);
 
-function send_message($msg)
+function send_message($msg, $sendTo = false)
 {
 	global $clients;
-	foreach($clients as $changed_socket)
-	{
-		@socket_write($changed_socket,$msg,strlen($msg));
-	}
+    $maskedMsg = mask($msg);
+    $length = strlen($maskedMsg);
+
+	if ($sendTo) {
+        @socket_write($sendTo, $maskedMsg, $length);
+    } else { //send to all
+        foreach($clients as $changed_socket)
+        {
+            @socket_write($changed_socket, $maskedMsg, $length);
+        }
+    }
 	return true;
 }
 
@@ -156,6 +189,24 @@ function perform_handshaking($received_header,$client_conn, $host, $port)
 	"WebSocket-Location: ws://$host:$port/demo/server.php\r\n".
 	"Sec-WebSocket-Accept:$secAccept\r\n\r\n";
 	socket_write($client_conn,$upgrade,strlen($upgrade));
+}
+
+function commands($message) {
+
+    if (substr($message, 0, 1) == '/') {
+
+        $command = ltrim($message, '/');
+
+        $exploded = explode(' ', $command);
+
+        if ($exploded['0'] == 'nick') {
+            echo 'change nick to ' . $exploded[1];
+        }
+
+
+    }
+
+    return false;
 }
 
 function debug($word) {
