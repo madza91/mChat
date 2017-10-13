@@ -3,6 +3,7 @@ $host = 'localhost'; //host
 $port = '9000'; //port
 $null = NULL; //null var
 $length = 5000;
+$botName = 'assistent';
 
 //Create TCP/IP stream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
@@ -17,7 +18,7 @@ socket_listen($socket);
 
 //create & add listening socket to the list
 $clients = array($socket);
-$users = array('0');
+$users = array($botName);
 
 //start endless loop, so that our script doesn't stop
 while (true) {
@@ -35,11 +36,8 @@ while (true) {
 		perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
 		
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
-		$response = array('type'=>'identify'); //prepare json data
-		send_message($response, $socket_new); //force client to identify himself
-
-        $response_text = array('type' => 'users_list', 'users' => $users);
-        send_message($response_text, $socket_new); //send user list
+		send_message(['type'=>'identify'], $socket_new); //force client to identify himself
+        send_message(['type' => 'users_list', 'users' => $users], $socket_new); //send user list
 
 		debug('Connected new user');
 
@@ -73,14 +71,15 @@ while (true) {
                     $user_message = $tst_msg->message; //message text
                     $user_color = $tst_msg->color; //color
 
-                    if (substr($user_message, 0, 1) === '/') {
+                    $firstChar = substr($user_message, 0, 1);
+                    if (in_array($firstChar, ['@', '/'])) {
                         //command
-                        $response_text = commands($user_message);
-                        send_message($response_text, $changed_socket); //send data
+                        $cmd = commands($changed_socket, $user_name, $user_message);
+                        send_message($cmd['return'], $cmd['to']); //send data
                     } else {
                         debug($user_name . ' sends a message.');
                         //prepare data to be sent to client
-                        $response_text = array('type'=>'user', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color);
+                        $response_text = array('type'=>'user', 'nick'=>$user_name, 'message'=>$user_message, 'color'=>$user_color);
                         send_message($response_text); //send data
                     }
 
@@ -93,7 +92,6 @@ while (true) {
 		if ($buf === false) { // check disconnected client
 			// remove client for $clients array
 			$found_socket = array_search($changed_socket, $clients);
-			socket_getpeername($changed_socket, $ip);
 
             debug('Disconnected user');
 			
@@ -110,6 +108,9 @@ socket_close($socket);
 
 function send_message($msg, $sendTo = false)
 {
+    if (!$msg) {
+        return false;
+    }
 	global $clients;
     $maskedMsg = mask($msg);
     $length = strlen($maskedMsg);
@@ -190,42 +191,164 @@ function perform_handshaking($received_header,$client_conn, $host, $port)
 	socket_write($client_conn,$upgrade,strlen($upgrade));
 }
 
-function commands($message) {
+function commands($client, $user, $message) {
 
     $return = [
         'type' => 'system',
         'message' => 'Unknown command'
     ];
+    $sendTo = false;
 
-    if (substr($message, 0, 1) == '/') {
+    global $clients, $users;
 
-        $message = ltrim($message, '/');
-
+    $firstChar = substr($message, 0, 1);
+    $message = ltrim($message, $firstChar);
+    if ($firstChar === '/') {
         $exploded = explode(' ', $message);
 
-        if (!isset($exploded['0']))
-            return false;
+        $availableCommands = ['nick', 'me', 'hello', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help'];
+        $command = getByKey($exploded, 0);
+        if ($command || in_array($command, $availableCommands)) {
+            switch ($command) {
+                case 'nick':
+                    $tmpNick = getByKey($exploded, 1);
+                    if ($tmpNick) {
 
-        $command = $exploded['0'];
+                        if (!in_array($tmpNick, $users)) {
+                            $return = [
+                                'type' => 'command',
+                                'command' => 'nick',
+                                'oldNick' => $user,
+                                'newNick' => $tmpNick
+                            ];
 
-        switch ($command) {
-            case 'nick':
-                if (isset($exploded[1])) {
+                            $found = array_search($user, $users);
+                            if ($found !== false) {
+                                $users[$found] = $tmpNick;
+                            }
+                        } elseif ($tmpNick === $user) {
+                            $return['message'] = 'Ooops! You are already ' . $user . ', right?';
+                        } else {
+                            $return['message'] = 'That nickname already exists. Choose your own!';
+                        }
+
+                    } else {
+                        $return['message'] = 'Incomplete command';
+                    }
+                    break;
+                case 'clear':
                     $return = [
                         'type' => 'command',
-                        'command' => 'nick',
-                        'nick' => trim($exploded[1])
+                        'command' => 'clear'
                     ];
-                }
+                    $sendTo = $client;
+                    break;
+                case 'disconnect':
+                case 'exit':
+                case 'quit':
+                    disconnectClient($client);
+                    $return = [
+                        'type' => 'leave',
+                        'nick' => $user
+                    ];
+                    break;
+                case 'help':
+                    $return = prepareMessage('Really? LoL');
+                    $return['type'] = 'private';
+                    $sendTo = $client;
+                    break;
+                case 'whois':
+                    $tmpNick = getByKey($exploded, 1);
+                    if ($tmpNick) {
+                        if (in_array($tmpNick, $users)){
+                            if ($user == $tmpNick) {
+                                $return = prepareMessage('You forgot who you are?');
+                            } else {
+                                $return = prepareMessage('You don\'t want to know who is he! Trust me.');
+                            }
+                        } else {
+                            $return = prepareMessage('That user even doesn\'t exists! lol');
+                        }
+                        $return['message'] = '@' . $user . ' ' . $return['message'];
+                        $return['type'] = 'private';
+                    } else {
+                        $return['message'] = 'Incomplete command';
+                    }
+                    $sendTo = $client;
+                    break;
+                case 'simulate':
+                    $tmpTotal = getByKey($exploded, 1, 1);
+                    $return = [
+                        'type' => 'command',
+                        'command' => 'simulate',
+                        'action' => 'add_user',
+                        'total' => $tmpTotal
+                    ];
+                    $sendTo = $client;
+                    break;
+                case 'me':
+                    $message = ltrim($message, 'me');
+                    $return = prepareMessage($user . $message, $user);
+                    $return['type'] = 'system';
+                    break;
+                case 'hello':
+                    $return = [
+                        'type' => 'command',
+                        'command' => 'noticeme',
+                        'nick' => $user
+                    ];
+            }
+        }
 
-                break;
+    } elseif ($firstChar === '@') {
+
+        $exploded = explode(' ', $message);
+        $tmpNick = getByKey($exploded, 0);
+        if ($tmpNick) {
+            $found_socket = array_search($tmpNick, $users);
+            $tmpSocket = $clients[$found_socket];
+
+            $return = [
+                'type' => 'private',
+                'message' => $firstChar . $message,
+                'nick' => $user
+            ];
+            $sendTo = $tmpSocket;
         }
 
     }
 
-    return $return;
+    return ['return' => $return, 'to' => $sendTo];
+}
+
+function prepareMessage($message, $user = false) {
+    global $botName;
+
+    $user = (!$user) ? $botName: $user;
+    return [
+        'type' => 'user',
+        'message' => $message,
+        'nick' => $user
+    ];
+}
+
+function disconnectClient($client) {
+    global $clients;
+    global $users;
+    $found_socket = array_search($client, $clients);
+    unset($clients[$found_socket]);
+    unset($users[$found_socket]);
+    socket_close($client);
+}
+
+function getByKey($array, $key, $default = false) {
+    return (isset($array[$key])) ? trim($array[$key]): $default;
 }
 
 function debug($word) {
   echo $word . "\r\n";
+}
+
+function getLngMessage($id) {
+
 }

@@ -1,9 +1,9 @@
 (function () {
 
     var chat = {
-        messageToSend: '',
-        messageFrom: '',
         userNick: '',
+        msgHistory: [],
+        msgHistoryIndex: 0,
         init: function () {
             this.cacheDOM();
             this.bindEvents();
@@ -14,7 +14,6 @@
             this.$chatHistory = $('.chat-history');
             this.$peopleList = $('.list');
             this.$button = $('#btn_send');
-            this.$buttonConnect = $('#btn_send');
             this.$textarea = $('#message-to-send');
             this.$chatHistoryList = this.$chatHistory.find('ul');
         },
@@ -22,38 +21,38 @@
             this.$button.on('click', this.addMessage.bind(this));
             this.$textarea.on('keyup', this.addMessageEnter.bind(this));
         },
-        render: function () {
+        render: function (from, message, visibility) {
             this.scrollToBottom();
-            if (this.messageToSend.trim() !== '') {
-
+            if (typeof message !== 'undefined') {
                 var template = '';
+                var cssClass = (visibility === 'public') ? 'my': 'private';
                 var context = {
-                    name: this.messageFrom,
-                    messageOutput: this.messageToSend,
-                    time: this.getCurrentTime()
+                    name: from,
+                    messageOutput: message,
+                    time: this.getCurrentTime(),
+                    type: cssClass
                 };
 
-                if (this.messageFrom === this.userNick) {
+                if (from === this.userNick) {
                     template = Handlebars.compile($("#message-template").html());
                 } else {
                     template = Handlebars.compile($("#message-response-template").html());
                 }
-
                 this.$chatHistoryList.append(template(context));
+
                 this.scrollToBottom();
             }
 
         },
         setNick: function (newNick) {
+            var oldNick = this.userNick;
             if (typeof newNick === 'undefined') {
-                this.userNick = myNick = 'guest' + this.getRandomInt(1000, 5000);
+                this.userNick = 'guest' + this.getRandomInt(1000, 5000);
             } else {
                 this.userNick = newNick;
             }
             $('.chat-with').html(this.userNick);
-        },
-        getNick: function () {
-            return this.userNick;
+            this.renameUser(oldNick, newNick);
         },
         addUser: function (user) {
             var templateOnlineUser = Handlebars.compile($("#people-list-template").html());
@@ -61,7 +60,31 @@
                 name: user,
                 status: 'online'
             };
-            this.$peopleList.append(templateOnlineUser(contextResponsePeople));
+            var item = $(templateOnlineUser(contextResponsePeople)).hide().fadeIn(300);
+            this.$peopleList.append(item);
+        },
+        removeUser: function(user) {
+            var tmpElement = $('.people-list ul li:contains("' + user + '")');
+            tmpElement.fadeOut(300, function () {
+                tmpElement.remove();
+            });
+        },
+        shakeUser: function(user) {
+            var tmpElement = $('.people-list ul li:contains("' + user + '")');
+            tmpElement.addClass('shakeit');
+            setTimeout(function(){
+                tmpElement.removeClass('shakeit');
+                }, 3000);
+        },
+        renameUser: function(user, newName) {
+            var templateOnlineUser = Handlebars.compile($("#people-list-template").html());
+            var contextResponsePeople = {
+                name: newName,
+                status: 'online'
+            };
+            var tmpElement = $('.people-list ul li:contains("' + user + '")');
+            $(templateOnlineUser(contextResponsePeople)).insertBefore(tmpElement);
+            tmpElement.remove();
         },
         addSystemMessage: function (msg) {
             var templateSystemMessage = Handlebars.compile($("#system-message-template").html());
@@ -72,9 +95,7 @@
             this.$chatHistoryList.append(templateSystemMessage(contextSystem));
         },
         addMessage: function () {
-            this.messageFrom = this.getNick();
-            this.messageToSend = this.$textarea.val();
-            this.render();
+            this.render(this.userNick, this.$textarea.val());
         },
         writeMessage: function (type, message) {
 
@@ -86,26 +107,50 @@
                     this.addSystemMessage(message);
                     break;
                 case 'chat_msg':
+                case 'private_msg':
+                    console.log(message);
+                    var uname = message.nick; //user name
                     var umsg = message.message; //message text
-                    var uname = message.name; //user name
-                    var ucolor = message.color; //color
-
-                    this.messageFrom = uname;
-                    this.messageToSend = umsg;
-                    this.render();
+                    var upvt = (type === 'private_msg') ? 'private': 'public';
+                    this.render(uname, umsg, upvt);
             }
 
         },
         addMessageEnter: function (event) {
             // enter was pressed
-            if (event.keyCode === 13) {
-                sendMessage(this.$textarea.val());
-                this.$textarea.val('');
+            switch (event.keyCode) {
+                case 13:
+                    sendMessage(this.$textarea.val());
+                    this.$textarea.val('');
+                    break;
+                case 38:
+                    this.$textarea.val(this.msgHistory[this.msgHistoryIndex]);
+                    if (this.msgHistoryIndex === 0) {
+                        this.msgHistoryIndex = this.msgHistory.length;
+                    }
+                    this.msgHistoryIndex--;
+                    break;
+                case 40:
+                    this.msgHistoryIndex++;
+                    if (this.msgHistoryIndex === (this.msgHistory.length)) {
+                        this.msgHistoryIndex = 0;
+                    }
+                    this.$textarea.val(this.msgHistory[this.msgHistoryIndex]);
+
+                    break;
             }
         },
         disableChat: function (disabled) {
-            $("#message-to-send").prop('disabled', disabled);
-            $("#btn_send").prop('disabled', disabled);
+            this.$peopleList.html('');
+            this.$textarea.prop('disabled', disabled);
+            this.$button.prop('disabled', disabled);
+            if (!disabled) {
+                this.$textarea.focus();
+            }
+        },
+        insertHistory: function (message) {
+            this.msgHistoryIndex = this.msgHistory.length;
+            this.msgHistory.push(message);
         },
         scrollToBottom: function () {
             this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
@@ -139,11 +184,14 @@
     websocket.onmessage = function (ev) {
         var msg = JSON.parse(ev.data); //PHP sends Json data
         var type = msg.type;
-        var myNick = chat.getNick();
+        var myNick = chat.userNick;
 
         switch (type) {
             case 'user':
                 chat.writeMessage('chat_msg', msg);
+                break;
+            case 'private':
+                chat.writeMessage('private_msg', msg);
                 break;
             case 'system':
                 chat.writeMessage('system_msg', msg.message);
@@ -165,22 +213,39 @@
                 }
                 break;
             case 'leave':
-                $('.people-list ul li:contains("' + msg.nick + '")').remove();
+                chat.removeUser(msg.nick);
                 chat.writeMessage('system_msg', msg.nick + ' disconnected.');
                 searchFilter.init();
                 break;
             case 'users_list':
                 jQuery.each(msg.users, function (index, item) {
-                    if (index > 0) {
-                        chat.addUser(this);
-                    }
+                    chat.addUser(this);
                 });
                 searchFilter.init();
                 break;
             case 'command':
                 if (msg.command === 'nick') {
-                    chat.setNick(msg.nick);
-                    chat.writeMessage('system_msg', 'Successfully changed nick to ' + msg.nick);
+                    if (msg.oldNick === myNick) {
+                        chat.setNick(msg.newNick);
+                        chat.writeMessage('system_msg', 'You successfully changed nick to ' + msg.newNick);
+                    } else {
+                        chat.renameUser(msg.oldNick, msg.newNick);
+                        chat.writeMessage('system_msg', msg.oldNick + ' changed nick to ' + msg.newNick);
+                    }
+
+                } else if (msg.command === 'clear') {
+                    chat.$chatHistoryList.html('');
+                    // $chatHistory.html('<ul></ul>');
+                } else if (msg.command === 'simulate') {
+
+                    if (msg.total) {
+                        for (i = 0; i < msg.total; i++) {
+                            chat.addUser('bot' + chat.getRandomInt());
+                        }
+                    }
+                    searchFilter.init();
+                } else if (msg.command === 'noticeme') {
+                    chat.shakeUser(msg.nick);
                 }
         }
 
@@ -202,11 +267,14 @@
             return;
         }
 
+        //store in message history
+        chat.insertHistory(myMessage);
+
         //prepare json data
         var msg = {
             type: 'message',
             message: myMessage,
-            name: chat.getNick(),
+            name: chat.userNick,
             color: myColour
         };
         //convert and send data to server
