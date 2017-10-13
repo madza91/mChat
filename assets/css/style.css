@@ -157,6 +157,9 @@ i {
   border-radius: 5px;
   resize: none;
 }
+.chat .chat-message textarea:disabled {
+    background: #efefef;
+}
 .chat .chat-message .fa-file-o, .chat .chat-message .fa-file-image-o {
   font-size: 16px;
   color: gray;
