@@ -59,7 +59,6 @@ while (true) {
 			    if ($tst_msg->type == 'identify') {
 
 			        if (in_array($tst_msg->name, $users)) {
-                        $users[] = $tst_msg->name;
                         send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
                     } else {
                         $users[] = $tst_msg->name;
@@ -69,7 +68,6 @@ while (true) {
                 } else if ($tst_msg->type == 'message') {
                     $user_name = $tst_msg->name; //sender name
                     $user_message = $tst_msg->message; //message text
-                    $user_color = $tst_msg->color; //color
 
                     $firstChar = substr($user_message, 0, 1);
                     if (in_array($firstChar, ['@', '/'])) {
@@ -79,8 +77,7 @@ while (true) {
                     } else {
                         debug($user_name . ' sends a message.');
                         //prepare data to be sent to client
-                        $response_text = array('type'=>'user', 'nick'=>$user_name, 'message'=>$user_message, 'color'=>$user_color);
-                        send_message($response_text); //send data
+                        send_message(['type'=>'user', 'nick'=>$user_name, 'message'=>$user_message]); //send data
                     }
 
                 }

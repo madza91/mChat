@@ -12,10 +12,10 @@
         },
         cacheDOM: function () {
             this.$chatHistory = $('.chat-history');
+            this.$chatHistoryList = this.$chatHistory.find('ul');
             this.$peopleList = $('.list');
             this.$button = $('#btn_send');
             this.$textarea = $('#message-to-send');
-            this.$chatHistoryList = this.$chatHistory.find('ul');
         },
         bindEvents: function () {
             this.$button.on('click', this.addMessage.bind(this));
@@ -87,12 +87,14 @@
             tmpElement.remove();
         },
         addSystemMessage: function (msg) {
+            this.scrollToBottom();
             var templateSystemMessage = Handlebars.compile($("#system-message-template").html());
             var contextSystem = {
                 message: msg,
                 time: this.getCurrentTime()
             };
             this.$chatHistoryList.append(templateSystemMessage(contextSystem));
+            this.scrollToBottom();
         },
         addMessage: function () {
             this.render(this.userNick, this.$textarea.val());
@@ -108,7 +110,6 @@
                     break;
                 case 'chat_msg':
                 case 'private_msg':
-                    console.log(message);
                     var uname = message.nick; //user name
                     var umsg = message.message; //message text
                     var upvt = (type === 'private_msg') ? 'private': 'public';
@@ -169,7 +170,14 @@
 
     chat.init();
 
-    var myColour = chat.randomColor();
+    var connection = {
+        wsUri: 'ws://localhost:9000/demo/server.php',
+        init: function () {
+
+        }
+
+    };
+
     chat.disableChat(true);
     //create a new WebSocket object.
     var wsUri = "ws://localhost:9000/demo/server.php";
@@ -274,8 +282,7 @@
         var msg = {
             type: 'message',
             message: myMessage,
-            name: chat.userNick,
-            color: myColour
+            name: chat.userNick
         };
         //convert and send data to server
         websocket.send(JSON.stringify(msg));
