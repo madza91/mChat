@@ -62,6 +62,14 @@
             };
             var item = $(templateOnlineUser(contextResponsePeople)).hide().fadeIn(300);
             this.$peopleList.append(item);
+
+            this.searchFilter();
+            if (user === this.userNick) {
+                chat.writeMessage('system_msg', 'Welcome ' + this.userNick);
+            } else {
+                chat.writeMessage('system_msg', user + ' joined.');
+            }
+
         },
         removeUser: function(user) {
             var tmpElement = $('.people-list ul li:contains("' + user + '")');
@@ -121,7 +129,7 @@
             // enter was pressed
             switch (event.keyCode) {
                 case 13:
-                    sendMessage(this.$textarea.val());
+                    connection.send('message', this.$textarea.val());
                     this.$textarea.val('');
                     break;
                 case 38:
@@ -159,139 +167,11 @@
         getCurrentTime: function () {
             return new Date().toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
         },
-        randomColor: function () {
-            var colours = ['007AFF', 'FF7000', '15E25F', 'CFC700', 'CF1100', 'CF00BE', 'F00'];
-            return colours[Math.floor(Math.random() * colours.length)];
-        },
         getRandomInt: function () {
             return Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
-        }
-    };
-
-    chat.init();
-
-    var connection = {
-        wsUri: 'ws://localhost:9000/demo/server.php',
-        init: function () {
-
-        }
-
-    };
-
-    chat.disableChat(true);
-    //create a new WebSocket object.
-    var wsUri = "ws://localhost:9000/demo/server.php";
-    websocket = new WebSocket(wsUri);
-
-    // Connection is open
-    websocket.onopen = function (ev) {
-        chat.disableChat(false);
-    };
-
-    // Message received from server?
-    websocket.onmessage = function (ev) {
-        var msg = JSON.parse(ev.data); //PHP sends Json data
-        var type = msg.type;
-        var myNick = chat.userNick;
-
-        switch (type) {
-            case 'user':
-                chat.writeMessage('chat_msg', msg);
-                break;
-            case 'private':
-                chat.writeMessage('private_msg', msg);
-                break;
-            case 'system':
-                chat.writeMessage('system_msg', msg.message);
-                break;
-            case 'identify':
-                var newMsg = {
-                    type: type,
-                    name: myNick
-                };
-                websocket.send(JSON.stringify(newMsg));
-                break;
-            case 'join':
-                chat.addUser(msg.nick);
-                searchFilter.init();
-                if (msg.nick === myNick) {
-                    chat.writeMessage('system_msg', 'Welcome ' + myNick);
-                } else {
-                    chat.writeMessage('system_msg', msg.nick + ' joined.');
-                }
-                break;
-            case 'leave':
-                chat.removeUser(msg.nick);
-                chat.writeMessage('system_msg', msg.nick + ' disconnected.');
-                searchFilter.init();
-                break;
-            case 'users_list':
-                jQuery.each(msg.users, function (index, item) {
-                    chat.addUser(this);
-                });
-                searchFilter.init();
-                break;
-            case 'command':
-                if (msg.command === 'nick') {
-                    if (msg.oldNick === myNick) {
-                        chat.setNick(msg.newNick);
-                        chat.writeMessage('system_msg', 'You successfully changed nick to ' + msg.newNick);
-                    } else {
-                        chat.renameUser(msg.oldNick, msg.newNick);
-                        chat.writeMessage('system_msg', msg.oldNick + ' changed nick to ' + msg.newNick);
-                    }
-
-                } else if (msg.command === 'clear') {
-                    chat.$chatHistoryList.html('');
-                    // $chatHistory.html('<ul></ul>');
-                } else if (msg.command === 'simulate') {
-
-                    if (msg.total) {
-                        for (i = 0; i < msg.total; i++) {
-                            chat.addUser('bot' + chat.getRandomInt());
-                        }
-                    }
-                    searchFilter.init();
-                } else if (msg.command === 'noticeme') {
-                    chat.shakeUser(msg.nick);
-                }
-        }
-
-    };
-
-    // Error
-    websocket.onerror = function (ev) {
-        chat.writeMessage('system_error', 'Error Occurred - ' + ev.data);
-    };
-
-    // Closed connection
-    websocket.onclose = function (ev) {
-        chat.disableChat(true);
-        chat.writeMessage('system_msg', 'Connection Closed');
-    };
-
-    function sendMessage(myMessage) {
-        if (typeof myMessage === 'undefined' || myMessage === '') {
-            return;
-        }
-
-        //store in message history
-        chat.insertHistory(myMessage);
-
-        //prepare json data
-        var msg = {
-            type: 'message',
-            message: myMessage,
-            name: chat.userNick
-        };
-        //convert and send data to server
-        websocket.send(JSON.stringify(msg));
-    }
-
-    var searchFilter = {
-        options: {valueNames: ['name']},
-        init: function () {
-            var userList = new List('people-list', this.options);
+        },
+        searchFilter: function () {
+            var userList = new List('people-list', {valueNames: ['name']});
             var noItems = $('<li id="no-items-found">No items found</li>');
 
             userList.on('updated', function (list) {
@@ -304,5 +184,120 @@
         }
     };
 
+    var connection = {
+        wsUri: 'ws://localhost:9000/demo/server.php',
+        init: function () {
+            this.open(this.wsUri);
+        },
+        open: function (url) {
+            websocket = new WebSocket(url);
+            websocket.onopen = function (ev) {
+                // Connection is open
+                connection.onOpen(ev);
+            };
+            websocket.onmessage = function (ev) {
+                // Message received from server
+                connection.onMessage(ev);
+            };
+            websocket.onerror = function (ev) {
+                // Connection error
+                connection.onError(ev);
+            };
+            websocket.onclose = function (ev) {
+                // Closed connection
+                connection.onClose(ev);
+            };
+        },
+        send: function (type, message) {
+            if (typeof message === 'undefined' || message === '') {
+                return;
+            }
+
+            //store in message history
+            chat.insertHistory(message);
+
+            type = (typeof type === 'undefined') ? 'message': type;
+
+            //prepare json data
+            var msg = {
+                type: type,
+                message: message,
+                name: chat.userNick
+            };
+            //convert and send data to server
+            websocket.send(JSON.stringify(msg));
+        },
+        onOpen: function (ev) {
+            chat.disableChat(false);
+        },
+        onMessage: function (ev) {
+            var msg = JSON.parse(ev.data); //PHP sends Json data
+            var type = msg.type;
+            var myNick = chat.userNick;
+
+            switch (type) {
+                case 'user':
+                    chat.writeMessage('chat_msg', msg);
+                    break;
+                case 'private':
+                    chat.writeMessage('private_msg', msg);
+                    break;
+                case 'system':
+                    chat.writeMessage('system_msg', msg.message);
+                    break;
+                case 'identify':
+                    connection.send('identify', true);
+                    break;
+                case 'join':
+                    chat.addUser(msg.nick);
+                    break;
+                case 'leave':
+                    chat.removeUser(msg.nick);
+                    chat.writeMessage('system_msg', msg.nick + ' disconnected.');
+                    this.searchFilter();
+                    break;
+                case 'users_list':
+                    jQuery.each(msg.users, function (index, item) {
+                        chat.addUser(this);
+                    });
+                    break;
+                case 'command':
+                    if (msg.command === 'nick') {
+                        if (msg.oldNick === myNick) {
+                            chat.setNick(msg.newNick);
+                            chat.writeMessage('system_msg', 'You successfully changed nick to ' + msg.newNick);
+                        } else {
+                            chat.renameUser(msg.oldNick, msg.newNick);
+                            chat.writeMessage('system_msg', msg.oldNick + ' changed nick to ' + msg.newNick);
+                        }
+
+                    } else if (msg.command === 'clear') {
+                        chat.$chatHistoryList.html('');
+                        // $chatHistory.html('<ul></ul>');
+                    } else if (msg.command === 'simulate') {
+
+                        if (msg.total) {
+                            for (i = 0; i < msg.total; i++) {
+                                chat.addUser('bot' + chat.getRandomInt());
+                            }
+                        }
+                        this.searchFilter();
+                    } else if (msg.command === 'noticeme') {
+                        chat.shakeUser(msg.nick);
+                    }
+            }
+        },
+        onError: function (ev) {
+            chat.writeMessage('system_error', 'Error Occurred - ' + ev.data);
+        },
+        onClose: function (ev) {
+            chat.disableChat(true);
+            chat.writeMessage('system_msg', 'Connection Closed');
+        }
+    };
+
+    chat.init();
+    chat.disableChat(true);
+    connection.init();
 
 })();
