@@ -1,19 +1,22 @@
 (function () {
 
+    var chatServer = 'localhost:9000';
+
     var chat = {
         userNick: '',
         msgHistory: [],
         msgHistoryIndex: 0,
+        totalUsers: 0,
         init: function () {
             this.cacheDOM();
             this.bindEvents();
-            this.render();
             this.setNick();
         },
         cacheDOM: function () {
             this.$chatHistory = $('.chat-history');
             this.$chatHistoryList = this.$chatHistory.find('ul');
             this.$peopleList = $('.list');
+            this.$totalUsers = $('#total_users');
             this.$button = $('#btn_send');
             this.$textarea = $('#message-to-send');
         },
@@ -39,10 +42,8 @@
                     template = Handlebars.compile($("#message-response-template").html());
                 }
                 this.$chatHistoryList.append(template(context));
-
                 this.scrollToBottom();
             }
-
         },
         setNick: function (newNick) {
             var oldNick = this.userNick;
@@ -54,28 +55,42 @@
             $('.chat-with').html(this.userNick);
             this.renameUser(oldNick, newNick);
         },
-        addUser: function (user) {
+        addUser: function (user, status, log) {
+            this.totalUsers++;
+            status = (typeof status === 'undefined' || status === false) ? 'online': status;
             var templateOnlineUser = Handlebars.compile($("#people-list-template").html());
             var contextResponsePeople = {
                 name: user,
-                status: 'online'
+                status: status
             };
             var item = $(templateOnlineUser(contextResponsePeople)).hide().fadeIn(300);
             this.$peopleList.append(item);
+            this.$totalUsers.html(this.totalUsers);
 
             this.searchFilter();
-            if (user === this.userNick) {
-                chat.writeMessage('system_msg', 'Welcome ' + this.userNick);
-            } else {
-                chat.writeMessage('system_msg', user + ' joined.');
+            if (log) {
+                if (user === this.userNick) {
+                    this.writeMessage('system', 'Welcome ' + this.userNick);
+                } else {
+                    this.writeMessage('system', user + ' joined.');
+                }
             }
 
         },
+        addBots: function (total) {
+            for (i = 0; i < total; i++) {
+                this.addUser('bot' + this.getRandomInt(), 'bot');
+            }
+        },
         removeUser: function(user) {
             var tmpElement = $('.people-list ul li:contains("' + user + '")');
+            this.totalUsers--;
             tmpElement.fadeOut(300, function () {
                 tmpElement.remove();
             });
+            this.$totalUsers.html(this.totalUsers);
+            chat.writeMessage('system', user + ' disconnected.');
+            this.searchFilter();
         },
         shakeUser: function(user) {
             var tmpElement = $('.people-list ul li:contains("' + user + '")');
@@ -84,21 +99,22 @@
                 tmpElement.removeClass('shakeit');
                 }, 3000);
         },
-        renameUser: function(user, newName) {
+        renameUser: function(user, newName, status) {
+            status = (typeof status === 'undefined') ? 'online': status;
             var templateOnlineUser = Handlebars.compile($("#people-list-template").html());
             var contextResponsePeople = {
                 name: newName,
-                status: 'online'
+                status: status
             };
             var tmpElement = $('.people-list ul li:contains("' + user + '")');
             $(templateOnlineUser(contextResponsePeople)).insertBefore(tmpElement);
             tmpElement.remove();
         },
-        addSystemMessage: function (msg) {
+        addSystemMessage: function (message) {
             this.scrollToBottom();
             var templateSystemMessage = Handlebars.compile($("#system-message-template").html());
             var contextSystem = {
-                message: msg,
+                message: message,
                 time: this.getCurrentTime()
             };
             this.$chatHistoryList.append(templateSystemMessage(contextSystem));
@@ -107,49 +123,42 @@
         addMessage: function () {
             this.render(this.userNick, this.$textarea.val());
         },
-        writeMessage: function (type, message) {
-
+        writeMessage: function (type, data) {
             switch (type) {
-                case 'system_msg':
-                    this.addSystemMessage(message);
+                case 'system':
+                    this.addSystemMessage(data);
                     break;
-                case 'system_error':
-                    this.addSystemMessage(message);
-                    break;
-                case 'chat_msg':
-                case 'private_msg':
-                    var uname = message.nick; //user name
-                    var umsg = message.message; //message text
-                    var upvt = (type === 'private_msg') ? 'private': 'public';
+                case 'user':
+                case 'private':
+                    var uname = data.nick; //user name
+                    var umsg = data.message; //message text
+                    var upvt = (type === 'private') ? 'private': 'public';
                     this.render(uname, umsg, upvt);
             }
-
         },
         addMessageEnter: function (event) {
-            // enter was pressed
             switch (event.keyCode) {
                 case 13:
                     connection.send('message', this.$textarea.val());
                     this.$textarea.val('');
                     break;
                 case 38:
-                    this.$textarea.val(this.msgHistory[this.msgHistoryIndex]);
-                    if (this.msgHistoryIndex === 0) {
-                        this.msgHistoryIndex = this.msgHistory.length;
+                    // up
+                    if (this.msgHistoryIndex > 0) {
+                        this.msgHistoryIndex--;
                     }
-                    this.msgHistoryIndex--;
+                    this.$textarea.val(this.msgHistory[this.msgHistoryIndex]);
                     break;
                 case 40:
-                    this.msgHistoryIndex++;
-                    if (this.msgHistoryIndex === (this.msgHistory.length)) {
-                        this.msgHistoryIndex = 0;
+                    // down
+                    if (this.msgHistoryIndex < this.msgHistory.length) {
+                        this.msgHistoryIndex++;
                     }
                     this.$textarea.val(this.msgHistory[this.msgHistoryIndex]);
-
                     break;
             }
         },
-        disableChat: function (disabled) {
+        disable: function (disabled) {
             this.$peopleList.html('');
             this.$textarea.prop('disabled', disabled);
             this.$button.prop('disabled', disabled);
@@ -157,9 +166,14 @@
                 this.$textarea.focus();
             }
         },
+        clear: function () {
+            this.$chatHistoryList.html('');
+        },
         insertHistory: function (message) {
-            this.msgHistoryIndex = this.msgHistory.length;
-            this.msgHistory.push(message);
+            if (typeof message !== 'boolean') {
+                this.msgHistory.push(message);
+                this.msgHistoryIndex = this.msgHistory.length;
+            }
         },
         scrollToBottom: function () {
             this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
@@ -185,9 +199,8 @@
     };
 
     var connection = {
-        wsUri: 'ws://localhost:9000/demo/server.php',
         init: function () {
-            this.open(this.wsUri);
+            this.open('ws://' + chatServer);
         },
         open: function (url) {
             websocket = new WebSocket(url);
@@ -228,7 +241,7 @@
             websocket.send(JSON.stringify(msg));
         },
         onOpen: function (ev) {
-            chat.disableChat(false);
+            chat.disable(false);
         },
         onMessage: function (ev) {
             var msg = JSON.parse(ev.data); //PHP sends Json data
@@ -237,67 +250,70 @@
 
             switch (type) {
                 case 'user':
-                    chat.writeMessage('chat_msg', msg);
-                    break;
                 case 'private':
-                    chat.writeMessage('private_msg', msg);
+                    chat.writeMessage(type, msg);
                     break;
                 case 'system':
-                    chat.writeMessage('system_msg', msg.message);
+                    chat.writeMessage(type, msg.message);
                     break;
                 case 'identify':
                     connection.send('identify', true);
                     break;
                 case 'join':
-                    chat.addUser(msg.nick);
+                    chat.addUser(msg.nick, false, true);
                     break;
                 case 'leave':
                     chat.removeUser(msg.nick);
-                    chat.writeMessage('system_msg', msg.nick + ' disconnected.');
-                    this.searchFilter();
                     break;
                 case 'users_list':
                     jQuery.each(msg.users, function (index, item) {
                         chat.addUser(this);
                     });
                     break;
+                case 'status':
+                    console.log(msg);
+                    chat.renameUser(msg.nick, msg.nick, msg.status);
+                    if (msg.message) {
+                        chat.writeMessage('system', msg.nick + ' is away. Reason: ' + msg.message);
+                    }
+                    break;
                 case 'command':
-                    if (msg.command === 'nick') {
-                        if (msg.oldNick === myNick) {
-                            chat.setNick(msg.newNick);
-                            chat.writeMessage('system_msg', 'You successfully changed nick to ' + msg.newNick);
-                        } else {
-                            chat.renameUser(msg.oldNick, msg.newNick);
-                            chat.writeMessage('system_msg', msg.oldNick + ' changed nick to ' + msg.newNick);
-                        }
-
-                    } else if (msg.command === 'clear') {
-                        chat.$chatHistoryList.html('');
-                        // $chatHistory.html('<ul></ul>');
-                    } else if (msg.command === 'simulate') {
-
-                        if (msg.total) {
-                            for (i = 0; i < msg.total; i++) {
-                                chat.addUser('bot' + chat.getRandomInt());
+                    switch (msg.command) {
+                        case 'nick':
+                            if (msg.oldNick === myNick) {
+                                chat.setNick(msg.newNick);
+                                chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
+                            } else {
+                                chat.renameUser(msg.oldNick, msg.newNick);
+                                chat.writeMessage('system', msg.oldNick + ' changed nick to ' + msg.newNick);
                             }
-                        }
-                        this.searchFilter();
-                    } else if (msg.command === 'noticeme') {
-                        chat.shakeUser(msg.nick);
+                            break;
+                        case 'clear':
+                            chat.clear();
+                            break;
+                        case 'simulate':
+                            if (msg.total) {
+                                chat.addBots(msg.total);
+                            }
+                            break;
+                        case 'noticeme':
+                            chat.shakeUser(msg.nick);
+                            break;
                     }
             }
         },
         onError: function (ev) {
-            chat.writeMessage('system_error', 'Error Occurred - ' + ev.data);
+            chat.writeMessage('system', 'Error Occurred - ' + ev.data);
         },
         onClose: function (ev) {
-            chat.disableChat(true);
-            chat.writeMessage('system_msg', 'Connection Closed');
-        }
+            chat.disable(true);
+            chat.writeMessage('system', 'Connection is closed');
+            $('.chat-num-messages').html('You are offline.');
+    }
     };
 
     chat.init();
-    chat.disableChat(true);
+    chat.disable(true);
     connection.init();
 
 })();

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Tiny Madza's chat</title>
+    <title>Madza's tiny chat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
     <link rel="stylesheet" href="assets/css/style.css">
@@ -27,7 +27,7 @@
 
             <div class="chat-about">
                 <div class="chat-with"></div>
-                <div class="chat-num-messages">Enjoy in Websocket chat!</div>
+                <div class="chat-num-messages">Welcome! There is <span id="total_users">0</span> users online</div>
             </div>
             <i class="fa fa-star"></i>
         </div> <!-- end chat-header -->
@@ -52,7 +52,7 @@
     <li class="clearfix">
         <div class="message-data align-right">
             <span class="message-data-time">{{time}}, Today</span> &nbsp; &nbsp;
-            <span class="message-data-name">{{name}}</span> <i class="fa fa-circle me"></i>
+            <span class="message-data-name">{{name}}</span> <i class="fa fa-circle online"></i>
         </div>
         <div class="message other-message float-right">
             {{messageOutput}}
@@ -78,7 +78,7 @@
         <div class="about">
             <div class="name">{{name}}</div>
             <div class="status">
-                <i class="fa fa-circle online"></i> {{status}}
+                <i class="fa fa-circle {{status}}"></i> {{status}}
             </div>
         </div>
     </li>

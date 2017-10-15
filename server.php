@@ -203,8 +203,8 @@ function commands($client, $user, $message) {
     if ($firstChar === '/') {
         $exploded = explode(' ', $message);
 
-        $availableCommands = ['nick', 'me', 'hello', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help'];
-        $command = getByKey($exploded, 0);
+        $availableCommands = ['nick', 'me', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help'];
+        $command = strtolower(getByKey($exploded, 0));
         if ($command || in_array($command, $availableCommands)) {
             switch ($command) {
                 case 'nick':
@@ -250,8 +250,8 @@ function commands($client, $user, $message) {
                     ];
                     break;
                 case 'help':
-                    $return = prepareMessage('Really? LoL');
-                    $return['type'] = 'private';
+                    $return = prepareMessage('Available commands: ' . implode(', ', $availableCommands));
+                    $return['type'] = 'system';
                     $sendTo = $client;
                     break;
                 case 'whois':
@@ -275,6 +275,7 @@ function commands($client, $user, $message) {
                     break;
                 case 'simulate':
                     $tmpTotal = getByKey($exploded, 1, 1);
+                    $tmpTotal = (is_numeric($tmpTotal)) ? $tmpTotal: 1;
                     $return = [
                         'type' => 'command',
                         'command' => 'simulate',
@@ -282,6 +283,16 @@ function commands($client, $user, $message) {
                         'total' => $tmpTotal
                     ];
                     $sendTo = $client;
+                    break;
+                case 'away':
+                    $message = substr($message, 5);
+                    $return = prepareMessage($message, $user);
+                    $return['type'] = 'status';
+                    if ($message == '') {
+                        $return['status'] = 'online';
+                    } else {
+                        $return['status'] = 'away';
+                    }
                     break;
                 case 'me':
                     $message = ltrim($message, 'me');

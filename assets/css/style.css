@@ -197,7 +197,7 @@ i {
   color: #75b1e8;
 }
 
-.online, .offline, .me {
+.online, .offline, .away, .me {
   margin-right: 3px;
   font-size: 10px;
 }
@@ -208,6 +208,10 @@ i {
 
 .offline {
   color: #E38968;
+}
+
+.away {
+  color: #da9d3e;
 }
 
 .info {
