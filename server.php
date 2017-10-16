@@ -18,7 +18,11 @@ socket_listen($socket);
 
 //create & add listening socket to the list
 $clients = array($socket);
-$users = array($botName);
+$users[] = [
+    'nick' => $botName,
+    'status' => 'online',
+    'socket' => $socket
+];
 
 //start endless loop, so that our script doesn't stop
 while (true) {
@@ -30,16 +34,27 @@ while (true) {
 	//check for new socket
 	if (in_array($socket, $changed)) {
 		$socket_new = socket_accept($socket); //accept new socket
-		$clients[] = $socket_new; //add socket to client array
+
 		
 		$header = socket_read($socket_new, $length); //read data sent by the socket
-		perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
-		
-		socket_getpeername($socket_new, $ip); //get ip address of connected socket
-		send_message(['type'=>'identify'], $socket_new); //force client to identify himself
-        send_message(['type' => 'users_list', 'users' => $users], $socket_new); //send user list
+		$nickname = perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
 
-		debug('Connected new user');
+        if (findUserID($nickname)) {
+            // TODO Force it to change nickname to guest0-9
+            send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
+        } else {
+            $clients[] = $socket_new; //add socket to client array
+
+            send_message(['type' => 'users_list', 'users' => getUsers()], $socket_new); //send user list
+            send_message(['type' => 'join', 'nick' => $nickname]); //send join data
+            $users[] = [
+                'nick' => $nickname,
+                'status' => 'online',
+                'socket' => $socket_new
+            ];
+        }
+
+		debug('Connected new user: ' . $nickname);
 
 		//make room for new socket
 		$found_socket = array_search($socket, $changed);
@@ -50,37 +65,28 @@ while (true) {
 	foreach ($changed as $changed_socket) {
 		
 		//check for any incoming data
-		while(socket_recv($changed_socket, $buf, $length, 0) >= 1)
-		{
+		while(socket_recv($changed_socket, $buf, $length, 0) >= 1) {
 			$received_text = unmask($buf); //unmask data
-			$tst_msg = json_decode($received_text); //json decode 
-			if ($tst_msg) {
+			$data = json_decode($received_text); //json decode 
+			if ($data && isset($data->type)) {
 
-			    if ($tst_msg->type == 'identify') {
+			    switch ($data->type) {
+                    case 'message':
+                        $nickname = $data->name; //sender name
+                        $message = $data->message; //message text
 
-			        if (in_array($tst_msg->name, $users)) {
-                        send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
-                    } else {
-                        $users[] = $tst_msg->name;
-                        send_message(['type' => 'join', 'nick' => $tst_msg->name]); //send join data
-                    }
-
-                } else if ($tst_msg->type == 'message') {
-                    $user_name = $tst_msg->name; //sender name
-                    $user_message = $tst_msg->message; //message text
-
-                    $firstChar = substr($user_message, 0, 1);
-                    if (in_array($firstChar, ['@', '/'])) {
-                        //command
-                        $cmd = commands($changed_socket, $user_name, $user_message);
-                        send_message($cmd['return'], $cmd['to']); //send data
-                    } else {
-                        debug($user_name . ' sends a message.');
-                        //prepare data to be sent to client
-                        send_message(['type'=>'user', 'nick'=>$user_name, 'message'=>$user_message]); //send data
-                    }
-
+                        $firstChar = substr($message, 0, 1);
+                        if (in_array($firstChar, ['@', '/'])) {
+                            //command
+                            $cmd = commands($changed_socket, $nickname, $message);
+                            send_message($cmd['return'], $cmd['to']); //send data
+                        } else {
+                            debug($nickname . ' sends a message.');
+                            //prepare data to be sent to client
+                            send_message(['type'=>'user', 'nick'=>$nickname, 'message'=>$message]); //send data
+                        }
                 }
+
 			}
 			break 2; //exist this loop
 		}
@@ -90,13 +96,14 @@ while (true) {
 			// remove client for $clients array
 			$found_socket = array_search($changed_socket, $clients);
 
-            debug('Disconnected user');
+			$tmpUserID = findUserID($changed_socket, 'socket');
+            debug('Disconnected user ' . $tmpUserID);
 			
 			//notify all users about disconnected connection
-			send_message(['type'=>'leave', 'nick'=> $users[$found_socket]]);
+			send_message(['type'=>'leave', 'nick'=> $users[$tmpUserID]['nick']]);
 
             unset($clients[$found_socket]);
-            unset($users[$found_socket]);
+            unset($users[$tmpUserID]);
 		}
 	}
 }
@@ -163,18 +170,28 @@ function mask($text)
 }
 
 //handshake new client.
-function perform_handshaking($received_header,$client_conn, $host, $port)
+function perform_handshaking($received_header, $client_conn, $host, $port)
 {
 	$headers = array();
+	$nickname = false;
+
 	$lines = preg_split("/\r\n/", $received_header);
-	foreach($lines as $line)
-	{
-		$line = chop($line);
-		if(preg_match('/\A(\S+): (.*)\z/', $line, $matches))
-		{
-			$headers[$matches[1]] = $matches[2];
-		}
-	}
+    foreach ($lines as $key => $line) {
+        $line = chop($line);
+        if (preg_match('/\A(\S+): (.*)\z/', $line, $matches)) {
+            $headers[$matches[1]] = $matches[2];
+        } else {
+            if (!empty($line)) {
+                $parsed = explode(' ', $line);
+                if (count($parsed) === 3) {
+                    list($method, $tmpNick, $http) = $parsed;
+                    if (strlen($tmpNick) > 1) {
+                        $nickname = ltrim($tmpNick, '/');
+                    }
+                }
+            }
+        }
+    }
 
 	$secKey = $headers['Sec-WebSocket-Key'];
 	$secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
@@ -186,6 +203,7 @@ function perform_handshaking($received_header,$client_conn, $host, $port)
 	"WebSocket-Location: ws://$host:$port/demo/server.php\r\n".
 	"Sec-WebSocket-Accept:$secAccept\r\n\r\n";
 	socket_write($client_conn,$upgrade,strlen($upgrade));
+	return $nickname;
 }
 
 function commands($client, $user, $message) {
@@ -285,14 +303,12 @@ function commands($client, $user, $message) {
                     $sendTo = $client;
                     break;
                 case 'away':
-                    $message = substr($message, 5);
+                    $message = substr($message, strlen($command) + 1);
                     $return = prepareMessage($message, $user);
                     $return['type'] = 'status';
-                    if ($message == '') {
-                        $return['status'] = 'online';
-                    } else {
-                        $return['status'] = 'away';
-                    }
+                    $userID = findUserID($user);
+                    $return['status'] = ($message == '') ? 'online': 'away';
+                    $users[$userID]['status'] = $return['status'];
                     break;
                 case 'me':
                     $message = ltrim($message, 'me');
@@ -338,6 +354,34 @@ function prepareMessage($message, $user = false) {
         'message' => $message,
         'nick' => $user
     ];
+}
+
+function findUserID($value, $by = 'nick') {
+    global $users;
+    $return = false;
+
+    switch ($by) {
+        case 'nick':
+        case 'socket':
+            $return = array_filter($users, function($v, $k) use ($by, $value) {
+                return $v[$by] === $value;
+            }, ARRAY_FILTER_USE_BOTH);
+            break;
+    }
+
+    return (count($return)) ? key($return): false;
+}
+
+function getUsers() {
+    global $users;
+    $tmpUsers = [];
+
+    foreach ($users as $key => $user) {
+        unset($user['socket']);
+        $tmpUsers[$key] = $user;
+    }
+
+    return $tmpUsers;
 }
 
 function disconnectClient($client) {

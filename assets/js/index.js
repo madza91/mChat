@@ -200,7 +200,7 @@
 
     var connection = {
         init: function () {
-            this.open('ws://' + chatServer);
+            this.open('ws://' + chatServer + '/' + chat.userNick);
         },
         open: function (url) {
             websocket = new WebSocket(url);
@@ -256,9 +256,6 @@
                 case 'system':
                     chat.writeMessage(type, msg.message);
                     break;
-                case 'identify':
-                    connection.send('identify', true);
-                    break;
                 case 'join':
                     chat.addUser(msg.nick, false, true);
                     break;
@@ -267,7 +264,7 @@
                     break;
                 case 'users_list':
                     jQuery.each(msg.users, function (index, item) {
-                        chat.addUser(this);
+                        chat.addUser(item.nick, item.status);
                     });
                     break;
                 case 'status':
