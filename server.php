@@ -97,7 +97,7 @@ while (true) {
 			$found_socket = array_search($changed_socket, $clients);
 
 			$tmpUserID = findUserID($changed_socket, 'socket');
-            debug('Disconnected user ' . $tmpUserID);
+            debug('Disconnected user ' . $users[$tmpUserID]['nick']);
 			
 			//notify all users about disconnected connection
 			send_message(['type'=>'leave', 'nick'=> $users[$tmpUserID]['nick']]);
@@ -229,7 +229,8 @@ function commands($client, $user, $message) {
                     $tmpNick = getByKey($exploded, 1);
                     if ($tmpNick) {
 
-                        if (!in_array($tmpNick, $users)) {
+                        $userID = findUserID($user);
+                        if ($userID !== false && $users[$userID]) {
                             $return = [
                                 'type' => 'command',
                                 'command' => 'nick',
@@ -237,10 +238,7 @@ function commands($client, $user, $message) {
                                 'newNick' => $tmpNick
                             ];
 
-                            $found = array_search($user, $users);
-                            if ($found !== false) {
-                                $users[$found] = $tmpNick;
-                            }
+                            $users[$userID]['nick'] = $tmpNick;
                         } elseif ($tmpNick === $user) {
                             $return['message'] = 'Ooops! You are already ' . $user . ', right?';
                         } else {
@@ -268,14 +266,18 @@ function commands($client, $user, $message) {
                     ];
                     break;
                 case 'help':
-                    $return = prepareMessage('Available commands: ' . implode(', ', $availableCommands));
-                    $return['type'] = 'system';
+                    $return = [
+                        'type' => 'command',
+                        'command' => 'help',
+                        'commands' => $availableCommands
+                    ];
                     $sendTo = $client;
                     break;
                 case 'whois':
                     $tmpNick = getByKey($exploded, 1);
                     if ($tmpNick) {
-                        if (in_array($tmpNick, $users)){
+                        $userID = findUserID($tmpNick);
+                        if ($userID !== false){
                             if ($user == $tmpNick) {
                                 $return = prepareMessage('You forgot who you are?');
                             } else {

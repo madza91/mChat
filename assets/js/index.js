@@ -70,7 +70,7 @@
             this.searchFilter();
             if (log) {
                 if (user === this.userNick) {
-                    this.writeMessage('system', 'Welcome ' + this.userNick);
+                    this.writeMessage('system', 'Welcome ' + this.userNick + '! Please use ' + this.mark('/help') + ' command for list of all available commands.');
                 } else {
                     this.writeMessage('system', user + ' joined.');
                 }
@@ -184,6 +184,9 @@
         getRandomInt: function () {
             return Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
         },
+        mark: function (value) {
+            return '<span class="mark">' + value + '</span>';
+        },
         searchFilter: function () {
             var userList = new List('people-list', {valueNames: ['name']});
             var noItems = $('<li id="no-items-found">No items found</li>');
@@ -296,6 +299,17 @@
                         case 'noticeme':
                             chat.shakeUser(msg.nick);
                             break;
+                        case 'help':
+                            console.log(msg);
+                            var output = 'Available commands: ';
+                            var total = msg.commands.length;
+                            jQuery.each(msg.commands, function (index, item) {
+                                output += chat.mark(item);
+                                if (index !== total -1) {
+                                    output += ' ';
+                                }
+                            });
+                            chat.writeMessage('system', output);
                     }
             }
         },

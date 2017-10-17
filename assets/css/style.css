@@ -222,6 +222,12 @@ i {
   color: #94C2ED;
 }
 
+.mark {
+  border-radius: 5px;
+  background-color: #cfd0c9;
+  padding: 1px 5px;
+}
+
 .align-left {
   text-align: left;
 }
