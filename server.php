@@ -34,27 +34,26 @@ while (true) {
 	//check for new socket
 	if (in_array($socket, $changed)) {
 		$socket_new = socket_accept($socket); //accept new socket
-
-		
 		$header = socket_read($socket_new, $length); //read data sent by the socket
 		$nickname = perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
 
-        if (findUserID($nickname)) {
-            // TODO Force it to change nickname to guest0-9
-            send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
-        } else {
-            $clients[] = $socket_new; //add socket to client array
+        if ($nickname) {
+            if (findUserID($nickname)) {
+                // TODO Force it to change nickname to guest0-9
+                send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
+            } else {
+                $clients[] = $socket_new; //add socket to client array
 
-            send_message(['type' => 'users_list', 'users' => getUsers()], $socket_new); //send user list
-            send_message(['type' => 'join', 'nick' => $nickname]); //send join data
-            $users[] = [
-                'nick' => $nickname,
-                'status' => 'online',
-                'socket' => $socket_new
-            ];
+                send_message(['type' => 'users_list', 'users' => getUsers()], $socket_new); //send user list
+                send_message(['type' => 'join', 'nick' => $nickname]); //send join data
+                $users[] = [
+                    'nick' => $nickname,
+                    'status' => 'online',
+                    'socket' => $socket_new
+                ];
+            }
+            debug('Connected new user: ' . $nickname);
         }
-
-		debug('Connected new user: ' . $nickname);
 
 		//make room for new socket
 		$found_socket = array_search($socket, $changed);
@@ -193,17 +192,20 @@ function perform_handshaking($received_header, $client_conn, $host, $port)
         }
     }
 
-	$secKey = $headers['Sec-WebSocket-Key'];
-	$secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
-	//hand shaking header
-	$upgrade  = "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" .
-	"Upgrade: websocket\r\n" .
-	"Connection: Upgrade\r\n" .
-	"WebSocket-Origin: $host\r\n" .
-	"WebSocket-Location: ws://$host:$port/\r\n".
-	"Sec-WebSocket-Accept:$secAccept\r\n\r\n";
-	socket_write($client_conn,$upgrade,strlen($upgrade));
-	return $nickname;
+    if (isset($headers['Sec-WebSocket-Key'])) {
+        $secKey = $headers['Sec-WebSocket-Key'];
+        $secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
+        //hand shaking header
+        $upgrade = "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" .
+            "Upgrade: websocket\r\n" .
+            "Connection: Upgrade\r\n" .
+            "WebSocket-Origin: $host\r\n" .
+            "WebSocket-Location: ws://$host:$port/\r\n" .
+            "Sec-WebSocket-Accept:$secAccept\r\n\r\n";
+        socket_write($client_conn, $upgrade, strlen($upgrade));
+        return $nickname;
+    }
+	return false;
 }
 
 function commands($client, $user, $message) {
