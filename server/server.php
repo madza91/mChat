@@ -5,6 +5,8 @@ $null = NULL; //null var
 $length = 5000;
 $botName = 'assistent';
 
+include_once('helpers.php');
+
 //Create TCP/IP stream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 //reusable port
@@ -24,7 +26,9 @@ $users[] = [
     'socket' => $socket
 ];
 
-//start endless loop, so that our script doesn't stop
+/**
+ * start endless loop, so that our script doesn't stop
+ */
 while (true) {
 	//manage multiple connections
 	$changed = $clients;
@@ -109,6 +113,11 @@ while (true) {
 // close the listening socket
 socket_close($socket);
 
+/**
+ * @param $msg
+ * @param bool $sendTo
+ * @return bool
+ */
 function send_message($msg, $sendTo = false)
 {
     if (!$msg) {
@@ -130,7 +139,11 @@ function send_message($msg, $sendTo = false)
 }
 
 
-//Unmask incoming framed message
+/**
+ * Unmask incoming framed message
+ * @param $text
+ * @return string
+ */
 function unmask($text) {
 	$length = ord($text[1]) & 127;
 	if($length == 126) {
@@ -152,11 +165,15 @@ function unmask($text) {
 	return $text;
 }
 
-//Encode message for transfer to client.
+/**
+ * Encode message for transfer to client
+ * @param $text
+ * @return string
+ */
 function mask($text)
 {
   $text = json_encode($text);
-	$length = strlen($text);
+  $length = strlen($text);
   $b1 = 0x80 | (0x1 & 0x0f);
 	
 	if($length <= 125)
@@ -168,7 +185,14 @@ function mask($text)
 	return $header.$text;
 }
 
-//handshake new client.
+/**
+ * Handshake new client
+ * @param $received_header
+ * @param $client_conn
+ * @param $host
+ * @param $port
+ * @return bool|string
+ */
 function perform_handshaking($received_header, $client_conn, $host, $port)
 {
 	$headers = array();
@@ -208,6 +232,12 @@ function perform_handshaking($received_header, $client_conn, $host, $port)
 	return false;
 }
 
+/**
+ * @param $client
+ * @param $user
+ * @param $message
+ * @return array
+ */
 function commands($client, $user, $message) {
 
     $return = [
@@ -349,45 +379,9 @@ function commands($client, $user, $message) {
     return ['return' => $return, 'to' => $sendTo];
 }
 
-function prepareMessage($message, $user = false) {
-    global $botName;
-
-    $user = (!$user) ? $botName: $user;
-    return [
-        'type' => 'user',
-        'message' => $message,
-        'nick' => $user
-    ];
-}
-
-function findUserID($value, $by = 'nick') {
-    global $users;
-    $return = false;
-
-    switch ($by) {
-        case 'nick':
-        case 'socket':
-            $return = array_filter($users, function($v, $k) use ($by, $value) {
-                return $v[$by] === $value;
-            }, ARRAY_FILTER_USE_BOTH);
-            break;
-    }
-
-    return (count($return)) ? key($return): false;
-}
-
-function getUsers() {
-    global $users;
-    $tmpUsers = [];
-
-    foreach ($users as $key => $user) {
-        unset($user['socket']);
-        $tmpUsers[$key] = $user;
-    }
-
-    return $tmpUsers;
-}
-
+/**
+ * @param $client
+ */
 function disconnectClient($client) {
     global $clients;
     global $users;
@@ -395,16 +389,4 @@ function disconnectClient($client) {
     unset($clients[$found_socket]);
     unset($users[$found_socket]);
     socket_close($client);
-}
-
-function getByKey($array, $key, $default = false) {
-    return (isset($array[$key])) ? trim($array[$key]): $default;
-}
-
-function debug($word) {
-  echo $word . "\r\n";
-}
-
-function getLngMessage($id) {
-
 }
