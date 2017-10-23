@@ -1,0 +1,10 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": 9000,
+    "botName": "assistent"
+  },
+  "client": {
+    "default": "simple"
+  }
+}
