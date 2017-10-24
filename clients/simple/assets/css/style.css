@@ -249,6 +249,12 @@ i {
   height: 0;
 }
 
+.chat .chat-history a {
+  color: #f5f2f2;
+  font-style: italic;
+  text-decoration: none;
+}
+
 #no-items-found {
     padding: 20px;
 }

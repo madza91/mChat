@@ -44,10 +44,10 @@
                     templateBody = Handlebars.compile($("#message-response-nonick-template").html());
                 }
                 if (this.lastChatNick !== from) {
-                    this.$chatHistoryList.append(templateTitle(context));
+                    this.$chatHistoryList.append(this.urlify(templateTitle(context)));
                 }
                 if (this.lastChatNick !== false && this.lastChatNick === from) {
-                    this.$chatHistoryList.append(templateBody(context));
+                    this.$chatHistoryList.append(this.urlify(templateBody(context)));
                 }
 
                 this.scrollToBottom();
@@ -221,6 +221,14 @@
         },
         mark: function (value) {
             return '<span class="mark">' + value + '</span>';
+        },
+        urlify: function (text) {
+            var urlRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g;
+            return text.replace(urlRegex, function(url) {
+                var a = document.createElement('a');
+                a.href = url;
+                return '<a title="' + url + '" href="' + url + '" target="_blank">' + a.hostname + '</a>';
+            })
         },
         searchFilter: function () {
             var userList = new List('people-list', {valueNames: ['name']});
