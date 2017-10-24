@@ -1,7 +1,5 @@
 (function () {
 
-    var chatServer = 'localhost:9000';
-
     var chat = {
         userNick: '',
         msgHistory: [],
@@ -229,7 +227,18 @@
 
     var connection = {
         init: function () {
-            this.open('ws://' + chatServer + '/' + chat.userNick);
+            var thisChat = this;
+            var xobj = new XMLHttpRequest();
+            xobj.overrideMimeType("application/json");
+            xobj.open('GET', 'config.json', true);
+            xobj.onreadystatechange = function() {
+                if (xobj.readyState == 4 && xobj.status == 200) {
+                    var config = JSON.parse(xobj.responseText);
+                    var server = config.server;
+                    thisChat.open('ws://' + server.host + ':' + server.port + '/' + chat.userNick);
+                }
+            };
+            xobj.send(null);
         },
         open: function (url) {
             websocket = new WebSocket(url);
