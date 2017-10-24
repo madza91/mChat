@@ -39,6 +39,7 @@
                 if (from === this.userNick) {
                     template = Handlebars.compile($("#message-template").html());
                 } else {
+                    this.sendNotification(from + ': ' + message);
                     template = Handlebars.compile($("#message-response-template").html());
                 }
                 this.$chatHistoryList.append(template(context));
@@ -72,6 +73,7 @@
                 if (user === this.userNick) {
                     this.writeMessage('system', 'Welcome ' + this.userNick + '! Please use ' + this.mark('/help') + ' command for list of all available commands.');
                 } else {
+                    this.sendNotification(user + ' joined.');
                     this.writeMessage('system', user + ' joined.');
                 }
             }
@@ -122,6 +124,30 @@
         },
         addMessage: function () {
             this.render(this.userNick, this.$textarea.val());
+        },
+        sendNotification: function (message) {
+            if (!Notification) {
+                // Not available in user's browser
+                return;
+            }
+
+            if (Notification.permission !== "granted")
+                Notification.requestPermission();
+            else {
+                var title = 'Madza\'s tiny chat message';
+                var icon = 'http://madza.rs/templates/portfolio/img/logo.png';
+                var notification = new Notification(title, {
+                    body: message,
+                    icon: icon
+                });
+
+                notification.addEventListener('click', function(e) {
+                    parent.focus();
+                    window.focus();
+                    e.target.close();
+                }, false);
+            }
+
         },
         writeMessage: function (type, data) {
             switch (type) {
@@ -323,8 +349,14 @@
     }
     };
 
+    // request permission on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+    });
+
     chat.init();
-    chat.disable(true);
+    // chat.disable(true);
     connection.init();
 
 })();
