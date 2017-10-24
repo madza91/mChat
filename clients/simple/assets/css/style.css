@@ -15,6 +15,7 @@ i {
 }
 
 .container {
+  height: 740px;
   margin: 0 auto;
   width: 1000px;
   background: #444753;
@@ -42,7 +43,7 @@ i {
   left: -25px;
 }
 .people-list ul {
-  height: 771px;
+  height: 80%;
 }
 .people-list img {
   float: left;
@@ -58,6 +59,7 @@ i {
   color: #92959E;
 }
 .list {
+  height: 88%;
   overflow-y: scroll;
 }
 
@@ -77,6 +79,7 @@ i {
 }
 
 .chat {
+  height: 100%;
   width: 740px;
   float: left;
   background: #F2F5F8;
@@ -113,7 +116,7 @@ i {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
   overflow-y: scroll;
-  height: 624px;
+  height: 68%;
 }
 .chat .chat-history .message-data {
   font-size: smaller;
