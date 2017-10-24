@@ -135,7 +135,7 @@
             this.render(this.userNick, this.$textarea.val());
         },
         sendNotification: function (message) {
-            if (!Notification) {
+            if (!Notification || !document.hidden) {
                 // Not available in user's browser
                 return;
             }
