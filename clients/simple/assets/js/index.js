@@ -2,6 +2,7 @@
 
     var chat = {
         userNick: '',
+        lastChatNick: false,
         msgHistory: [],
         msgHistoryIndex: 0,
         totalUsers: 0,
@@ -35,13 +36,22 @@
                 };
 
                 if (from === this.userNick) {
-                    template = Handlebars.compile($("#message-template").html());
+                    templateTitle = Handlebars.compile($("#message-template").html());
+                    templateBody = Handlebars.compile($("#message-nonick-template").html());
                 } else {
                     this.sendNotification(from + ': ' + message);
-                    template = Handlebars.compile($("#message-response-template").html());
+                    templateTitle = Handlebars.compile($("#message-response-template").html());
+                    templateBody = Handlebars.compile($("#message-response-nonick-template").html());
                 }
-                this.$chatHistoryList.append(template(context));
+                if (this.lastChatNick !== from) {
+                    this.$chatHistoryList.append(templateTitle(context));
+                }
+                if (this.lastChatNick !== false && this.lastChatNick === from) {
+                    this.$chatHistoryList.append(templateBody(context));
+                }
+
                 this.scrollToBottom();
+                this.lastChatNick = from;
             }
         },
         setNick: function (newNick) {
@@ -118,6 +128,7 @@
                 time: this.getCurrentTime()
             };
             this.$chatHistoryList.append(templateSystemMessage(contextSystem));
+            this.lastChatNick = false;
             this.scrollToBottom();
         },
         addMessage: function () {

@@ -54,7 +54,15 @@
             <span class="message-data-time">{{time}}, Today</span> &nbsp; &nbsp;
             <span class="message-data-name">{{name}}</span> <i class="fa fa-circle online"></i>
         </div>
-        <div class="message other-message float-right">
+        <div class="message messageArrow other-message float-right">
+            {{messageOutput}}
+        </div>
+    </li>
+</script>
+
+<script id="message-nonick-template" type="text/x-handlebars-template">
+    <li class="clearfix">
+        <div class="message other-message float-right" title="{{time}}">
             {{messageOutput}}
         </div>
     </li>
@@ -66,7 +74,15 @@
             <span class="message-data-name"><i class="fa fa-circle online"></i> {{name}}</span>
             <span class="message-data-time">{{time}}, Today</span>
         </div>
-        <div class="message {{type}}-message">
+        <div class="message messageArrow {{type}}-message">
+            {{messageOutput}}
+        </div>
+    </li>
+</script>
+
+<script id="message-response-nonick-template" type="text/x-handlebars-template">
+    <li>
+        <div class="message {{type}}-message" title="{{time}}">
             {{messageOutput}}
         </div>
     </li>

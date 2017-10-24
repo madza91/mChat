@@ -129,11 +129,11 @@ i {
   line-height: 26px;
   font-size: 16px;
   border-radius: 7px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   width: 90%;
   position: relative;
 }
-.chat .chat-history .message:after {
+.chat .chat-history .messageArrow:after {
   bottom: 100%;
   left: 7%;
   border: solid transparent;
