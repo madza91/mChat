@@ -39,6 +39,7 @@
                 if (from === this.userNick) {
                     template = Handlebars.compile($("#message-template").html());
                 } else {
+                    this.sendNotification('Notification from chat', '', message, '');
                     template = Handlebars.compile($("#message-response-template").html());
                 }
                 this.$chatHistoryList.append(template(context));
@@ -122,6 +123,26 @@
         },
         addMessage: function () {
             this.render(this.userNick, this.$textarea.val());
+        },
+        sendNotification: function (title, icon, body, url) {
+            if (!Notification) {
+                // Not available in user's browser
+                return;
+            }
+
+            if (Notification.permission !== "granted")
+                Notification.requestPermission();
+            else {
+                var notification = new Notification(title, {
+                    icon: icon,
+                    body: body,
+                });
+
+                notification.onclick = function () {
+                    window.open(url);
+                };
+            }
+
         },
         writeMessage: function (type, data) {
             switch (type) {
@@ -323,8 +344,14 @@
     }
     };
 
+    // request permission on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+    });
+
     chat.init();
-    chat.disable(true);
+    // chat.disable(true);
     connection.init();
 
 })();
