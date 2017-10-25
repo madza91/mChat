@@ -360,6 +360,9 @@ function commands($client, $user, $message) {
                         'command' => 'noticeme',
                         'nick' => $user
                     ];
+                    break;
+                default:
+                    $sendTo = $client;
             }
         }
 
@@ -368,15 +371,13 @@ function commands($client, $user, $message) {
         $exploded = explode(' ', $message);
         $tmpNick = getByKey($exploded, 0);
         if ($tmpNick) {
-            $found_socket = array_search($tmpNick, $users);
-            $tmpSocket = $clients[$found_socket];
-
             $return = [
                 'type' => 'private',
                 'message' => $firstChar . $message,
                 'nick' => $user
             ];
-            $sendTo = $tmpSocket;
+            $tmpUserID = findUserID($tmpNick);
+            $sendTo = $users[$tmpUserID]['socket'];
         }
 
     }
