@@ -18,6 +18,10 @@
             this.$totalUsers = $('#total_users');
             this.$button = $('#btn_send');
             this.$textarea = $('#message-to-send');
+            this.$tempMessage = $("#message-template");
+            this.$tempMessageOnly = $("#message-nonick-template");
+            this.$tempMessageResponse = $("#message-response-template");
+            this.$tempMessageResponseOnly = $("#message-response-nonick-template");
         },
         bindEvents: function () {
             this.$button.on('click', this.addMessage.bind(this));
@@ -26,8 +30,10 @@
         render: function (from, message, visibility) {
             this.scrollToBottom();
             if (typeof message !== 'undefined') {
-                var template = '';
+                var templateEl = '';
                 var cssClass = (visibility === 'public') ? 'my': 'private';
+                var previousSender = (this.lastChatNick === from);
+                var isMe = (this.userNick === from);
                 var context = {
                     name: from,
                     messageOutput: message,
@@ -35,21 +41,15 @@
                     type: cssClass
                 };
 
-                if (from === this.userNick) {
-                    templateTitle = Handlebars.compile($("#message-template").html());
-                    templateBody = Handlebars.compile($("#message-nonick-template").html());
+                if (isMe) {
+                    templateEl = previousSender ? this.$tempMessageOnly: this.$tempMessage;
                 } else {
+                    templateEl = previousSender ? this.$tempMessageResponseOnly: this.$tempMessageResponse;
                     this.sendNotification(from + ': ' + message);
-                    templateTitle = Handlebars.compile($("#message-response-template").html());
-                    templateBody = Handlebars.compile($("#message-response-nonick-template").html());
-                }
-                if (this.lastChatNick !== from) {
-                    this.$chatHistoryList.append(this.urlify(templateTitle(context)));
-                }
-                if (this.lastChatNick !== false && this.lastChatNick === from) {
-                    this.$chatHistoryList.append(this.urlify(templateBody(context)));
                 }
 
+                var templateBody = Handlebars.compile(templateEl.html());
+                this.$chatHistoryList.append(this.urlify(templateBody(context)));
                 this.scrollToBottom();
                 this.lastChatNick = from;
             }
@@ -88,7 +88,7 @@
 
         },
         addBots: function (total) {
-            for (i = 0; i < total; i++) {
+            for (var i = 0; i < total; i++) {
                 this.addUser('bot' + this.getRandomInt(), 'bot');
             }
         },
@@ -251,7 +251,7 @@
             xobj.overrideMimeType("application/json");
             xobj.open('GET', 'config.json', true);
             xobj.onreadystatechange = function() {
-                if (xobj.readyState == 4 && xobj.status == 200) {
+                if (xobj.readyState === 4 && xobj.status === 200) {
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
                     thisChat.open('ws://' + server.host + ':' + server.port + '/' + chat.userNick);
@@ -297,7 +297,7 @@
             //convert and send data to server
             websocket.send(JSON.stringify(msg));
         },
-        onOpen: function (ev) {
+        onOpen: function () {
             chat.disable(false);
         },
         onMessage: function (ev) {
@@ -370,7 +370,7 @@
         onError: function (ev) {
             chat.writeMessage('system', 'Error Occurred - ' + ev.data);
         },
-        onClose: function (ev) {
+        onClose: function () {
             chat.disable(true);
             chat.writeMessage('system', 'Connection is closed');
             $('.chat-num-messages').html('You are offline.');
