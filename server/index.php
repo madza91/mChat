@@ -263,14 +263,19 @@ function commands($client, $user, $message) {
 
                         $userID = findUserID($user);
                         if ($userID !== false && $users[$userID]) {
-                            $return = [
+                            $allowed = preg_match('/^[0-9A-Za-z.]{3,20}$/', $tmpNick);
+                            if ($allowed) {
+                              $return = [
                                 'type' => 'command',
                                 'command' => 'nick',
                                 'oldNick' => $user,
                                 'newNick' => $tmpNick
-                            ];
+                              ];
 
-                            $users[$userID]['nick'] = $tmpNick;
+                              $users[$userID]['nick'] = $tmpNick;
+                            } else {
+                              $return['message'] = 'That nickname is not allowed. Please use only letters and numbers.';
+                            }
                         } elseif ($tmpNick === $user) {
                             $return['message'] = 'Ooops! You are already ' . $user . ', right?';
                         } else {
