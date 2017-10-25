@@ -172,17 +172,18 @@ function unmask($text) {
  */
 function mask($text)
 {
-  $text = json_encode($text);
-  $length = strlen($text);
-  $b1 = 0x80 | (0x1 & 0x0f);
-	
-	if($length <= 125)
-		$header = pack('CC', $b1, $length);
-	elseif($length > 125 && $length < 65536)
-		$header = pack('CCn', $b1, 126, $length);
-	elseif($length >= 65536)
-		$header = pack('CCNN', $b1, 127, $length);
-	return $header.$text;
+    $text = json_encode($text);
+    $length = strlen($text);
+    $b1 = 0x80 | (0x1 & 0x0f);
+    $header = false;
+
+    if ($length <= 125)
+        $header = pack('CC', $b1, $length);
+    elseif ($length > 125 && $length < 65536)
+        $header = pack('CCn', $b1, 126, $length);
+    elseif ($length >= 65536)
+        $header = pack('CCNN', $b1, 127, $length);
+    return $header . $text;
 }
 
 /**
@@ -246,7 +247,7 @@ function commands($client, $user, $message) {
     ];
     $sendTo = false;
 
-    global $clients, $users;
+    global $users;
 
     $firstChar = substr($message, 0, 1);
     $message = ltrim($message, $firstChar);

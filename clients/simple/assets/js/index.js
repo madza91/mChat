@@ -226,6 +226,9 @@
             var urlRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g;
             return text.replace(urlRegex, function(url) {
                 var a = document.createElement('a');
+                if (text.indexOf('://') === -1) {
+                    url = 'http://' + url;
+                }
                 a.href = url;
                 return '<a title="' + url + '" href="' + url + '" target="_blank">' + a.hostname + '</a>';
             })
