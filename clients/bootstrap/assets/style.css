@@ -245,6 +245,12 @@ body {
     border: none;
 }
 
+.avatar {
+    border-radius: 50%;
+    width: 55px;
+    border: 2px solid #aba2a2;
+}
+
 .shakeit {
     animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
