@@ -166,6 +166,11 @@ i {
   border-bottom-color: #94C2ED;
   left: 93%;
 }
+.chat .chat-history a {
+  color: #f5f2f2;
+  font-style: italic;
+  text-decoration: none;
+}
 .chat .chat-message {
   padding: 30px;
 }
@@ -250,12 +255,6 @@ i {
   content: " ";
   clear: both;
   height: 0;
-}
-
-.chat .chat-history a {
-  color: #f5f2f2;
-  font-style: italic;
-  text-decoration: none;
 }
 
 #no-items-found {

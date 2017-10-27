@@ -5,6 +5,6 @@
     "botName": "assistent"
   },
   "client": {
-    "default": "simple"
+    "default": "bootstrap"
   }
 }
