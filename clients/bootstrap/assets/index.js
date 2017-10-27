@@ -120,6 +120,7 @@
             var tmpElement = $('.people-list ul li:contains("' + user + '")');
             $(templateOnlineUser(contextResponsePeople)).insertBefore(tmpElement);
             tmpElement.remove();
+            this.searchFilter();
         },
         addSystemMessage: function (message) {
             this.scrollToBottom();
