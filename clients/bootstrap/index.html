@@ -19,21 +19,26 @@
 <body>
 
 <div class="main-wrapper">
-    <aside class="section people-list col-md-2 hidden-xs" id="people-list">
+    <aside class="section people-list hidden-xs col-sm-4 col-md-3 col-lg-2" id="people-list">
         <div class="search">
-            <input type="text" placeholder="search"/>
+            <input type="text" id="search-field" placeholder="search"/>
             <i class="fa fa-search"></i>
         </div>
         <ul class="list"></ul>
     </aside>
-    <aside class="section chat col-xs-12 col-md-10">
+    <aside class="section chat col-xs-12 col-sm-8 col-md-9 col-lg-10">
         <div class="chat-history">
             <ul>
             </ul>
         </div>
         <footer class="chat-message">
-            <div>
+            <div class="input-group">
                 <input name="message-to-send" id="message-to-send" placeholder="Type your message" autofocus="">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-attach" aria-label="attach" disabled>
+                        <i class="fa fa-paperclip"></i>
+                    </button>
+                </div>
             </div>
         </footer>
     </aside>

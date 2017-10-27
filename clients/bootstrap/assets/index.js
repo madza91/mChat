@@ -12,20 +12,21 @@
             this.setNick();
         },
         cacheDOM: function () {
+            this.$body = $('body');
             this.$chatHistory = $('.chat-history');
             this.$chatHistoryList = this.$chatHistory.find('ul');
             this.$peopleList = $('.list');
             this.$totalUsers = $('#total_users');
-            this.$button = $('#btn_send');
             this.$textarea = $('#message-to-send');
+            this.$searchField = $('#search-field');
             this.$tempMessage = $("#message-template");
             this.$tempMessageOnly = $("#message-nonick-template");
             this.$tempMessageResponse = $("#message-response-template");
             this.$tempMessageResponseOnly = $("#message-response-nonick-template");
         },
         bindEvents: function () {
-            this.$button.on('click', this.addMessage.bind(this));
             this.$textarea.on('keyup', this.addMessageEnter.bind(this));
+            this.$body.on('keydown', this.checkFocus.bind(this));
         },
         render: function (from, message, visibility) {
             this.scrollToBottom();
@@ -193,10 +194,16 @@
                     break;
             }
         },
+        checkFocus: function () {
+            var isInputFocused = this.$textarea.is(':focus');
+            var isSearchFocused = this.$searchField.is(':focus');
+            if (!isInputFocused && !isSearchFocused) {
+                this.$textarea.focus();
+            }
+        },
         disable: function (disabled) {
             this.$peopleList.html('');
             this.$textarea.prop('disabled', disabled);
-            this.$button.prop('disabled', disabled);
             if (!disabled) {
                 this.$textarea.focus();
             }
