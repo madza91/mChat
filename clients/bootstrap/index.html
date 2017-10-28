@@ -25,9 +25,13 @@
         <ul class="list"></ul>
     </aside>
     <aside class="section chat col-xs-12 col-sm-8 col-md-9 col-lg-10">
+        <progress id="upload_status" value="0"></progress>
         <div class="chat-history">
             <ul>
                 <div id="connection_control" class="text-center">
+                    <noscript>
+                        <div class="alert alert-danger" role="alert">This chat requires enabled JavaScript. Please enable it and reload page. Thank you!</div>
+                    </noscript>
                     <p class="well-md well">You are not connected.</p>
                     <button class="btn btn-info" id="connect">Connect <i class="fa fa-wechat"></i></button>
                 </div>
@@ -37,9 +41,11 @@
             <div class="input-group">
                 <input name="message-to-send" id="message-to-send" placeholder="Type your message" autofocus="">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default btn-attach" aria-label="attach" disabled>
-                        <i class="fa fa-paperclip"></i>
-                    </button>
+                    <form enctype="multipart/form-data">
+                        <label id="attach-button" class="btn btn-default btn-attach btn-file">
+                            <i class="fa fa-paperclip"></i><input type="file" name="file" hidden>
+                        </label>
+                    </form>
                 </div>
             </div>
         </footer>

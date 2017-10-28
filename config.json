@@ -8,6 +8,6 @@
     "default": "bootstrap"
   },
   "settings": {
-    "sendEmail": true
+    "sendEmail": false
   }
 }

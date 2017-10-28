@@ -26,11 +26,14 @@
             this.$tempMessageResponseOnly = $("#message-response-nonick-template");
             this.$connectBtn = $('#connect');
             this.$connectControl = $('#connection_control');
+            this.$uploadProgress = $('#upload_status');
+            this.$uploadInput = $(':file');
         },
         bindEvents: function () {
             this.$connectBtn.on('click', this.connect.bind(this));
             this.$textarea.on('keyup', this.addMessageEnter.bind(this));
             this.$body.on('keydown', this.checkFocus.bind(this));
+            this.$uploadInput.on('change', this.uploadFile.bind(this));
         },
         connect: function () {
             this.userNick = prompt('Please choose your nickname:');
@@ -156,7 +159,7 @@
             if (Notification.permission !== "granted")
                 Notification.requestPermission();
             else {
-                var title = 'Madza\'s tiny chat message';
+                var title = 'Madza\'s tiny chat';
                 var icon = 'http://madza.rs/templates/portfolio/img/logo.png';
                 var notification = new Notification(title, {
                     body: message,
@@ -216,6 +219,8 @@
         disable: function (disabled) {
             this.$peopleList.html('');
             this.$textarea.prop('disabled', disabled);
+            this.$uploadInput.attr('disabled', disabled);
+            $('#attach-button').attr('disabled', disabled);
             if (!disabled) {
                 this.$textarea.focus();
                 this.$connectControl.hide();
@@ -254,10 +259,58 @@
             })
         },
         sendEmail: function(nick, message) {
-            if (this.settings.sendEmail) {
+            if (this.settings && this.settings.sendEmail) {
                 var token = Math.random().toString(36).substring(2);
                 $.post( "http://madza.rs/emailme.php", {name: nick, message: message, token: token}, function() {});
             }
+        },
+        uploadFile: function() {
+            var file = this.$uploadInput[0].files[0];
+
+            if (file.size > 5242880) {
+                this.writeMessage('system', 'Chosen file is too big! Maximum allowed size is 5mb.');
+                return;
+            }
+
+            $.ajax({
+                url: 'server/attach.php',
+                type: 'POST',
+
+                // Form data
+                data: new FormData($('form')[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+
+                // Custom XMLHttpRequest
+                xhr: function() {
+                    var myXhr = $.ajaxSettings.xhr();
+                    if (myXhr.upload) {
+                        // For handling the progress of the upload
+                        chat.$uploadProgress.show();
+                        myXhr.upload.addEventListener('progress', function(e) {
+                            if (e.lengthComputable) {
+                                console.log(e.total, e.loaded);
+                                chat.$uploadProgress.attr({
+                                    value: e.loaded,
+                                    max: e.total
+                                });
+                            }
+                        } , false);
+                    }
+                    return myXhr;
+                }
+            })
+                .done(function(data) {
+                    connection.send('message', data);
+                })
+                .fail(function(data) {
+                    console.log(data);
+                    chat.writeMessage('system', 'Error on file uploading (' + data.responseText + ')');
+                })
+                .always(function() {
+                    chat.$uploadProgress.hide();
+                });
         },
         searchFilter: function () {
             var userList = new List('people-list', {valueNames: ['name']});
@@ -382,6 +435,7 @@
                             break;
                         case 'noticeme':
                             chat.shakeUser(msg.nick);
+                            chat.sendNotification(msg.nick + ' says hello!');
                             chat.sendEmail(msg.nick, msg.nick + ' is bored...');
                             break;
                         case 'help':
