@@ -22,7 +22,7 @@ socket_listen($socket);
 $clients = array($socket);
 $users[] = [
     'nick' => $botName,
-    'status' => 'online',
+    'status' => 'bot',
     'socket' => $socket
 ];
 

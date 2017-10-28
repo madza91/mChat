@@ -6,5 +6,8 @@
   },
   "client": {
     "default": "bootstrap"
+  },
+  "settings": {
+    "sendEmail": true
   }
 }

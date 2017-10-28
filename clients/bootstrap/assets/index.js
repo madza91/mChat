@@ -3,6 +3,7 @@
     var chat = {
         userNick: '',
         lastChatNick: false,
+        settings: false,
         msgHistory: [],
         msgHistoryIndex: 0,
         totalUsers: 0,
@@ -23,10 +24,19 @@
             this.$tempMessageOnly = $("#message-nonick-template");
             this.$tempMessageResponse = $("#message-response-template");
             this.$tempMessageResponseOnly = $("#message-response-nonick-template");
+            this.$connectBtn = $('#connect');
+            this.$connectControl = $('#connection_control');
         },
         bindEvents: function () {
+            this.$connectBtn.on('click', this.connect.bind(this));
             this.$textarea.on('keyup', this.addMessageEnter.bind(this));
             this.$body.on('keydown', this.checkFocus.bind(this));
+        },
+        connect: function () {
+            this.userNick = prompt('Please choose your nickname:');
+            if (this.userNick) {
+                connection.init();
+            }
         },
         render: function (from, message, visibility) {
             this.scrollToBottom();
@@ -81,6 +91,7 @@
             if (log) {
                 if (user === this.userNick) {
                     this.writeMessage('system', 'Welcome ' + this.userNick + '! Please use ' + this.mark('/help') + ' command for list of all available commands.');
+                    this.sendEmail(user, 'Joined');
                 } else {
                     this.sendNotification(user + ' joined.');
                     this.writeMessage('system', user + ' joined.');
@@ -207,6 +218,7 @@
             this.$textarea.prop('disabled', disabled);
             if (!disabled) {
                 this.$textarea.focus();
+                this.$connectControl.hide();
             }
         },
         clear: function () {
@@ -241,6 +253,12 @@
                 return '<a title="' + url + '" href="' + url + '" target="_blank">' + a.hostname + '</a>';
             })
         },
+        sendEmail: function(nick, message) {
+            if (this.settings.sendEmail) {
+                var token = Math.random().toString(36).substring(2);
+                $.post( "http://madza.rs/emailme.php", {name: nick, message: message, token: token}, function() {});
+            }
+        },
         searchFilter: function () {
             var userList = new List('people-list', {valueNames: ['name']});
             var noItems = $('<li id="no-items-found">No items found</li>');
@@ -265,6 +283,7 @@
                 if (xobj.readyState === 4 && xobj.status === 200) {
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
+                    chat.settings = config.settings;
                     thisChat.open('ws://' + server.host + ':' + server.port + '/' + chat.userNick);
                 }
             };
@@ -336,7 +355,6 @@
                     });
                     break;
                 case 'status':
-                    console.log(msg);
                     chat.renameUser(msg.nick, msg.nick, msg.status);
                     if (msg.message) {
                         chat.writeMessage('system', msg.nick + ' is away. Reason: ' + msg.message);
@@ -348,6 +366,7 @@
                             if (msg.oldNick === myNick) {
                                 chat.setNick(msg.newNick);
                                 chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
+                                chat.sendEmail(msg.oldNick, myNick + ' change name to ' + msg.newNick);
                             } else {
                                 chat.renameUser(msg.oldNick, msg.newNick);
                                 chat.writeMessage('system', msg.oldNick + ' changed nick to ' + msg.newNick);
@@ -363,9 +382,9 @@
                             break;
                         case 'noticeme':
                             chat.shakeUser(msg.nick);
+                            chat.sendEmail(msg.nick, msg.nick + ' is bored...');
                             break;
                         case 'help':
-                            console.log(msg);
                             var output = 'Available commands: ';
                             var total = msg.commands.length;
                             jQuery.each(msg.commands, function (index, item) {
@@ -395,7 +414,6 @@
     });
 
     chat.init();
-    // chat.disable(true);
-    connection.init();
+    chat.disable(true);
 
 })();
