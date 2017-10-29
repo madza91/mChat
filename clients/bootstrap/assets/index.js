@@ -289,14 +289,11 @@
                     var myXhr = $.ajaxSettings.xhr();
                     if (myXhr.upload) {
                         // For handling the progress of the upload
-                        chat.$uploadProgress.show();
                         myXhr.upload.addEventListener('progress', function(e) {
                             if (e.lengthComputable) {
-                                console.log(e.total, e.loaded);
-                                chat.$uploadProgress.attr({
-                                    value: e.loaded,
-                                    max: e.total
-                                });
+                                chat.$uploadProgress.animate({
+                                    width: (e.loaded / e.total) * 100 + '%'
+                                }, 150);
                             }
                         } , false);
                     }
@@ -311,7 +308,7 @@
                     chat.writeMessage('system', 'Error on file uploading (' + data.responseText + ')');
                 })
                 .always(function() {
-                    chat.$uploadProgress.hide();
+                    chat.$uploadProgress.width('0%');
                 });
         },
         searchFilter: function () {
