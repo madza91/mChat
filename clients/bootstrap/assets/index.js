@@ -60,6 +60,7 @@
                 } else {
                     templateEl = previousSender ? this.$tempMessageResponseOnly: this.$tempMessageResponse;
                     this.sendNotification(from + ': ' + message);
+                    this.playSound();
                 }
 
                 var templateBody = Handlebars.compile(templateEl.html());
@@ -119,9 +120,9 @@
         },
         shakeUser: function(user) {
             var tmpElement = $('.people-list ul li:contains("' + user + '")');
-            tmpElement.addClass('shakeit');
+            tmpElement.addClass('shake-it');
             setTimeout(function(){
-                tmpElement.removeClass('shakeit');
+                tmpElement.removeClass('shake-it');
             }, 3000);
         },
         renameUser: function(user, newName, status) {
@@ -149,6 +150,11 @@
         },
         addMessage: function () {
             this.render(this.userNick, this.$textarea.val());
+        },
+        playSound: function () {
+            var audio = document.getElementById("audio");
+            audio.currentTime = 0;
+            audio.play();
         },
         sendNotification: function (message) {
             if (!Notification || !document.hidden) {

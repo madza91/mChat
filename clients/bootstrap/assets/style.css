@@ -12,6 +12,19 @@ body {
     font: 16px/20px "Lato", Arial, sans-serif;
 }
 
+input {
+    width: 100%;
+    border: none;
+    padding: 10px 20px;
+    font: 14px/22px "Lato", Arial, sans-serif;
+    border-radius: 5px;
+    resize: none;
+}
+
+input:focus {
+    outline: none;
+}
+
 #upload_status {
     position: absolute;
     background-color: #e11c20;
@@ -29,19 +42,6 @@ body {
     width: 100%;
     background-color: #f5f5f5;
     padding: 10px 15px;
-}
-
-input {
-    width: 100%;
-    border: none;
-    padding: 10px 20px;
-    font: 14px/22px "Lato", Arial, sans-serif;
-    border-radius: 5px;
-    resize: none;
-}
-
-input:focus {
-    outline: none;
 }
 
 .people-list {
@@ -62,20 +62,15 @@ input:focus {
     font-size: 14px;
 }
 
-.people-list .fa-search {
-    position: relative;
-    left: -25px;
-}
 .people-list img {
     float: left;
 }
 .people-list .about {
     float: left;
     margin-top: 8px;
-}
-.people-list .about {
     padding-left: 8px;
 }
+
 .people-list .status {
     color: #92959E;
 }
@@ -116,22 +111,9 @@ input:focus {
 .chat .chat-history {
     height: 100%;
     margin-bottom: 62px;
-}
-
-.chat .chat-history {
     padding: 30px 30px 20px;
     border-bottom: 2px solid white;
     overflow-y: scroll;
-}
-
-.chat .chat-history .message-data {
-    font-size: smaller;
-    margin-bottom: 10px;
-}
-
-.chat .chat-history .message-data-time {
-    color: #a8aab1;
-    padding-left: 6px;
 }
 
 .chat .chat-history .message {
@@ -187,20 +169,18 @@ input:focus {
     text-decoration: none;
 }
 
+.chat .chat-history .message-info {
+    background-color: #fdf2c0;
+    padding: 5px 25px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 7px 0px rgba(0,0,0,0.2);
+}
+
 .chat .chat-history .message-data {
     color: black;
     font-size: smaller;
     margin-bottom: 10px;
-}
-
-.chat .chat-history .message-data-time {
-    color: #a8aab1;
-    padding-left: 6px;
-}
-
-.chat .chat-history .message-data {
-    font-size: smaller;
-    margin-bottom: 10px;
+    margin-top: 15px;
 }
 
 .chat .chat-history .message-data-time {
@@ -243,14 +223,6 @@ input:focus {
     float: right;
 }
 
-.align-left {
-    text-align: left;
-}
-
-.align-right {
-    text-align: right;
-}
-
 .btn-attach {
     padding: 10px 13px;
     border: none;
@@ -262,7 +234,7 @@ input:focus {
     border: 2px solid #aba2a2;
 }
 
-.shakeit {
+.shake-it {
     animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;

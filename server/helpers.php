@@ -73,7 +73,7 @@ function getByKey($array, $key, $default = false) {
  * @return int
  */
 function isValidNick($nick) {
-    return preg_match('/^[0-9A-Za-z.]{3,20}$/', $nick);
+    return preg_match('/^[0-9A-Za-z.]([\w ]+){3,20}$/', $nick);
 }
 
 /**
