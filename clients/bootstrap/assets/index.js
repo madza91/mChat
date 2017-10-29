@@ -209,11 +209,13 @@
                     break;
             }
         },
-        checkFocus: function () {
-            var isInputFocused = this.$textarea.is(':focus');
-            var isSearchFocused = this.$searchField.is(':focus');
-            if (!isInputFocused && !isSearchFocused) {
-                this.$textarea.focus();
+        checkFocus: function (ev) {
+            if (!ev.ctrlKey) {
+                var isInputFocused = this.$textarea.is(':focus');
+                var isSearchFocused = this.$searchField.is(':focus');
+                if (!isInputFocused && !isSearchFocused) {
+                    this.$textarea.focus();
+                }
             }
         },
         disable: function (disabled) {
