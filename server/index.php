@@ -40,22 +40,28 @@ while (true) {
 		$socket_new = socket_accept($socket); //accept new socket
 		$header = socket_read($socket_new, $length); //read data sent by the socket
 		$nickname = perform_handshaking($header, $socket_new, $host, $port); //perform web-socket handshake
+        $isNickValid = isValidNick($nickname);
 
         if ($nickname) {
-            if (findUserID($nickname)) {
-                // TODO Force it to change nickname to guest0-9
-                send_message(['type' => 'system', 'message' => 'Your nick already exists, please change it']); //send join data
-            } else {
-                $clients[] = $socket_new; //add socket to client array
+            $clients[] = $socket_new; //add socket to client array
 
-                send_message(['type' => 'users_list', 'users' => getUsers()], $socket_new); //send user list
-                send_message(['type' => 'join', 'nick' => $nickname]); //send join data
-                $users[] = [
-                    'nick' => $nickname,
-                    'status' => 'online',
-                    'socket' => $socket_new
-                ];
+            if (!$isNickValid || findUserID($nickname) !== false) {
+                $oldNickname = $nickname;
+                do {
+                    $nickname = 'guest' . rand(1000, 9999);
+                } while (findUserID($nickname));
+                $reason = (!$isNickValid) ? 'Chosen nickname is in invalid format': 'Chosen nickname already exists';
+                send_message(['type' => 'command', 'command' => 'nick', 'oldNick' => $oldNickname, 'newNick' => $nickname, 'reason' => $reason], $socket_new); //send join data
             }
+
+            send_message(['type' => 'users_list', 'users' => getUsers()], $socket_new); //send user list
+            send_message(['type' => 'join', 'nick' => $nickname]); //send join data
+            $users[] = [
+                'nick' => $nickname,
+                'status' => 'online',
+                'socket' => $socket_new
+            ];
+
             debug('Connected new user: ' . $nickname);
         }
 
@@ -210,7 +216,7 @@ function perform_handshaking($received_header, $client_conn, $host, $port)
                 if (count($parsed) === 3) {
                     list($method, $tmpNick, $http) = $parsed;
                     if (strlen($tmpNick) > 1) {
-                        $nickname = ltrim($tmpNick, '/');
+                        $nickname = urldecode(ltrim($tmpNick, '/'));
                     }
                 }
             }
@@ -261,11 +267,9 @@ function commands($client, $user, $message) {
                 case 'nick':
                     $tmpNick = getByKey($exploded, 1);
                     if ($tmpNick) {
-
                         $userID = findUserID($user);
                         if ($userID !== false && $users[$userID]) {
-                            $allowed = preg_match('/^[0-9A-Za-z.]{3,20}$/', $tmpNick);
-                            if ($allowed) {
+                            if (isValidNick($tmpNick)) {
                               $return = [
                                 'type' => 'command',
                                 'command' => 'nick',

@@ -31,7 +31,7 @@ progress#upload_status {
     padding: 10px 15px;
 }
 
-.chat-message input {
+input {
     width: 100%;
     border: none;
     padding: 10px 20px;
@@ -40,7 +40,7 @@ progress#upload_status {
     resize: none;
 }
 
-.chat-message input:focus {
+input:focus {
     outline: none;
 }
 
@@ -52,16 +52,13 @@ progress#upload_status {
 }
 
 .people-list .search {
-    padding: 20px;
+    padding: 10px 15px;
 }
 
 .people-list input {
-    border-radius: 3px;
-    border: none;
-    padding: 14px;
+    padding: 5px 10px;
     color: white;
     background: #6A6C75;
-    width: 90%;
     font-size: 14px;
 }
 

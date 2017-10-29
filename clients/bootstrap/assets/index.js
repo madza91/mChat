@@ -418,7 +418,11 @@
                         case 'nick':
                             if (msg.oldNick === myNick) {
                                 chat.setNick(msg.newNick);
-                                chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
+                                if (msg.reason) {
+                                    chat.writeMessage('system', 'Your nick is invalid. You are renamed to ' + msg.newNick);
+                                } else {
+                                    chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
+                                }
                                 chat.sendEmail(msg.oldNick, myNick + ' change name to ' + msg.newNick);
                             } else {
                                 chat.renameUser(msg.oldNick, msg.newNick);

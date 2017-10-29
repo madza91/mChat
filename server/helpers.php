@@ -69,6 +69,14 @@ function getByKey($array, $key, $default = false) {
 }
 
 /**
+ * @param $nick
+ * @return int
+ */
+function isValidNick($nick) {
+    return preg_match('/^[0-9A-Za-z.]{3,20}$/', $nick);
+}
+
+/**
  * @param $word
  */
 function debug($word) {
