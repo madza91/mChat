@@ -80,7 +80,8 @@ function isValidNick($nick) {
  * @param $word
  */
 function debug($word) {
-    echo $word . "\r\n";
+    $time = date('H:i:s');
+    echo "\033[31m[{$time}]\033[0m {$word}\r\n";
 }
 
 /**

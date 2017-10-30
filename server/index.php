@@ -6,9 +6,18 @@ $length = 5000;
 $botName = 'assistent';
 
 include_once('helpers.php');
+debug("Starting server on {$host}, post {$port}");
 
 //Create TCP/IP stream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+
+debug('Adding bot named ' . $botName);
+$users[] = [
+  'nick' => $botName,
+  'status' => 'bot',
+  'socket' => $socket
+];
+
 //reusable port
 socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
 
@@ -17,14 +26,9 @@ socket_bind($socket, '0.0.0.0', $port);
 
 //listen to port
 socket_listen($socket);
-
+debug('Server is opened for new connections...');
 //create & add listening socket to the list
 $clients = array($socket);
-$users[] = [
-    'nick' => $botName,
-    'status' => 'bot',
-    'socket' => $socket
-];
 
 /**
  * start endless loop, so that our script doesn't stop
