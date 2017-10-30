@@ -1,16 +1,17 @@
 (function () {
 
     var chat = {
-        userNick: '',
+        userNick: false,
         lastChatNick: false,
         settings: false,
+        isConnected: false,
         msgHistory: [],
         msgHistoryIndex: 0,
         totalUsers: 0,
         init: function () {
             this.cacheDOM();
             this.bindEvents();
-            this.setNick();
+            $('.connection_info').show();
         },
         cacheDOM: function () {
             this.$body = $('body');
@@ -36,7 +37,9 @@
             this.$uploadInput.on('change', this.uploadFile.bind(this));
         },
         connect: function () {
-            this.userNick = prompt('Please choose your nickname:');
+            if (!this.userNick) {
+                this.userNick = prompt('Please choose your nickname:');
+            }
             if (this.userNick) {
                 connection.init();
             }
@@ -230,8 +233,12 @@
             this.$uploadInput.attr('disabled', disabled);
             $('#attach-button').attr('disabled', disabled);
             if (!disabled) {
+                this.isConnected = true;
                 this.$textarea.focus();
                 this.$connectControl.hide();
+            } else {
+                this.isConnected = false;
+                this.$connectControl.show();
             }
         },
         clear: function () {
@@ -474,6 +481,14 @@
     document.addEventListener('DOMContentLoaded', function () {
         if (Notification.permission !== "granted")
             Notification.requestPermission();
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+        if (chat.isConnected) {
+            var confirmationMessage = "\o/";
+            (e || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
     });
 
     chat.init();

@@ -26,16 +26,19 @@
     </aside>
     <aside class="section chat col-xs-12 col-sm-8 col-md-9 col-lg-10">
         <div id="upload_status"></div>
+        <div id="connection_control" class="text-center">
+            <noscript>
+                <span>This chat requires enabled JavaScript. Please enable it and reload page. Thank you!</span>
+            </noscript>
+            <div class="col-lg-10 connection_info">
+                <p>Welcome! This is open and free chat and you can use it without registration. Just click <span class="mark">connect</span> and enjoy!</p>
+            </div>
+            <div class="col-lg-2 connection_info">
+                <button class="btn btn-info pull-right" id="connect">Connect <i class="fa fa-wechat"></i></button>
+            </div>
+        </div>
         <div class="chat-history">
-            <ul>
-                <div id="connection_control" class="text-center">
-                    <noscript>
-                        <div class="alert alert-danger" role="alert">This chat requires enabled JavaScript. Please enable it and reload page. Thank you!</div>
-                    </noscript>
-                    <p class="well-md well">Welcome! This is open and free chat and you can use it without registration. Just click <span class="mark">connect</span> and enjoy!</p>
-                    <button class="btn btn-info" id="connect">Connect <i class="fa fa-wechat"></i></button>
-                </div>
-            </ul>
+            <ul></ul>
         </div>
         <footer class="chat-message">
             <div class="input-group">

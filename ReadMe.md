@@ -1,14 +1,33 @@
-Running Server :
+# websocketChat
+This is a very fast and tiny chat for group chat via web sockets.
 
-1. Change host address in index.php and server.php
+## Features
+* Group chat
+* Private chat
+* Sending (upload) image files
+* Search online users
+* Sending browser notifications
+* Sound on received message
+* Commands (combined IRC and custom)
 
-2. Go to your shell command-line interface
+## Chat commands
+In this chat you can use commands starting with slash (/).
+Available commands:
+* nick - IRC command
+* me - IRC command
+* hello - Shake your nickname in users list and sends notification to all users
+* away - IRC command
+* exit, disconnect, quit - Disconnects from chat
+* whois - IRC command
+* simulate - Simulate joining new users (bots)
+* help - Get list of all available commands
 
-3. type: 
-	php -q c:\path\server.php
+## Requirements - Server
+* PHP
+* Websockets
 
-4. Using browser, navigate to index.php location to open chat page, have fun!
+## Helpful links
+* [Visit chat online](http://madza.rs/chat)
 
-
-@Tutorial : http://www.sanwebe.com/2013/05/chat-using-websocket-php-socket
-@License : http://opensource.org/licenses/MIT
+# Credits
+Written by Nemanja Madzovski (nemanja at madza dot rs)

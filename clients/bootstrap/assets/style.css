@@ -32,6 +32,22 @@ input:focus {
     height: 3px;
 }
 
+#connection_control {
+    position: absolute;
+    width: 100%;
+    background-color: #fdf2c0;
+    padding: 10px;
+    border-bottom: 1px solid #b5a7a7;
+}
+
+.connection_info {
+    display: none;
+}
+
+.connection_info p {
+    padding-top: 7px;
+}
+
 .main-wrapper {
     height: 100vh;
 }
@@ -118,7 +134,7 @@ input:focus {
 
 .chat .chat-history .message {
     color: white;
-    padding: 8px 10px;
+    padding: 4px 10px;
     line-height: 26px;
     font-size: 16px;
     border-radius: 7px;
