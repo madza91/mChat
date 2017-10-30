@@ -6,7 +6,7 @@ $length = 5000;
 $botName = 'assistent';
 
 include_once('helpers.php');
-debug("Starting server on {$host}, post {$port}");
+debug("Starting server on {$host}, port {$port}");
 
 //Create TCP/IP stream socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
