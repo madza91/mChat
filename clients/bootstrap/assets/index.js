@@ -37,12 +37,13 @@
             this.$uploadInput.on('change', this.uploadFile.bind(this));
         },
         connect: function () {
-            if (!this.userNick) {
-                this.userNick = prompt('Please choose your nickname:');
+            var localUserNick = localStorage.getItem("madzaChatNick");
+            if (localUserNick === null) {
+                this.setNick(prompt('Please choose your nickname:'));
+            } else {
+                this.setNick(localUserNick);
             }
-            if (this.userNick) {
-                connection.init();
-            }
+            connection.init();
         },
         render: function (from, message, visibility) {
             this.scrollToBottom();
@@ -74,11 +75,12 @@
         },
         setNick: function (newNick) {
             var oldNick = this.userNick;
-            if (typeof newNick === 'undefined') {
+            if (typeof newNick === 'undefined' || newNick === null) {
                 this.userNick = 'guest' + this.getRandomInt(1000, 5000);
             } else {
                 this.userNick = newNick;
             }
+            localStorage.madzaChatNick = this.userNick;
             $('.chat-with').html(this.userNick);
             this.renameUser(oldNick, newNick);
         },
