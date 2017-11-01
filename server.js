@@ -40,11 +40,25 @@ io.sockets.on('connection', function (socket) {
     });
 
 
+    socket.on("cMessage",function(data) {
 
+        if (data && typeof data.type !== 'undefined') {
+            switch (data.type) {
+                case 'message':
+                    var nickname = data.name;
+                    var message = data.message;
+                    var firstChar = message.charAt(0);
 
+                    if (firstChat === '/' || firstChar === '@') {
+                        var cmd = commands(nickname, message);
+                        debug('command debug');
+                    } else {
+                        debug(nickname + ' sends a message.');
+                        send_message({type: 'user', nick: nickname, message: message});
+                    }
+            }
+        }
 
-
-    socket.on("message",function(message) {
         debug('user sends message');
     });
 
@@ -73,7 +87,7 @@ function send_message(message, socketID) {
         io.to(socketID).emit("message", message);
     } else {
         // send message to all connected clients
-        io.sockets.emit('message', message);
+        io.sockets.emit('sMessage', message);
     }
     return true;
 }

@@ -363,7 +363,7 @@
                 connection.onOpen(ev);
             });
 
-            socket.on('message', function (data) {
+            socket.on('sMessage', function (data) {
                 // Message received from server
                 connection.onMessage(data);
             });
