@@ -367,7 +367,6 @@
 
             socket.on('sMessage', function (data) {
                 // Message received from server
-                console.log(data);
                 connection.onMessage(data);
             });
 
@@ -419,6 +418,9 @@
                     chat.addUser(msg.nick, false, true);
                     break;
                 case 'leave':
+                    if (myNick === msg.nick) {
+                        socket.disconnect();
+                    }
                     chat.removeUser(msg.nick);
                     break;
                 case 'users_list':
@@ -438,7 +440,7 @@
                             if (msg.oldNick === myNick) {
                                 chat.setNick(msg.newNick);
                                 if (msg.reason) {
-                                    chat.writeMessage('system', 'Your nick is invalid. You are renamed to ' + msg.newNick);
+                                    chat.writeMessage('system', 'Your nick is invalid. You are renamed to ' + msg.newNick + ' (' + msg.reason + ')');
                                 } else {
                                     chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
                                 }
