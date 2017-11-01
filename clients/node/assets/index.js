@@ -341,6 +341,7 @@
     };
 
     var connection = {
+        socket: false,
         init: function () {
             var thisChat = this;
             var xobj = new XMLHttpRequest();
@@ -351,13 +352,14 @@
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
                     chat.settings = config.settings;
-                    thisChat.open('http://' + server.host + ':' + server.port + '/' + chat.userNick);
+                    thisChat.open('http://' + server.host + ':' + server.port + '/?user=' + chat.userNick);
                 }
             };
             xobj.send(null);
         },
         open: function (url) {
-            var socket = io(url);
+            socket = io(url);
+            console.log(url);
             socket.on('connect', function (ev) {
                 // Connection is open
                 connection.onOpen(ev);
@@ -365,6 +367,7 @@
 
             socket.on('sMessage', function (data) {
                 // Message received from server
+                console.log(data);
                 connection.onMessage(data);
             });
 
@@ -394,14 +397,13 @@
                 message: message,
                 name: chat.userNick
             };
-            //convert and send data to server
-            websocket.send(JSON.stringify(msg));
+
+            socket.emit('cMessage', msg);
         },
         onOpen: function () {
             chat.disable(false);
         },
-        onMessage: function (ev) {
-            var msg = JSON.parse(ev.data); //PHP sends Json data
+        onMessage: function (msg) {
             var type = msg.type;
             var myNick = chat.userNick;
 

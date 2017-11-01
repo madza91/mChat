@@ -49,7 +49,7 @@ io.sockets.on('connection', function (socket) {
                     var message = data.message;
                     var firstChar = message.charAt(0);
 
-                    if (firstChat === '/' || firstChar === '@') {
+                    if (firstChar === '/' || firstChar === '@') {
                         var cmd = commands(nickname, message);
                         debug('command debug');
                     } else {
@@ -84,7 +84,7 @@ function send_message(message, socketID) {
 
     if (typeof socketID !== 'undefined') {
         // send message to specific client
-        io.to(socketID).emit("message", message);
+        io.to(socketID).emit("sMessage", message);
     } else {
         // send message to all connected clients
         io.sockets.emit('sMessage', message);
