@@ -10,6 +10,9 @@ This is a very fast and tiny chat for group chat via web sockets.
 * Sound on received message
 * Commands (combined IRC and custom)
 
+## Installation
+* npm install socket.io
+
 ## Chat commands
 In this chat you can use commands starting with slash (/).
 Available commands:
@@ -23,8 +26,10 @@ Available commands:
 * help - Get list of all available commands
 
 ## Requirements - Server
-* PHP
-* Websockets
+* npm
+* node
+* socket.io
+* Websockets enabled on server
 
 ## Helpful links
 * [Visit chat online](http://madza.rs/chat)

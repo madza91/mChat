@@ -1,0 +1,153 @@
+/*
+/* Autor: Marko Nikolic
+/* Naziv: Chat Socket.io App
+/* Datum: 20.07.2014
+/* Kontakt email: vttsvranje@hotmail.com
+/* Kontakt telefon: +381 64/31 81 259
+*/
+
+body {
+    background: url(../images/contentBg.gif) repeat;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px;
+    color: #7b7b7b;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 24px;
+}
+
+#wrapper {
+    width: 80%;
+    margin: 50px auto;
+}
+
+.chat-wrapper {
+    width: 60%;
+    height: 480px;
+    margin: 0 auto;
+    padding: 2%;
+    overflow: hidden;
+    border: 1px solid #cc1213;
+}
+
+.chat-data {
+    width: 60%;
+    margin: 0;
+    float: left;
+}
+
+.chat-output {
+    width: 95%;
+    height: 350px;
+    margin: 0;
+    padding: 5%;
+    border: 1px solid #FFFFFF;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.chat-input {
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+
+.chat-users {
+    width: 30%;
+    height: 412px;
+    margin: 0;
+    padding: 1%;
+    border: 1px solid #cc1213;
+    float: right;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.chat-users ul li {
+    font-size: 14px;
+    margin: 4px 5px;
+}
+
+.chat-users ul li span {
+    background: #0BA300;
+    width: 7px;
+    height: 7px;
+    display: block;
+    border-radius: 7px;
+    float: left;
+    margin: 4px 5px;
+}
+
+input[type=text] {
+    width: 103%;
+    margin: 0 2% 0 0;
+    padding: 1%;
+    background-color: rgba(255,255,255,0.025);
+    border: 1px solid rgba(204,18,19,0.80);
+    color: #FFFFFF;
+    font-size: 12px;
+}
+
+.btn-send {
+    background: #cc1213;
+    color: #ffffff;
+    text-shadow: none;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 8px 15px;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+
+.btn-send:hover {
+    background: #ffffff;
+    color: #cc1213;
+    text-shadow: none;
+    outline: none !important;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.my {
+    background: rgba(255,255,255,0.1);
+    color: #FFFFFF;
+    float: right;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.my div {
+    color: #FFFFFF;
+    text-align: right;
+}
+
+.their {
+    background: rgba(81,164,15,0.1);
+    color: #cc1213;
+    float: left;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.their div {
+    color: #cc1213;
+    text-align: left;
+}
+
+.clear {
+    clear: both;
+}

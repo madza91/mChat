@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test Chat</title>
+
+    <link rel="stylesheet" href="node.css" type="text/css"/>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
+
+    <script src="http://52.15.57.211:1234/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
+
+<body>
+<div id="wrapper"><!-- SRART WRAPPER -->
+    <div class="chat-wrapper"><!-- SRART CHAT-WRAPPER -->
+
+        <h1>Chat Socket.io App</h1>
+
+        <div class="chat-data"><!-- SRART CHAT-DATA -->
+
+            <div class="chat-output" id="chatarea"><!-- SRART CHAT-OUTPUT -->
+            </div><!-- END CHAT-OUTPUT -->
+
+            <div class="chat-input"><!-- SRART CHAT-INPUT -->
+                <input type="text" placeholder="Vasa poruka" id="msgbox"/>
+            </div><!-- END CHAT-INPUT -->
+
+        </div><!-- END CHAT-DATA -->
+
+        <div class="chat-users"><!-- SRART CHAT-ACTIVE-USER -->
+            <ul id="chat_users">
+            </ul>
+        </div><!-- END CHAT-ACTIVE-USER -->
+
+    </div><!-- END CHAT-WRAPPER -->
+</div><!-- END WRAPPER -->
+</body>
+</html>
+
+
+<script>
+    var socket = io('http://localhost:9000?user=nemanja');
+    socket.on('connect', function () {
+
+        // login i upis korisnika u local storage
+        var clientname;
+        if (localStorage.getItem("username") !== null)
+        {
+            clientname = localStorage.username;
+            var a = confirm("Poslednja poseta sa nadimkom: " + clientname + ".");
+            if (a != true) {
+                clientname = prompt("Dodaj novi nadimak?");
+                localStorage.username = clientname;
+            }
+        }
+        else {
+            clientname = prompt("Koji je vas nadimak?");
+            localStorage.username = clientname;
+        }
+
+        socket.emit("setUser", clientname);
+    });
+
+    socket.on('message', function (data) {
+        console.log(data);
+    });
+
+    socket.on('error', function(ev) {
+        alert('greska');
+        console.log(ev);
+    });
+
+    socket.on('disconnect', function(ev) {
+        alert('greska1');
+        console.log(ev);
+    });
+
+</script>
