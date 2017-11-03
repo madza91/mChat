@@ -124,6 +124,8 @@ function commands(socketID, user, message) {
                         };
                         nickObj.changeUser(user, {nick: validation.nick});
                         sendTo = false;
+                    } else {
+                        preparedReturn.message = validation.reason;
                     }
                     break;
                 case 'clear':
@@ -214,7 +216,7 @@ var nickObj = {
     validate: function (nick) {
         var isValid = this.isValid(nick);
         var userID = this.findUser(nick, 'nick');
-        var reason = isValid ? 'Chosen nickname already exists' : 'Chosen nickname is in invalid format';
+        var reason = isValid ? 'Chosen nickname already exists' : 'Chosen nickname is in invalid format. Check `/help nick` for detailed information.';
         if (isValid && userID.length === 0) {
             return {nick: nick, isValid: true, reason: null};
         } else {
