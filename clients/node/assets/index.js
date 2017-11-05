@@ -100,7 +100,6 @@
             if (log) {
                 if (user === this.userNick) {
                     this.writeMessage('system', 'Welcome ' + this.userNick + '! Please use ' + this.mark('/help') + ' command for list of all available commands.');
-                    this.sendEmail(user, 'Joined');
                 } else {
                     this.sendNotification(user + ' joined.');
                     this.writeMessage('system', user + ' joined.');
@@ -275,12 +274,6 @@
                 return '<a title="' + url + '" href="' + url + '" target="_blank">' + a.hostname + '</a>';
             })
         },
-        sendEmail: function(nick, message) {
-            if (this.settings && this.settings.sendEmail) {
-                var token = Math.random().toString(36).substring(2);
-                $.post( "http://madza.rs/emailme.php", {name: nick, message: message, token: token}, function() {});
-            }
-        },
         uploadFile: function() {
             var file = this.$uploadInput[0].files[0];
 
@@ -444,7 +437,6 @@
                                 } else {
                                     chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
                                 }
-                                chat.sendEmail(msg.oldNick, myNick + ' change name to ' + msg.newNick);
                             } else {
                                 chat.renameUser(msg.oldNick, msg.newNick);
                                 chat.writeMessage('system', msg.oldNick + ' changed nick to ' + msg.newNick);
@@ -461,7 +453,6 @@
                         case 'noticeme':
                             chat.shakeUser(msg.nick);
                             chat.sendNotification(msg.nick + ' says hello!');
-                            chat.sendEmail(msg.nick, msg.nick + ' is bored...');
                             break;
                         case 'help':
                             var output = 'Available commands: ';

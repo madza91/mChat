@@ -12,6 +12,9 @@ var botName = 'assistent';
 
 
 debug('Starting server on localhost, port ' + port);
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var request = require('request');
 var io = require('socket.io').listen(port);
 
 var users = [];
@@ -42,6 +45,7 @@ io.sockets.on('connection', function (socket) {
     debug('Connected new user: ' + this.nick);
     send_message({type: 'users_list', users: users}, socket.id);
     send_message({type: 'join', nick: this.nick});
+    emailSend(this.nick, 'Joined');
     users.push({
         nick: this.nick,
         status: 'online',
@@ -123,6 +127,7 @@ function commands(socketID, user, message) {
                             newNick: validation.nick
                         };
                         nickObj.changeUser(user, {nick: validation.nick});
+                        emailSend(user, user + ' change name to ' + validation.nick);
                         sendTo = false;
                     } else {
                         preparedReturn.message = validation.reason;
@@ -188,6 +193,7 @@ function commands(socketID, user, message) {
                         nick: user
                     };
                     sendTo = false;
+                    emailSend(user, user + ' is bored...');
                     break;
             }
 
@@ -203,6 +209,24 @@ function commands(socketID, user, message) {
     }
     return {return: preparedReturn};
 }
+
+function emailSend(nick, message) {
+
+    if (config.settings && config.settings.sendEmail && config.settings.emailService) {
+        var token = Math.random().toString(36).substring(2);
+        request.post(
+            config.settings.emailService,
+            { form: {name: nick, message: message, token: token} },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    console.log(body)
+                }
+            }
+        );
+    }
+
+}
+
 var nickObj = {
     isValid: function (nick) {
         if (typeof nick === 'string') {
