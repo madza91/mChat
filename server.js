@@ -212,7 +212,7 @@ function commands(socketID, user, message) {
 
 function emailSend(nick, message) {
 
-    if (config.settings && config.settings.sendEmail && config.settings.emailService) {
+    if (config.settings && config.settings.emailService && config.settings.sendEmail === true) {
         var token = Math.random().toString(36).substring(2);
         request.post(
             config.settings.emailService,

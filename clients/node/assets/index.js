@@ -29,6 +29,7 @@
             this.$connectControl = $('#connection_control');
             this.$uploadProgress = $('#upload_status');
             this.$uploadInput = $(':file');
+            this.$uploadButton = $('#attach-button');
         },
         bindEvents: function () {
             this.$connectBtn.on('click', this.connect.bind(this));
@@ -232,7 +233,7 @@
             this.$peopleList.html('');
             this.$textarea.prop('disabled', disabled);
             this.$uploadInput.attr('disabled', disabled);
-            $('#attach-button').attr('disabled', disabled);
+            this.$uploadButton.attr('disabled', disabled);
             if (!disabled) {
                 this.isConnected = true;
                 this.$textarea.focus();
@@ -297,6 +298,9 @@
                     var myXhr = $.ajaxSettings.xhr();
                     if (myXhr.upload) {
                         // For handling the progress of the upload
+                        chat.$uploadInput.attr('disabled', true);
+                        chat.$uploadButton.attr('disabled', true);
+                        chat.$uploadProgress.show();
                         myXhr.upload.addEventListener('progress', function(e) {
                             if (e.lengthComputable) {
                                 chat.$uploadProgress.animate({
@@ -316,7 +320,10 @@
                     chat.writeMessage('system', 'Error on file uploading (' + data.responseText + ')');
                 })
                 .always(function() {
+                    chat.$uploadProgress.hide();
                     chat.$uploadProgress.width('0%');
+                    chat.$uploadInput.attr('disabled', false);
+                    chat.$uploadButton.attr('disabled', false);
                 });
         },
         searchFilter: function () {
