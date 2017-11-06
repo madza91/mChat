@@ -141,6 +141,7 @@ input:focus {
     margin-bottom: 5px;
     width: 90%;
     position: relative;
+    word-wrap: break-word;
 }
 
 .chat .chat-history .messageArrow:after {
