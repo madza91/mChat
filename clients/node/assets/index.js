@@ -245,6 +245,7 @@
         },
         clear: function () {
             this.$chatHistoryList.html('');
+            this.lastChatNick = false;
         },
         insertHistory: function (message) {
             if (typeof message !== 'boolean') {
