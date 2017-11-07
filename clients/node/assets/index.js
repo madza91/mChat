@@ -285,7 +285,7 @@
             }
 
             $.ajax({
-                url: 'server/attach.php',
+                url: '../../server/attach.php',
                 type: 'POST',
 
                 // Form data
