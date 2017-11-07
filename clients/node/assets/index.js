@@ -347,7 +347,7 @@
             var thisChat = this;
             var xobj = new XMLHttpRequest();
             xobj.overrideMimeType("application/json");
-            xobj.open('GET', 'config.json', true);
+            xobj.open('GET', '../../config.json', true);
             xobj.onreadystatechange = function() {
                 if (xobj.readyState === 4 && xobj.status === 200) {
                     var config = JSON.parse(xobj.responseText);
@@ -360,7 +360,6 @@
         },
         open: function (url) {
             socket = io(url);
-            console.log(url);
             socket.on('connect', function (ev) {
                 // Connection is open
                 connection.onOpen(ev);
