@@ -5,9 +5,10 @@
     "botName": "assistent"
   },
   "client": {
-    "default": "bootstrap"
+    "default": "node"
   },
   "settings": {
-    "sendEmail": false
+    "emailService": "http://madza.rs/emailme.php",
+    "sendEmail": true
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "tiny-websocket-chat",
+  "version": "1.0.0",
+  "description": "Madza's tiny websocket chat",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madza91/websocketChat.git"
+  },
+  "keywords": [
+    "chat",
+    "websocket",
+    "js"
+  ],
+  "author": "Nemanja Madžovski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/madza91/websocketChat/issues"
+  },
+  "homepage": "http://madza.rs/chat",
+  "dependencies": {
+    "request": "^2.83.0",
+    "socket.io": "^2.0.4"
+  }
+}

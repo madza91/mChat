@@ -29,6 +29,7 @@
             this.$connectControl = $('#connection_control');
             this.$uploadProgress = $('#upload_status');
             this.$uploadInput = $(':file');
+            this.$uploadButton = $('#attach-button');
         },
         bindEvents: function () {
             this.$connectBtn.on('click', this.connect.bind(this));
@@ -100,7 +101,6 @@
             if (log) {
                 if (user === this.userNick) {
                     this.writeMessage('system', 'Welcome ' + this.userNick + '! Please use ' + this.mark('/help') + ' command for list of all available commands.');
-                    this.sendEmail(user, 'Joined');
                 } else {
                     this.sendNotification(user + ' joined.');
                     this.writeMessage('system', user + ' joined.');
@@ -233,7 +233,7 @@
             this.$peopleList.html('');
             this.$textarea.prop('disabled', disabled);
             this.$uploadInput.attr('disabled', disabled);
-            $('#attach-button').attr('disabled', disabled);
+            this.$uploadButton.attr('disabled', disabled);
             if (!disabled) {
                 this.isConnected = true;
                 this.$textarea.focus();
@@ -245,6 +245,7 @@
         },
         clear: function () {
             this.$chatHistoryList.html('');
+            this.lastChatNick = false;
         },
         insertHistory: function (message) {
             if (typeof message !== 'boolean') {
@@ -275,12 +276,6 @@
                 return '<a title="' + url + '" href="' + url + '" target="_blank">' + a.hostname + '</a>';
             })
         },
-        sendEmail: function(nick, message) {
-            if (this.settings && this.settings.sendEmail) {
-                var token = Math.random().toString(36).substring(2);
-                $.post( "http://madza.rs/emailme.php", {name: nick, message: message, token: token}, function() {});
-            }
-        },
         uploadFile: function() {
             var file = this.$uploadInput[0].files[0];
 
@@ -290,7 +285,7 @@
             }
 
             $.ajax({
-                url: 'server/attach.php',
+                url: '../../server/attach.php',
                 type: 'POST',
 
                 // Form data
@@ -304,6 +299,9 @@
                     var myXhr = $.ajaxSettings.xhr();
                     if (myXhr.upload) {
                         // For handling the progress of the upload
+                        chat.$uploadInput.attr('disabled', true);
+                        chat.$uploadButton.attr('disabled', true);
+                        chat.$uploadProgress.show();
                         myXhr.upload.addEventListener('progress', function(e) {
                             if (e.lengthComputable) {
                                 chat.$uploadProgress.animate({
@@ -323,7 +321,10 @@
                     chat.writeMessage('system', 'Error on file uploading (' + data.responseText + ')');
                 })
                 .always(function() {
+                    chat.$uploadProgress.hide();
                     chat.$uploadProgress.width('0%');
+                    chat.$uploadInput.attr('disabled', false);
+                    chat.$uploadButton.attr('disabled', false);
                 });
         },
         searchFilter: function () {
@@ -341,39 +342,43 @@
     };
 
     var connection = {
+        socket: false,
         init: function () {
             var thisChat = this;
             var xobj = new XMLHttpRequest();
             xobj.overrideMimeType("application/json");
-            xobj.open('GET', 'config.json', true);
+            xobj.open('GET', '../../config.json', true);
             xobj.onreadystatechange = function() {
                 if (xobj.readyState === 4 && xobj.status === 200) {
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
                     chat.settings = config.settings;
-                    thisChat.open('ws://' + server.host + ':' + server.port + '/' + chat.userNick);
+                    thisChat.open('http://' + server.host + ':' + server.port + '/?user=' + chat.userNick);
                 }
             };
             xobj.send(null);
         },
         open: function (url) {
-            websocket = new WebSocket(url);
-            websocket.onopen = function (ev) {
+            socket = io(url);
+            socket.on('connect', function (ev) {
                 // Connection is open
                 connection.onOpen(ev);
-            };
-            websocket.onmessage = function (ev) {
+            });
+
+            socket.on('sMessage', function (data) {
                 // Message received from server
-                connection.onMessage(ev);
-            };
-            websocket.onerror = function (ev) {
+                connection.onMessage(data);
+            });
+
+            socket.on('error', function(ev) {
                 // Connection error
                 connection.onError(ev);
-            };
-            websocket.onclose = function (ev) {
+            });
+
+            socket.on('disconnect', function(ev) {
                 // Closed connection
                 connection.onClose(ev);
-            };
+            });
         },
         send: function (type, message) {
             if (typeof message === 'undefined' || message === '') {
@@ -391,14 +396,13 @@
                 message: message,
                 name: chat.userNick
             };
-            //convert and send data to server
-            websocket.send(JSON.stringify(msg));
+
+            socket.emit('cMessage', msg);
         },
         onOpen: function () {
             chat.disable(false);
         },
-        onMessage: function (ev) {
-            var msg = JSON.parse(ev.data); //PHP sends Json data
+        onMessage: function (msg) {
             var type = msg.type;
             var myNick = chat.userNick;
 
@@ -414,6 +418,9 @@
                     chat.addUser(msg.nick, false, true);
                     break;
                 case 'leave':
+                    if (myNick === msg.nick) {
+                        socket.disconnect();
+                    }
                     chat.removeUser(msg.nick);
                     break;
                 case 'users_list':
@@ -433,11 +440,10 @@
                             if (msg.oldNick === myNick) {
                                 chat.setNick(msg.newNick);
                                 if (msg.reason) {
-                                    chat.writeMessage('system', 'Your nick is invalid. You are renamed to ' + msg.newNick);
+                                    chat.writeMessage('system', 'Your nick is invalid. You are renamed to ' + msg.newNick + ' (' + msg.reason + ')');
                                 } else {
                                     chat.writeMessage('system', 'You successfully changed nick to ' + msg.newNick);
                                 }
-                                chat.sendEmail(msg.oldNick, myNick + ' change name to ' + msg.newNick);
                             } else {
                                 chat.renameUser(msg.oldNick, msg.newNick);
                                 chat.writeMessage('system', msg.oldNick + ' changed nick to ' + msg.newNick);
@@ -454,7 +460,6 @@
                         case 'noticeme':
                             chat.shakeUser(msg.nick);
                             chat.sendNotification(msg.nick + ' says hello!');
-                            chat.sendEmail(msg.nick, msg.nick + ' is bored...');
                             break;
                         case 'help':
                             var output = 'Available commands: ';
