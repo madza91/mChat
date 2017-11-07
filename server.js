@@ -6,21 +6,17 @@
  * Date: 31.10.2017
  */
 
-// Config
-var port = 9000;
-var botName = 'assistent';
-
-
-debug('Starting server on localhost, port ' + port);
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 var request = require('request');
-var io = require('socket.io').listen(port);
+
+debug('Starting server on localhost, port ' + config.server.port);
+var io = require('socket.io').listen(config.server.port);
 
 var users = [];
-debug('Adding bot named ' + botName);
+debug('Adding bot named ' + config.server.botName);
 users.push({
-    nick: botName,
+    nick: config.server.botName,
     status: 'bot',
     socket: null
 });
