@@ -69,7 +69,10 @@
                 }
 
                 var templateBody = Handlebars.compile(templateEl.html());
-                this.$chatHistoryList.append(this.urlify(templateBody(context)));
+                var preparedMessage = templateBody(context);
+                preparedMessage = this.urlify(preparedMessage);
+                preparedMessage = this.emoticonify(preparedMessage);
+                this.$chatHistoryList.append(preparedMessage);
                 this.scrollToBottom();
                 this.lastChatNick = from;
             }
@@ -275,6 +278,28 @@
                 a.href = url;
                 return '<a title="' + url + '" href="' + url + '" target="_blank">' + a.hostname + '</a>';
             })
+        },
+        emoticonify: function (text) {
+
+            var map = {
+                ':-)': 'blush',
+                ':-D': 'smiley',
+                ':-(': 'worried',
+                ':-O': 'anguished',
+                ':-P': 'stuck_out_tongue',
+                ':-*': 'kissing_heart',
+                ':-/': 'confused',
+                ':pig:': 'pig',
+                '(y)': '--1',
+                '(n)': '-1'
+            };
+
+            Object.keys(map).forEach(function (ico) {
+                var icoE = ico.replace(/([.?*+^$[\]\\(){}<|-])/g, "\\$1");
+                text = text.replace(new RegExp(icoE, 'g'), '<i class="em em-' + map[ico] + '"></i>');
+            });
+
+            return text;
         },
         uploadFile: function() {
             var file = this.$uploadInput[0].files[0];

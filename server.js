@@ -56,7 +56,7 @@ io.sockets.on('connection', function (socket) {
             var message = data.message;
             var firstChar = message.charAt(0);
 
-            if (firstChar === '/' || firstChar === '@') {
+            if (firstChar === '/') {
                 var cmd = commands(socket.id, nickname, message);
                 send_message(cmd.return, cmd.to);
             } else {
