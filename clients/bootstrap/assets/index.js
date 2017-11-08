@@ -285,7 +285,7 @@
             var emojiRegex = /:(.*?):/g;
             var tmpEmoji;
             var map = {
-                ':-)': 'blush',
+                ':-)': 'slightly_smiling_face',
                 ':-D': 'smiley',
                 ':-(': 'worried',
                 ':-O': 'anguished',
