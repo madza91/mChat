@@ -282,6 +282,8 @@
         },
         emoticonify: function (text) {
 
+            var emojiRegex = /:(.*?):/g;
+            var tmpEmoji;
             var map = {
                 ':-)': 'blush',
                 ':-D': 'smiley',
@@ -293,9 +295,13 @@
                 ':-|': 'neutral_face',
                 ';-)': 'wink',
                 '(y)': '--1',
-                '(n)': '-1',
-                ':pig:': 'pig'
+                '(n)': '-1'
             };
+
+            text = text.replace(emojiRegex, function(emoji) {
+                tmpEmoji = emoji.slice(1, -1);
+                return (emojis.includes(tmpEmoji)) ? '<i class="em em-' + tmpEmoji + '"></i>': emoji;
+            });
 
             Object.keys(map).forEach(function (ico) {
                 var icoE = ico.replace(/([.?*+^$[\]\\(){}<|-])/g, "\\$1");
