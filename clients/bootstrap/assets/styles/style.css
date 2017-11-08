@@ -199,6 +199,7 @@ input:focus {
     font-size: smaller;
     margin-bottom: 10px;
     margin-top: 15px;
+    width: 100%;
 }
 
 .chat .chat-history .message-data-time {
@@ -235,10 +236,6 @@ input:focus {
     border-radius: 5px;
     background-color: #cfd0c9;
     padding: 1px 5px;
-}
-
-.float-right {
-    float: right;
 }
 
 .btn-attach {

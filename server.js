@@ -214,7 +214,7 @@ function emailSend(nick, message) {
             config.settings.emailService,
             { form: {name: nick, message: message, token: token} },
             function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+                if (!error && response.statusCode === 200) {
                     console.log(body)
                 }
             }

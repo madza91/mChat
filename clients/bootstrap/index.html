@@ -66,11 +66,11 @@
 
 <script id="message-template" type="text/x-handlebars-template">
     <li class="clearfix">
-        <div class="message-data pull-right">
+        <div class="message-data text-right">
             <span class="message-data-time">{{time}}, Today</span> &nbsp; &nbsp;
             <span class="message-data-name">{{name}}</span> <i class="fa fa-circle online"></i>
         </div>
-        <div class="message messageArrow other-message float-right">
+        <div class="message messageArrow other-message pull-right">
             {{messageOutput}}
         </div>
     </li>
@@ -78,7 +78,7 @@
 
 <script id="message-nonick-template" type="text/x-handlebars-template">
     <li class="clearfix">
-        <div class="message other-message float-right" title="{{time}}">
+        <div class="message other-message pull-right" title="{{time}}">
             {{messageOutput}}
         </div>
     </li>
@@ -86,7 +86,7 @@
 
 <script id="message-response-template" type="text/x-handlebars-template">
     <li>
-        <div class="message-data">
+        <div class="message-data clearfix">
             <span class="message-data-name"><i class="fa fa-circle online"></i> {{name}}</span>
             <span class="message-data-time">{{time}}, Today</span>
         </div>
