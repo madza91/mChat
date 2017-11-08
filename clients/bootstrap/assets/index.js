@@ -290,9 +290,11 @@
                 ':-P': 'stuck_out_tongue',
                 ':-*': 'kissing_heart',
                 ':-/': 'confused',
-                ':pig:': 'pig',
+                ':-|': 'neutral_face',
+                ';-)': 'wink',
                 '(y)': '--1',
-                '(n)': '-1'
+                '(n)': '-1',
+                ':pig:': 'pig'
             };
 
             Object.keys(map).forEach(function (ico) {
