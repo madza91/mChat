@@ -242,9 +242,11 @@
                 this.isConnected = true;
                 this.$textarea.focus();
                 this.$connectControl.hide();
+                this.$chatHistory.removeClass('blur');
             } else {
                 this.isConnected = false;
                 this.$connectControl.show();
+                this.$chatHistory.addClass('blur');
             }
         },
         clear: function () {

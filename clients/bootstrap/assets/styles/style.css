@@ -38,6 +38,7 @@ input:focus {
     background-color: #fdf2c0;
     padding: 10px;
     border-bottom: 1px solid #b5a7a7;
+    z-index: 10;
 }
 
 .connection_info {
@@ -320,4 +321,8 @@ input:focus {
 
 [hidden] {
     display: none !important;
+}
+
+.blur {
+    filter: blur(2px);
 }
