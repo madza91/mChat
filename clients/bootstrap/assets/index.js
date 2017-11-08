@@ -165,28 +165,29 @@
             audio.play();
         },
         sendNotification: function (message) {
-            if (!Notification || !document.hidden) {
-                // Not available in user's browser
-                return;
+            if (window.Notification) {
+                if (!Notification || !document.hidden) {
+                    // Not available in user's browser
+                    return;
+                }
+
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+                else {
+                    var title = 'Madza\'s tiny chat';
+                    var icon = 'http://madza.rs/templates/portfolio/img/logo.png';
+                    var notification = new Notification(title, {
+                        body: message,
+                        icon: icon
+                    });
+
+                    notification.addEventListener('click', function (e) {
+                        parent.focus();
+                        window.focus();
+                        e.target.close();
+                    }, false);
+                }
             }
-
-            if (Notification.permission !== "granted")
-                Notification.requestPermission();
-            else {
-                var title = 'Madza\'s tiny chat';
-                var icon = 'http://madza.rs/templates/portfolio/img/logo.png';
-                var notification = new Notification(title, {
-                    body: message,
-                    icon: icon
-                });
-
-                notification.addEventListener('click', function(e) {
-                    parent.focus();
-                    window.focus();
-                    e.target.close();
-                }, false);
-            }
-
         },
         writeMessage: function (type, data) {
             switch (type) {
@@ -510,10 +511,12 @@
     };
 
     // request permission on page load
-    document.addEventListener('DOMContentLoaded', function () {
-        if (Notification.permission !== "granted")
-            Notification.requestPermission();
-    });
+    if (window.Notification) {
+        document.addEventListener('DOMContentLoaded', function () {
+            if (Notification.permission !== "granted")
+                Notification.requestPermission();
+        });
+    }
 
     window.addEventListener("beforeunload", function (e) {
         if (chat.isConnected) {
