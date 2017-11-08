@@ -393,6 +393,10 @@
             xobj.send(null);
         },
         open: function (url) {
+            if (typeof io === 'undefined') {
+                chat.writeMessage('system', 'Server is offline.');
+                return;
+            }
             socket = io(url);
             socket.on('connect', function (ev) {
                 // Connection is open
