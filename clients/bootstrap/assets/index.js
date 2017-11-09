@@ -379,6 +379,7 @@
 
     var connection = {
         socket: false,
+        config: false,
         init: function () {
             var thisChat = this;
             var xobj = new XMLHttpRequest();
@@ -388,37 +389,45 @@
                 if (xobj.readyState === 4 && xobj.status === 200) {
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
-                    chat.settings = config.settings;
+                    connection.config = config;
                     thisChat.open('http://' + server.host + ':' + server.port + '/?user=' + chat.userNick);
                 }
             };
             xobj.send(null);
         },
         open: function (url) {
-            if (typeof io === 'undefined') {
-                chat.writeMessage('system', 'Server is offline.');
-                return;
-            }
-            socket = io(url);
-            socket.on('connect', function (ev) {
-                // Connection is open
-                connection.onOpen(ev);
-            });
 
-            socket.on('sMessage', function (data) {
-                // Message received from server
-                connection.onMessage(data);
-            });
+            $.getScript('http://' + this.config.server.host + ':' + this.config.server.port + '/socket.io/socket.io.js')
+                .done(function (script, textStatus) {
+                    if (typeof io === 'undefined') {
+                        chat.writeMessage('system', 'Server is offline.');
+                        return;
+                    }
+                    socket = io(url);
+                    socket.on('connect', function (ev) {
+                        // Connection is open
+                        connection.onOpen(ev);
+                    });
 
-            socket.on('error', function(ev) {
-                // Connection error
-                connection.onError(ev);
-            });
+                    socket.on('sMessage', function (data) {
+                        // Message received from server
+                        connection.onMessage(data);
+                    });
 
-            socket.on('disconnect', function(ev) {
-                // Closed connection
-                connection.onClose(ev);
-            });
+                    socket.on('error', function (ev) {
+                        // Connection error
+                        connection.onError(ev);
+                    });
+
+                    socket.on('disconnect', function (ev) {
+                        // Closed connection
+                        connection.onClose(ev);
+                    });
+                })
+                .fail(function (jqxhr, settings, exception) {
+                    chat.writeMessage('system', 'Server is offline.');
+                });
+
         },
         send: function (type, message) {
             if (typeof message === 'undefined' || message === '') {
