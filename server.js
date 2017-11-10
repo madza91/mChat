@@ -57,7 +57,7 @@ io.sockets.on('connection', function (socket) {
             var firstChar = message.charAt(0);
 
             if (firstChar === '/') {
-                var cmd = commands(socket.id, nickname, message);
+                var cmd = commands(socket, nickname, message);
                 send_message(cmd.return, cmd.to);
             } else {
                 debug(nickname + ' sends a message.');
@@ -97,7 +97,8 @@ function send_message(message, socketID) {
     return true;
 }
 
-function commands(socketID, user, message) {
+function commands(socket, user, message) {
+    var socketID = socket.id;
     var preparedReturn = {
         type: 'system',
         message: 'Unknown command'
@@ -138,20 +139,29 @@ function commands(socketID, user, message) {
                 case 'disconnect':
                 case 'exit':
                 case 'quit':
-                    preparedReturn = {
-                        type: 'leave',
-                        nick: user
-                    };
+                    socket.disconnect();
                     break;
                 case 'help':
+                    var commands = '<b>' + availableCommands.join('</b> <b>') + '</b>';
                     preparedReturn = {
-                        type: 'command',
-                        command: 'help',
-                        commands: availableCommands
+                        type: 'system',
+                        message: 'Available commands: ' + commands
                     };
                     break;
                 case 'whois':
-                    // TODO create command
+                    if (exploded[1]) {
+                        var userID = nickObj.findUser(exploded[1], 'nick');
+                        var isOnline = (userID.length > 0) ? 'online': 'offline';
+                        preparedReturn = {
+                            type: 'system',
+                            message: 'This command is under development. We don\'t have info about this user, but it seems he is ' + isOnline
+                        };
+                    } else {
+                        preparedReturn = {
+                            type: 'system',
+                            message: 'Uncompleted command. Please type in <b>/whois nick</b>.'
+                        };
+                    }
                     break;
                 case 'simulate':
                     message = message.substr(9);

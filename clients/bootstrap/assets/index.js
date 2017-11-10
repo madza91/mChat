@@ -146,13 +146,18 @@
             this.searchFilter();
         },
         addSystemMessage: function (message) {
+            // Todo boldify
             this.scrollToBottom();
             var templateSystemMessage = Handlebars.compile($("#system-message-template").html());
             var contextSystem = {
                 message: message,
                 time: this.getCurrentTime()
             };
-            this.$chatHistoryList.append(templateSystemMessage(contextSystem));
+
+            var preparedMessage = templateSystemMessage(contextSystem);
+            preparedMessage = this.boldify(preparedMessage);
+
+            this.$chatHistoryList.append(preparedMessage);
             this.lastChatNick = false;
             this.scrollToBottom();
         },
@@ -283,7 +288,6 @@
             })
         },
         emoticonify: function (text) {
-
             var emojiRegex = /:(.*?):/g;
             var tmpEmoji;
             var map = {
@@ -311,6 +315,12 @@
             });
 
             return text;
+        },
+        boldify: function(text) {
+            var markRegex = /<b>(.*?)<\/b>/g;
+            return text.replace(markRegex, function(mark) {
+                return chat.mark(mark);
+            });
         },
         uploadFile: function() {
             var file = this.$uploadInput[0].files[0];
@@ -467,9 +477,6 @@
                     chat.addUser(msg.nick, false, true);
                     break;
                 case 'leave':
-                    if (myNick === msg.nick) {
-                        socket.disconnect();
-                    }
                     chat.removeUser(msg.nick);
                     break;
                 case 'users_list':
@@ -510,16 +517,6 @@
                             chat.shakeUser(msg.nick);
                             chat.sendNotification(msg.nick + ' says hello!');
                             break;
-                        case 'help':
-                            var output = 'Available commands: ';
-                            var total = msg.commands.length;
-                            jQuery.each(msg.commands, function (index, item) {
-                                output += chat.mark(item);
-                                if (index !== total -1) {
-                                    output += ' ';
-                                }
-                            });
-                            chat.writeMessage('system', output);
                     }
             }
         },
