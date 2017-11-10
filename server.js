@@ -104,7 +104,7 @@ function commands(socket, user, message) {
         message: 'Unknown command'
     };
     var sendTo = socketID;
-    var availableCommands = ['nick', 'me', 'clear', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help'];
+    var availableCommands = ['nick', 'me', 'clear', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help', 'about'];
 
     var firstChar = message.charAt(0);
 
@@ -187,8 +187,7 @@ function commands(socket, user, message) {
                 case 'me':
                     preparedReturn = {
                         type: 'system',
-                        message: user + message.substr(2),
-                        nick: user
+                        message: user + message.substr(2)
                     };
                     sendTo = false;
                     break;
@@ -201,6 +200,11 @@ function commands(socket, user, message) {
                     sendTo = false;
                     emailSend(user, user + ' is bored...');
                     break;
+                case 'about':
+                    preparedReturn = {
+                        type: 'system',
+                        message: 'Hello! This chat application is written by Nemanja Madžovski. You can contact me via contact form on http://madza.rs/ Thank you! :-)'
+                    };
             }
 
         }

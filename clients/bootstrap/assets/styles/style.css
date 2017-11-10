@@ -194,6 +194,18 @@ input:focus {
     box-shadow: 2px 2px 7px 0px rgba(0,0,0,0.2);
 }
 
+.chat .chat-history .message-info a {
+    color: black;
+    border-radius: 5px;
+    background-color: #cfd0c9;
+    padding: 1px 5px;
+}
+
+.chat .chat-history .message-info i {
+    position: relative;
+    top: -2px;
+}
+
 .chat .chat-history .message-data {
     color: black;
     font-size: smaller;

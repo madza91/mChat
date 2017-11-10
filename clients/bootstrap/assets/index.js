@@ -146,7 +146,6 @@
             this.searchFilter();
         },
         addSystemMessage: function (message) {
-            // Todo boldify
             this.scrollToBottom();
             var templateSystemMessage = Handlebars.compile($("#system-message-template").html());
             var contextSystem = {
@@ -156,6 +155,8 @@
 
             var preparedMessage = templateSystemMessage(contextSystem);
             preparedMessage = this.boldify(preparedMessage);
+            preparedMessage = this.urlify(preparedMessage);
+            preparedMessage = this.emoticonify(preparedMessage);
 
             this.$chatHistoryList.append(preparedMessage);
             this.lastChatNick = false;
