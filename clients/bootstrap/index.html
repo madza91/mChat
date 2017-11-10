@@ -39,11 +39,11 @@
             <noscript>
                 <span>This chat requires enabled JavaScript. Please enable it and reload page. Thank you!</span>
             </noscript>
-            <div class="col-lg-10 connection_info">
+            <div class="col-lg-12 connection_info">
                 <p>Welcome! This is open and free chat and you can use it without registration. Just click <span class="mark">connect</span> and enjoy! <i class="em em-blush"></i></p>
             </div>
-            <div class="col-lg-2 connection_info">
-                <button class="btn btn-info pull-right" id="connect">Connect <i class="fa fa-wechat"></i></button>
+            <div class="col-md-12 connection_info">
+                <button class="btn btn-info" id="connect">Connect <i class="fa fa-wechat"></i></button>
             </div>
         </div>
         <div class="chat-history">
@@ -119,10 +119,10 @@
 <script id="system-message-template" type="text/x-handlebars-template">
     <li>
         <div class="message-data text-center">
-            <span class="message-info">
+            <div class="message-info">
                 <span class="message-data-name">{{{message}}}</span>
                 <span class="message-data-time">{{time}}, Today</span>
-            </span>
+            </div>
         </div>
     </li>
 </script>
