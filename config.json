@@ -5,7 +5,7 @@
     "botName": "assistent"
   },
   "client": {
-    "default": "node"
+    "default": "bootstrap"
   },
   "settings": {
     "emailService": "http://madza.rs/emailme.php",
