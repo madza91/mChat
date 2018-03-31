@@ -13,6 +13,10 @@ This is a very fast and tiny chat for group chat via web sockets.
 ## Installation
 * npm install socket.io
 
+## Server start
+* node server.js
+* forever start server.js
+
 ## Chat commands
 In this chat you can use commands starting with slash (/).
 Available commands:
