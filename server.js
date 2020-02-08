@@ -8,6 +8,7 @@
 
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var questions = fs.readFileSync('quiz/questions.txt', 'utf8');
 var request = require('request');
 
 debug('Starting server on localhost, port ' + config.server.port);
@@ -23,6 +24,8 @@ users.push({
 
 // New client connection
 io.sockets.on('connection', function (socket) {
+
+    quiz.getRandomQuestion();
 
     var chosenNick = socket.handshake.query.user;
     var validation = nickObj.validate(chosenNick);
@@ -40,6 +43,7 @@ io.sockets.on('connection', function (socket) {
 
     debug('Connected new user: ' + this.nick);
     send_message({type: 'users_list', users: users}, socket.id);
+    // send_message({type: 'user', nick: 'Trivia', message: 'Welcome buddy!'});
     send_message({type: 'join', nick: this.nick});
     emailSend(this.nick, 'Joined');
     users.push({
@@ -220,8 +224,17 @@ function commands(socket, user, message) {
     return {return: preparedReturn};
 }
 
-function emailSend(nick, message) {
+var quiz = {
+    start: function () {
+        debug('Starting a quiz...');
+        return true;
+    },
+    getRandomQuestion: function () {
+        debug(questions);
+    }
+};
 
+function emailSend(nick, message) {
     if (config.settings && config.settings.emailService && config.settings.sendEmail === true) {
         var token = Math.random().toString(36).substring(2);
         request.post(
@@ -234,7 +247,6 @@ function emailSend(nick, message) {
             }
         );
     }
-
 }
 
 var nickObj = {

@@ -4,6 +4,11 @@
     "port": 9000,
     "botName": "assistent"
   },
+  "quiz": {
+    "hints": true,
+    "hintTotal": 3,
+    "hintDelay": 10
+  },
   "client": {
     "default": "bootstrap"
   },

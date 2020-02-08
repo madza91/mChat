@@ -14,7 +14,7 @@ This is a very fast and tiny chat for group chat via web sockets.
 * npm install socket.io
 
 ## Server start
-* node server.js
+* npm start
 * forever start server.js
 
 ## Chat commands
