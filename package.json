@@ -23,8 +23,8 @@
   },
   "homepage": "http://madza.rs/chat",
   "dependencies": {
-    "npm": "^5.8.0",
-    "request": "^2.83.0",
-    "socket.io": "^2.0.4"
+    "npm": "^6.13.7",
+    "request": "^2.88.0",
+    "socket.io": "^2.3.0"
   }
 }
