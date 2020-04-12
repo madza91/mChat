@@ -401,44 +401,37 @@
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
                     connection.config = config;
-                    thisChat.open('http://' + server.host + ':' + server.port + '/?user=' + chat.userNick);
+                    thisChat.open('https://chat.test:8080/?user=' + chat.userNick);
                 }
             };
             xobj.send(null);
         },
         open: function (url) {
-
-            $.getScript('http://' + this.config.server.host + ':' + this.config.server.port + '/socket.io/socket.io.js')
-                .done(function (script, textStatus) {
-                    if (typeof io === 'undefined') {
-                        chat.writeMessage('system', 'Server is offline.');
-                        return;
-                    }
-                    socket = io(url);
-                    socket.on('connect', function (ev) {
-                        // Connection is open
-                        connection.onOpen(ev);
-                    });
-
-                    socket.on('sMessage', function (data) {
-                        // Message received from server
-                        connection.onMessage(data);
-                    });
-
-                    socket.on('error', function (ev) {
-                        // Connection error
-                        connection.onError(ev);
-                    });
-
-                    socket.on('disconnect', function (ev) {
-                        // Closed connection
-                        connection.onClose(ev);
-                    });
-                })
-                .fail(function (jqxhr, settings, exception) {
+            socket = io(url);
+                if (typeof io === 'undefined') {
                     chat.writeMessage('system', 'Server is offline.');
+                    return;
+                }
+
+                socket.on('connect', function (ev) {
+                    // Connection is open
+                    connection.onOpen(ev);
                 });
 
+                socket.on('sMessage', function (data) {
+                    // Message received from server
+                    connection.onMessage(data);
+                });
+
+                socket.on('error', function (ev) {
+                    // Connection error
+                    connection.onError(ev);
+                });
+
+                socket.on('disconnect', function (ev) {
+                    // Closed connection
+                    connection.onClose(ev);
+                });
         },
         send: function (type, message) {
             if (typeof message === 'undefined' || message === '') {

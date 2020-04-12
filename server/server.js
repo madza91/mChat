@@ -6,15 +6,28 @@
  * Date: 31.10.2017
  */
 
-var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-var request = require('request');
+const expressApp = require('express')();
+const https = require('https');
+const fs = require('fs');
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const request = require('request');
+const debugging = require('./helpers/debugging');
 
-debug('Starting server on localhost, port ' + config.server.port);
-var io = require('socket.io').listen(config.server.port);
+// HTTPS Server
+const secureServer = https.createServer({
+    key: fs.readFileSync('/etc/ssl/certs/chat.test/chat.test.key'),
+    cert: fs.readFileSync('/etc/ssl/certs/chat.test/chat.test.crt')
+}, expressApp);
+
+secureServer.listen(config.server.port, () => {
+    debugging.log('Started server on localhost, port ' + config.server.port);
+});
+
+// Socket Server
+const io = require('socket.io')(secureServer);
 
 var users = [];
-debug('Adding bot named ' + config.server.botName);
+debugging.log('Adding bot named ' + config.server.botName);
 users.push({
     nick: config.server.botName,
     status: 'bot',
@@ -22,10 +35,9 @@ users.push({
 });
 
 // New client connection
-io.sockets.on('connection', function (socket) {
-
-    var chosenNick = socket.handshake.query.user;
-    var validation = nickObj.validate(chosenNick);
+io.on('connection', function (socket) {
+    const chosenNick = socket.handshake.query.user;
+    const validation = nickObj.validate(chosenNick);
     this.nick = validation.nick;
 
     if (chosenNick !== this.nick) {
@@ -38,7 +50,7 @@ io.sockets.on('connection', function (socket) {
         }, socket.id);
     }
 
-    debug('Connected new user: ' + this.nick);
+    debugging.log('Connected new user: ' + this.nick);
     send_message({type: 'users_list', users: users}, socket.id);
     send_message({type: 'join', nick: this.nick});
     emailSend(this.nick, 'Joined');
@@ -60,7 +72,7 @@ io.sockets.on('connection', function (socket) {
                 var cmd = commands(socket, nickname, message);
                 send_message(cmd.return, cmd.to);
             } else {
-                debug(nickname + ' sends a message.');
+                debugging.log(nickname + ' sends a message.');
                 send_message({type: 'user', nick: nickname, message: message});
             }
         }
@@ -75,11 +87,6 @@ io.sockets.on('connection', function (socket) {
         nickObj.eventLeave(socket.id);
     });
 });
-
-function debug(word) {
-    var time = new Date;
-    console.log('\033[31m[' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds() + ']\033[0m ' + word);
-}
 
 function send_message(message, socketID) {
 
@@ -229,7 +236,7 @@ function emailSend(nick, message) {
             { form: {name: nick, message: message, token: token} },
             function (error, response, body) {
                 if (!error && response.statusCode === 200) {
-                    console.log(body)
+                    debugging.log(body)
                 }
             }
         );
@@ -295,7 +302,7 @@ var nickObj = {
         if (tmpClient.length > 0) {
             send_message({type: 'leave', nick: tmpClient[0].nick});
             this.removeUser(tmpClient[0].nick);
-            debug('User is disconnected ' + tmpClient[0].nick);
+            debugging.log(tmpClient[0].nick + ' is disconnected');
         }
     }
 };

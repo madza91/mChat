@@ -2,10 +2,10 @@
   "name": "tiny-websocket-chat",
   "version": "1.0.0",
   "description": "Madza's tiny websocket chat",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "http://madza.rs/chat",
   "dependencies": {
+    "express": "^4.17.1",
     "npm": "^6.13.7",
     "request": "^2.88.0",
     "socket.io": "^2.3.0"
