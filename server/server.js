@@ -15,8 +15,8 @@ const debugging = require('./helpers/debugging');
 
 // HTTPS Server
 const secureServer = https.createServer({
-    key: fs.readFileSync('/etc/ssl/certs/chat.test/chat.test.key'),
-    cert: fs.readFileSync('/etc/ssl/certs/chat.test/chat.test.crt')
+    key: fs.readFileSync(config.server.sslKey),
+    cert: fs.readFileSync(config.server.sslCert)
 }, expressApp);
 
 secureServer.listen(config.server.port, () => {
