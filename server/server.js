@@ -20,7 +20,7 @@ const secureServer = https.createServer({
 }, expressApp);
 
 secureServer.listen(config.server.port, () => {
-    debugging.log('Started server on localhost, port ' + config.server.port);
+    debugging.log(`Started server on ${config.server.host}, port ${config.server.port}`);
 });
 
 // Socket Server
