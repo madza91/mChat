@@ -2,7 +2,7 @@
   "name": "Madza's Tiny Chat",
   "short_name": "Madza Chat",
   "description": "Very tiny chat for Madza's Development",
-  "theme_color": "#8ff67a",
+  "theme_color": "#7DC166",
   "background_color": "#3d7eb1",
   "display": "standalone",
   "Scope": "/",
