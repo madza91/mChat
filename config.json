@@ -1,6 +1,6 @@
 {
   "server": {
-    "host": "localhost",
+    "host": "https://chat.test",
     "port": 8080,
     "botName": "assistent"
   },

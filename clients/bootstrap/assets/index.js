@@ -401,7 +401,7 @@
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
                     connection.config = config;
-                    thisChat.open('https://chat.test:8080/?user=' + chat.userNick);
+                    thisChat.open(server.host + ':' + server.port + '/?user=' + chat.userNick);
                 }
             };
             xobj.send(null);
