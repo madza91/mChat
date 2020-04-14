@@ -1,7 +1,7 @@
 <?php
 
 $projectDir = dirname(dirname(__FILE__));
-$target_dir = $projectDir . "/uploads/";
+$target_dir = $projectDir . "/server/uploads/";
 
 $maxSize = 5242880;
 $allowedTypes = ['audio', 'text', 'image', 'video'];
@@ -27,7 +27,7 @@ if (isset($_FILES["file"])) {
         $target_file = 'attachment' . rand(10000, 9999999) . '.' . $fileExt;
 
         if (move_uploaded_file($file["tmp_name"], $target_dir . $target_file)) {
-            setResponse($wwwDir . 'uploads/' . $target_file);
+            setResponse($wwwDir . 'server/uploads/' . $target_file);
         } else {
             setResponse("Sorry, there was an error uploading your file", 400);
         }

@@ -6,9 +6,6 @@
     "sslKey": "/etc/ssl/certs/chat.test/chat.test.key",
     "sslCert": "/etc/ssl/certs/chat.test/chat.test.crt"
   },
-  "client": {
-    "default": "bootstrap"
-  },
   "settings": {
     "emailService": "http://madza.rs/emailme.php",
     "sendEmail": true
