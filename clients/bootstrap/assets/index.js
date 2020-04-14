@@ -192,6 +192,13 @@
                         window.focus();
                         e.target.close();
                     }, false);
+
+                    document.addEventListener('visibilitychange', function() {
+                        if (document.visibilityState === 'visible') {
+                            // The tab has become visible so clear the now-stale Notification.
+                            notification.close();
+                        }
+                    });
                 }
             }
         },
