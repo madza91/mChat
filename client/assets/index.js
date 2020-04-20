@@ -188,8 +188,8 @@
                     });
 
                     notification.addEventListener('click', function (e) {
-                        parent.focus();
-                        window.focus();
+                        // parent.focus();
+                        // window.focus();
                         e.target.close();
                     }, false);
 
@@ -242,7 +242,7 @@
                 var isInputFocused = this.$textarea.is(':focus');
                 var isSearchFocused = this.$searchField.is(':focus');
                 if (!isInputFocused && !isSearchFocused) {
-                    this.$textarea.focus();
+                    //this.$textarea.focus();
                 }
             }
         },
@@ -253,11 +253,12 @@
             this.$uploadButton.attr('disabled', disabled);
             if (!disabled) {
                 this.isConnected = true;
-                this.$textarea.focus();
+                // this.$textarea.focus();
                 this.$connectControl.hide();
                 this.$chatHistory.removeClass('blur');
             } else {
                 this.isConnected = false;
+                // this.$connectControl.show();
                 this.$connectControl.show();
                 this.$chatHistory.addClass('blur');
             }
@@ -408,7 +409,8 @@
                     var config = JSON.parse(xobj.responseText);
                     var server = config.server;
                     connection.config = config;
-                    thisChat.open(server.host + ':' + server.port + '/?user=' + chat.userNick);
+                    // thisChat.open(server.host + ':' + server.port + '/?user=' + chat.userNick);
+                    thisChat.open('https://chat.test:8080/?user=' + chat.userNick);
                 }
             };
             xobj.send(null);
@@ -425,9 +427,34 @@
                     connection.onOpen(ev);
                 });
 
-                socket.on('sMessage', function (data) {
+                socket.on('command', function (data) {
                     // Message received from server
-                    connection.onMessage(data);
+                    connection.onMessage('command', data);
+                });
+
+                socket.on('users_list', function (data) {
+                    // Message received from server
+                    connection.onMessage('users_list', data);
+                });
+
+                socket.on('join', function (data) {
+                    // Message received from server
+                    connection.onMessage('join', data);
+                });
+
+                socket.on('system', function (data) {
+                    // Message received from server
+                    connection.onMessage('system', data);
+                });
+
+                socket.on('status', function (data) {
+                    // Message received from server
+                    connection.onMessage('status', data);
+                });
+
+                socket.on('user', function (data) {
+                    // Message received from server
+                    connection.onMessage('user', data);
                 });
 
                 socket.on('error', function (ev) {
@@ -462,8 +489,7 @@
         onOpen: function () {
             chat.disable(false);
         },
-        onMessage: function (msg) {
-            var type = msg.type;
+        onMessage: function (type, msg) {
             var myNick = chat.userNick;
 
             switch (type) {

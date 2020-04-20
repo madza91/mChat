@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/madza91/websocketChat.git"
+    "url": "git+https://github.com/madza91/mChat.git"
   },
   "keywords": [
     "chat",
@@ -19,7 +19,7 @@
   "author": "Nemanja Madžovski",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/madza91/websocketChat/issues"
+    "url": "https://github.com/madza91/mChat/issues"
   },
   "homepage": "http://madza.rs/chat",
   "dependencies": {
