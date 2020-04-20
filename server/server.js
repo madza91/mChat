@@ -7,11 +7,11 @@
  */
 
 const expressApp = require('express')();
-const https = require('https');
-const fs = require('fs');
-const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-const request = require('request');
-const debugging = require('./helpers/debugging');
+const https      = require('https');
+const fs         = require('fs');
+const config     = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const request    = require('request');
+const debugging  = require('./modules/debugging');
 
 // HTTPS Server
 const secureServer = https.createServer({
@@ -19,12 +19,15 @@ const secureServer = https.createServer({
     cert: fs.readFileSync(config.server.sslCert)
 }, expressApp);
 
-secureServer.listen(config.server.port, () => {
+secureServer.listen(config.server.port, 'localhost', (error) => {
     debugging.log(`Started server on ${config.server.host}, port ${config.server.port}`);
 });
 
 // Socket Server
-const io = require('socket.io')(secureServer);
+const io = require('socket.io')(secureServer, {
+    path: '/',
+    serveClient: false
+});
 
 var users = [];
 debugging.log('Adding bot named ' + config.server.botName);
@@ -41,8 +44,7 @@ io.on('connection', function (socket) {
     this.nick = validation.nick;
 
     if (chosenNick !== this.nick) {
-        send_message({
-            type: 'command',
+        send_message('command', {
             command: 'nick',
             oldNick: chosenNick,
             newNick: this.nick,
@@ -51,8 +53,8 @@ io.on('connection', function (socket) {
     }
 
     debugging.log('Connected new user: ' + this.nick);
-    send_message({type: 'users_list', users: users}, socket.id);
-    send_message({type: 'join', nick: this.nick});
+    send_message('users_list',{users: users}, socket.id);
+    send_message('join', {nick: this.nick});
     emailSend(this.nick, 'Joined');
     users.push({
         nick: this.nick,
@@ -60,20 +62,21 @@ io.on('connection', function (socket) {
         socket: socket.id
     });
 
-
     socket.on("cMessage", function (data) {
-
         if (data && typeof data.type !== 'undefined' && data.type === 'message') {
             var nickname = data.name;
             var message = data.message;
             var firstChar = message.charAt(0);
 
+            debugging.log('Stiglo');
+            console.log(data);
+
             if (firstChar === '/') {
                 var cmd = commands(socket, nickname, message);
-                send_message(cmd.return, cmd.to);
+                send_message(cmd.return.type, cmd.return, cmd.to);
             } else {
                 debugging.log(nickname + ' sends a message.');
-                send_message({type: 'user', nick: nickname, message: message});
+                send_message('user',{nick: nickname, message: message});
             }
         }
 
@@ -88,18 +91,17 @@ io.on('connection', function (socket) {
     });
 });
 
-function send_message(message, socketID) {
-
+function send_message(type, message, socketID) {
     if (typeof message === 'undefined') {
         return;
     }
 
     if (typeof socketID !== 'undefined') {
         // send message to specific client
-        io.to(socketID).emit("sMessage", message);
+        io.to(socketID).emit(type, message);
     } else {
         // send message to all connected clients
-        io.sockets.emit('sMessage', message);
+        io.sockets.emit(type, message);
     }
     return true;
 }
@@ -228,7 +230,6 @@ function commands(socket, user, message) {
 }
 
 function emailSend(nick, message) {
-
     if (config.settings && config.settings.emailService && config.settings.sendEmail === true) {
         var token = Math.random().toString(36).substring(2);
         request.post(
@@ -241,7 +242,6 @@ function emailSend(nick, message) {
             }
         );
     }
-
 }
 
 var nickObj = {

@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
     <meta name="description" content="Tiny chat room without registration">
     <meta name="author" content="Nemanja Madžovski">
     <title>Madza's tiny chat</title>
 
     <!-- Theme base -->
-    <base href="client/" target="_blank">
+    <base href="/mChat/client/" target="_blank">
 
     <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Madza Chat">
@@ -26,8 +26,8 @@
     <link rel="apple-touch-startup-image" href="assets/splash/launch-2048x2732.png" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 
     <!-- Bookmark Icons -->
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
@@ -36,7 +36,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="assets/styles/style.css">
     <link rel="stylesheet" href="assets/styles/emoji.css">
-    <link rel="stylesheet" href="https://afeld.github.io/emoji-css/emoji.css">
+<!--    <link rel="stylesheet" href="https://afeld.github.io/emoji-css/emoji.css">-->
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
@@ -55,6 +55,14 @@
         <ul class="list"></ul>
     </aside>
     <aside class="section chat col-xs-12 col-sm-8 col-md-9 col-lg-10">
+        <div id="top_bar">
+            <span class="d-sm-none">
+                <svg class="bi bi-filter-left" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2 10.5a.5.5 0 01.5-.5h3a.5.5 0 010 1h-3a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                </svg>
+            </span>
+            <span>#general</span>
+        </div>
         <div id="upload_status"></div>
         <div id="connection_control" class="text-center">
             <noscript>
@@ -72,7 +80,7 @@
         </div>
         <footer class="chat-message">
             <div class="input-group">
-                <input name="message-to-send" id="message-to-send" placeholder="Type your message" autofocus="">
+                <input name="message-to-send" id="message-to-send" placeholder="Type your message">
                 <div class="input-group-btn">
                     <form enctype="multipart/form-data">
                         <label id="attach-button" class="btn btn-default btn-attach btn-file">
@@ -153,6 +161,6 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js'></script>
 <script src="assets/emoji.js"></script>
 <script src="assets/index.js"></script>
-<script src="/app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
