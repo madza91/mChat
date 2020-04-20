@@ -1,0 +1,7 @@
+:root {
+    --sidebar-width: 230px;
+    --main-header-height: 60px;
+    --main-header-height-mobile: 40px;
+    --font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    --primary-color: #333a4b;
+}
