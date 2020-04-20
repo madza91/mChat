@@ -85,7 +85,7 @@ input:focus {
     bottom: 0;
     border-top: 2px solid white;
     background-color: #f5f5f5;
-    padding: 10px 15px, env(safe-area-inset-bottom);
+    padding: 10px 15px env(safe-area-inset-bottom);
 }
 
 .people-list {
