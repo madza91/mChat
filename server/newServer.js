@@ -3,10 +3,11 @@
  * @type {app}
  */
 
+const env        = require('dotenv').config({path: __dirname + '/.env'});
+const config     = env.parsed;
 const expressApp = require('express')();
 const https      = require('https');
 const fs         = require('fs');
-const config     = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const request    = require('request');
 const debugging  = require('./modules/debugging');
 

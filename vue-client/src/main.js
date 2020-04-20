@@ -18,7 +18,7 @@ Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'https://chat.test:8080',
+  connection: `${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}`,
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
