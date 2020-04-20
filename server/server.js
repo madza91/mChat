@@ -6,21 +6,22 @@
  * Date: 31.10.2017
  */
 
+const env        = require('dotenv').config({path: __dirname + '/.env'});
+const config     = env.parsed;
 const expressApp = require('express')();
 const https      = require('https');
 const fs         = require('fs');
-const config     = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const request    = require('request');
 const debugging  = require('./modules/debugging');
 
 // HTTPS Server
 const secureServer = https.createServer({
-    key: fs.readFileSync(config.server.sslKey),
-    cert: fs.readFileSync(config.server.sslCert)
+    key: fs.readFileSync(config.SERVER_SSL_KEY),
+    cert: fs.readFileSync(config.SERVER_SSL_CERT)
 }, expressApp);
 
-secureServer.listen(config.server.port, 'localhost', (error) => {
-    debugging.log(`Started server on ${config.server.host}, port ${config.server.port}`);
+secureServer.listen(config.SERVER_PORT, 'localhost', (error) => {
+    debugging.log(`Started server on ${config.SERVER_HOST}, port ${config.SERVER_PORT}`);
 });
 
 // Socket Server
@@ -30,9 +31,9 @@ const io = require('socket.io')(secureServer, {
 });
 
 var users = [];
-debugging.log('Adding bot named ' + config.server.botName);
+debugging.log('Adding bot named ' + config.BOT_NAME);
 users.push({
-    nick: config.server.botName,
+    nick: config.BOT_NAME,
     status: 'bot',
     socket: null
 });
@@ -230,7 +231,7 @@ function commands(socket, user, message) {
 }
 
 function emailSend(nick, message) {
-    if (config.settings && config.settings.emailService && config.settings.sendEmail === true) {
+    if (config.EMAIL_ENABLED === true && config.EMAIL_SERVICE) {
         var token = Math.random().toString(36).substring(2);
         request.post(
             config.settings.emailService,
