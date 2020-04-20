@@ -20,7 +20,7 @@ const secureServer = https.createServer({
     cert: fs.readFileSync(config.SERVER_SSL_CERT)
 }, expressApp);
 
-secureServer.listen(config.SERVER_PORT, 'localhost', (error) => {
+secureServer.listen(config.SERVER_PORT,() => {
     debugging.log(`Started server on ${config.SERVER_HOST}, port ${config.SERVER_PORT}`);
 });
 
