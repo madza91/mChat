@@ -10,7 +10,7 @@ export default {
   name: 'SideBarHeader',
   data: function () {
     return {
-      userNick: 'Nemanja Madzovski'
+      userNick: 'Full Name'
     }
   }
 }
@@ -29,6 +29,7 @@ export default {
   .user-profile-picture {
     width: 40px;
     height: 40px;
+    border-radius: 12px 3px;
   }
 
   .user-fullname {

@@ -1,12 +1,12 @@
 <template>
   <div class="content-wrapper" id="content-wrapper">
     <MainHeader />
-    <div class="container-fluid">
+    <div class="container-fluid" id="container-fluid">
       <ul class="list">
         <SystemMessage message="Welcome" />
         <UserMessage
-          v-for="message in messages"
-          :key="message.nick"
+          v-for="(message, index) in messages"
+          :key="index"
           :nick="message.nick"
           :message="message.text"
         />
@@ -35,6 +35,10 @@ export default {
     MessagingInput,
     MainHeader
   },
+  updated () {
+    const container = this.$el.querySelector('#container-fluid')
+    container.scrollTop = container.scrollHeight
+  },
   sockets: {
     user: function (data) {
       this.messages.push({
@@ -55,7 +59,7 @@ export default {
   }
   @media only screen and (min-width: 600px) {
     .content-wrapper {
-      width: calc(100% - 230px);
+      width: calc(100% - var(--sidebar-width));
     }
   }
   .list {
@@ -73,9 +77,10 @@ export default {
     }
   }
   .container-fluid {
-    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: var(--footer-height);
+    overflow-y: scroll;
     padding-top: 80px;
-    padding-bottom: 62px;
-    overflow: scroll;
   }
 </style>

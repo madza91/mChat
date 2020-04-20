@@ -18,7 +18,6 @@ const actions = {
     commit('setSidebarState', data)
   },
   settingsToggle ({ commit }, data) {
-    console.log('test')
     commit('setSettingsState', data)
   }
 }

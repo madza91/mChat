@@ -60,7 +60,7 @@ export default {
     z-index: 1030;
     transition: transform .3s ease-in-out, width .3s ease-in-out;
     backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(144, 144, 144, 0.3);
     overflow: auto;
 
     @media only screen and (max-width: 600px) {
