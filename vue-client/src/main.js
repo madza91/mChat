@@ -24,7 +24,7 @@ Vue.use(new VueSocketIO({
     actionPrefix: 'SOCKET_',
     mutationPrefix: 'SOCKET_'
   },
-  options: { path: '/' } // Optional options
+  options: { path: process.env.VUE_APP_SOCKET_PATH } // Optional options
 }))
 
 new Vue({
