@@ -10,15 +10,6 @@
           :nick="message.nick"
           :message="message.text"
         />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
-        <UserMessage nick="Nickola" message="Test poruka" />
       </ul>
     </div>
     <MessagingInput />
