@@ -16,9 +16,12 @@ Vue.use(IconsPlugin)
 
 Vue.config.productionTip = false
 
+// ToDo Improve this
+const nick = prompt('Please choose your nickname:')
+
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: `${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}`,
+  connection: `${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}/?user=${nick}`,
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
