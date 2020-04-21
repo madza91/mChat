@@ -3,7 +3,7 @@
     <SideBarHeader />
     <div class="scrollable">
       <ul class="sidebar-nav">
-        <ListUserItem v-for="user in usersList" :key="user.nick" :nick="user.nick"/>
+        <ListUserItem v-for="user in users" :key="user.nick" :nick="user.nick"/>
       </ul>
     </div>
   </aside>
@@ -12,24 +12,34 @@
 <script>
 import ListUserItem from './ListUserItem'
 import SideBarHeader from './SideBarHeader'
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions, mapState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'SideBar',
-  data: function () {
-    return {
-      usersList: {}
-    }
+  computed: {
+    ...mapState(['users'])
   },
   components: {
     ListUserItem,
     SideBarHeader
   },
+  methods: {
+    ...mapActions([
+      'addUser',
+      'setUsers',
+      'removeUser'
+    ])
+  },
   sockets: {
     users_list: function (data) {
-      this.usersList = data.users
+      this.setUsers(data.users)
     },
     join: function (data) {
-      this.usersList.push({ nick: data.nick })
+      this.addUser(data)
+    },
+    leave: function (data) {
+      this.removeUser(data.nick)
     }
   }
 }
