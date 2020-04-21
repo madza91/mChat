@@ -88,6 +88,7 @@ export default {
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
     transition: transform .3s ease-in-out, margin .3s ease-in-out;
+    background-image: url('./../../assets/sports.webp');
   }
   @media only screen and (min-width: 600px) {
     .content-wrapper {
