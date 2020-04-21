@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import ui from './ui'
+import ui from './modules/ui'
+import chat from './modules/chat'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    ui
+    ui,
+    chat
   }
 })

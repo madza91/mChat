@@ -1,4 +1,3 @@
-
 const state = {
   sidebar: false,
   settingsBar: false

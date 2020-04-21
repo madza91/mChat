@@ -301,7 +301,7 @@ var nickObj = {
     eventLeave: function (sockedID) {
         var tmpClient = this.findUser(sockedID, 'socket');
         if (tmpClient.length > 0) {
-            send_message({type: 'leave', nick: tmpClient[0].nick});
+            send_message('leave', {nick: tmpClient[0].nick});
             this.removeUser(tmpClient[0].nick);
             debugging.log(tmpClient[0].nick + ' is disconnected');
         }

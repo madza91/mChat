@@ -16,7 +16,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapGetters } = createNamespacedHelpers('ui')
+const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
+const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'MainHeader',
@@ -27,9 +28,17 @@ export default {
       required: false
     }
   },
+  computed: {
+    ...mapChatState(['messages'])
+  },
+  updated () {
+    const messages = this.getMessagesByRoom('ads')
+
+    console.log('messages2', messages)
+  },
   methods: {
-    ...mapActions(['sidebarToggle', 'settingsToggle']),
-    ...mapGetters(['getSidebar'])
+    ...mapUiActions(['sidebarToggle', 'settingsToggle']),
+    ...mapUiGetters(['getSidebar'])
   }
 }
 </script>

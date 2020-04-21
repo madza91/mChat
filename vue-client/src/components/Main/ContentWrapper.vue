@@ -1,6 +1,7 @@
 <template>
   <div class="content-wrapper" id="content-wrapper">
     <MainHeader />
+    <ConnectionStatus v-show="connected === false" />
     <div class="container-fluid" id="container-fluid">
       <ul class="list">
         <SystemMessage message="Welcome" />
@@ -12,36 +13,67 @@
         />
       </ul>
     </div>
-    <MessagingInput />
+    <MessagingInput :enabled="connected" />
   </div>
 </template>
 
 <script>
-import MessagingInput from '@/components/Main/MessagingInput'
-import MainHeader from '@/components/Main/MainHeader'
+import { createNamespacedHelpers } from 'vuex'
+import MessagingInput from './MessagingInput'
+import MainHeader from './MainHeader'
+import ConnectionStatus from './ConnectionStatus'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
+const { mapActions, mapState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'ContentWrapper',
   data: function () {
     return {
-      messages: []
+      connected: null
     }
+  },
+  computed: {
+    ...mapState(['messages'])
   },
   components: {
     UserMessage,
     SystemMessage,
     MessagingInput,
-    MainHeader
+    MainHeader,
+    ConnectionStatus
   },
   updated () {
     const container = this.$el.querySelector('#container-fluid')
     container.scrollTop = container.scrollHeight
   },
+  methods: {
+    ...mapActions(['insertMessage', 'resetMessages', 'resetUsers']),
+    setDisconnected () {
+      this.resetUsers()
+      this.resetMessages()
+      this.connected = false
+    }
+  },
   sockets: {
+    connect: function () {
+      this.connected = true
+    },
+    disconnect: function () {
+      this.setDisconnected()
+    },
+    error: function () {
+      this.setDisconnected()
+    },
+    connect_error: function () {
+      this.setDisconnected()
+    },
+    connect_timeout: function () {
+      this.setDisconnected()
+    },
     user: function (data) {
-      this.messages.push({
+      this.insertMessage({
+        type: 'user',
         nick: data.nick,
         text: data.message
       })
