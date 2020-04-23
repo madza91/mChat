@@ -1,6 +1,8 @@
 const state = {
   nick: null,
+  socketId: null,
   connected: null,
+  authenticated: false,
   messages: [],
   users: []
 }
@@ -36,6 +38,9 @@ const actions = {
   SOCKET_connect_timeout ({ commit }, data) {
     commit('setConnected', false)
   },
+  SOCKET_welcome ({ commit }, data) {
+    commit('authenticated', data)
+  },
   SOCKET_user ({ commit }, data) {
     commit('insertMessage', {
       type: 'user',
@@ -59,6 +64,11 @@ const actions = {
 }
 
 const mutations = {
+  authenticated (state, data) {
+    state.authenticated = true
+    state.nick = data.nick
+    state.socketId = data.socket
+  },
   setNick (state, data) {
     state.nick = data
   },
@@ -76,11 +86,16 @@ const mutations = {
   },
   renameUser (state, data) {
     const user = state.users.find(user => user.socket === data.socket)
+
     user.nick = data.newNick
 
     state.users = state.users.map(currentUser => {
       return [user].find(o => o.socket === currentUser.socket) || currentUser
     })
+
+    if (data.socket === state.socketId) {
+      state.nick = user.nick
+    }
   },
   removeUser (state, data) {
     state.users = state.users.filter(user => user.nick !== data)

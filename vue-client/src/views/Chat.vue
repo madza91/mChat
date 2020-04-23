@@ -5,13 +5,15 @@
     <SideBar />
     <ControlSideBar />
     <ContentWrapper />
+    <WelcomeModal />
   </div>
 </template>
 
 <script>
-import SideBar from '@/components/Side/SideBar.vue'
-import ControlSideBar from '@/components/Side/ControlSideBar.vue'
-import ContentWrapper from '@/components/Main/ContentWrapper.vue'
+import SideBar from '../components/Side/SideBar.vue'
+import ControlSideBar from '../components/Side/ControlSideBar.vue'
+import ContentWrapper from '../components/Main/ContentWrapper.vue'
+import WelcomeModal from '../components/Modals/WelcomeModal'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('ui')
@@ -19,6 +21,7 @@ const { mapState } = createNamespacedHelpers('ui')
 export default {
   name: 'Chat',
   components: {
+    WelcomeModal,
     SideBar,
     ControlSideBar,
     ContentWrapper

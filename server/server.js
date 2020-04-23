@@ -40,32 +40,8 @@ users.push({
 
 // New client connection
 io.on('connection', function (socket) {
-    const chosenNick = socket.handshake.query.user;
-    const validation = nickObj.validate(chosenNick);
-    this.nick = validation.nick;
-
-    if (chosenNick !== this.nick) {
-        send_message('command', {
-            command: 'nick',
-            oldNick: chosenNick,
-            newNick: this.nick,
-            reason: validation.reason
-        }, socket.id);
-    }
-
-    debugging.log('Connected new user: ' + this.nick);
+    debugging.log('Connected new unauthenticated user: ' + socket.id);
     send_message('users_list',{users: users}, socket.id);
-    send_message('join', {
-        nick: this.nick,
-        status: 'online',
-        socket: socket.id
-    });
-    emailSend(this.nick, 'Joined');
-    users.push({
-        nick: this.nick,
-        status: 'online',
-        socket: socket.id
-    });
 
     socket.on("cMessage", function (data) {
         const user = nickObj.findUser(this.id, 'socket');
@@ -93,6 +69,36 @@ io.on('connection', function (socket) {
             }
         }
     });
+
+    socket.on('client_auth', (nickname) => {
+        // const chosenNick = this.handshake.query.user;
+        const validation = nickObj.validate(nickname);
+        const nick = validation.nick;
+
+        if (nickname !== nick) {
+            send_message('nick', {
+                socket: socket.id,
+                oldNick: nickname,
+                newNick: nick,
+                reason: validation.reason
+            }, socket.id);
+        }
+        send_message('welcome', {
+            socket: socket.id,
+            nick: nick
+        }, socket.id);
+        send_message('join', {
+            nick: nick,
+            status: 'online',
+            socket: socket.id
+        });
+        users.push({
+            nick: nick,
+            status: 'online',
+            socket: socket.id
+        });
+        // emailSend(this.nick, 'Joined');
+    })
 
     socket.on('error', function () {
         nickObj.eventLeave(socket.id);
@@ -260,7 +266,7 @@ function emailSend(nick, message) {
 var nickObj = {
     isValid: function (nick) {
         if (typeof nick === 'string') {
-            return /^[0-9A-Za-z.]{3,20}$/.test(nick);
+            return /^[0-9A-Za-z.-/-_!@#$%^&*()|<>?{}'"/[\]]{3,30}$/.test(nick);
         }
         return false;
     },
