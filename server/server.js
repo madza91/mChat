@@ -70,7 +70,11 @@ io.on('connection', function (socket) {
     socket.on("cMessage", function (data) {
         const user = nickObj.findUser(this.id, 'socket');
 
-        if (data && typeof data.type !== 'undefined' && data.type === 'message') {
+        if (data
+          && typeof data.type !== 'undefined'
+          && data.type === 'message'
+          && data.message
+        ) {
             var nickname  = user[0].nick;
             var message   = data.message;
             var date      = (new Date(data.time));
@@ -100,7 +104,7 @@ io.on('connection', function (socket) {
 });
 
 function send_message(type, message, socketID) {
-    if (typeof message === 'undefined') {
+    if (typeof message === 'undefined' || message === '') {
         return;
     }
 
