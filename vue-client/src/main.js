@@ -24,24 +24,12 @@ Vue.use(new VueSocketIO({
   connection: `${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}/?user=${nick}`,
   vuex: {
     store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
+    actionPrefix: 'SOCKET_'
   },
   options: { path: process.env.VUE_APP_SOCKET_PATH } // Optional options
 }))
 
 new Vue({
-  sockets: {
-    connect: function () {
-      console.log('socket connected')
-    }
-  },
-  methods: {
-    clickButton: function (data) {
-      // $socket is socket.io-client instance
-      this.$socket.emit('cMessage', data)
-    }
-  },
   router,
   store,
   render: h => h(App)
