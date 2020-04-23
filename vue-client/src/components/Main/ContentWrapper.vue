@@ -24,17 +24,12 @@ import MainHeader from './MainHeader'
 import ConnectionStatus from './ConnectionStatus'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
-const { mapActions, mapState } = createNamespacedHelpers('chat')
+const { mapState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'ContentWrapper',
-  data: function () {
-    return {
-      connected: null
-    }
-  },
   computed: {
-    ...mapState(['messages'])
+    ...mapState(['messages', 'connected'])
   },
   components: {
     UserMessage,
@@ -46,38 +41,6 @@ export default {
   updated () {
     const container = this.$el.querySelector('#container-fluid')
     container.scrollTop = container.scrollHeight
-  },
-  methods: {
-    ...mapActions(['insertMessage', 'resetMessages', 'resetUsers']),
-    setDisconnected () {
-      this.resetUsers()
-      this.resetMessages()
-      this.connected = false
-    }
-  },
-  sockets: {
-    connect: function () {
-      this.connected = true
-    },
-    disconnect: function () {
-      this.setDisconnected()
-    },
-    error: function () {
-      this.setDisconnected()
-    },
-    connect_error: function () {
-      this.setDisconnected()
-    },
-    connect_timeout: function () {
-      this.setDisconnected()
-    },
-    user: function (data) {
-      this.insertMessage({
-        type: 'user',
-        nick: data.nick,
-        text: data.message
-      })
-    }
   }
 }
 </script>

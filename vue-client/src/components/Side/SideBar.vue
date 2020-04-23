@@ -13,7 +13,7 @@
 import ListUserItem from './ListUserItem'
 import SideBarHeader from './SideBarHeader'
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapState } = createNamespacedHelpers('chat')
+const { mapState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'SideBar',
@@ -23,24 +23,6 @@ export default {
   components: {
     ListUserItem,
     SideBarHeader
-  },
-  methods: {
-    ...mapActions([
-      'addUser',
-      'setUsers',
-      'removeUser'
-    ])
-  },
-  sockets: {
-    users_list: function (data) {
-      this.setUsers(data.users)
-    },
-    join: function (data) {
-      this.addUser(data)
-    },
-    leave: function (data) {
-      this.removeUser(data.nick)
-    }
   }
 }
 </script>

@@ -1,5 +1,6 @@
 const state = {
   nick: null,
+  connected: null,
   messages: [],
   users: []
 }
@@ -20,29 +21,45 @@ const actions = {
   setUserNick ({ commit }, data) {
     commit('setNick', data)
   },
-  insertMessage ({ commit }, data) {
-    commit('insertMessage', data)
+  SOCKET_connect ({ commit }, data) {
+    commit('setConnected', true)
   },
-  resetMessages ({ commit }, data) {
-    commit('resetMessages', data)
+  SOCKET_disconnect ({ commit }, data) {
+    commit('setConnected', false)
   },
-  addUser ({ commit }, data) {
+  SOCKET_error ({ commit }, data) {
+    commit('setConnected', false)
+  },
+  SOCKET_connect_error ({ commit }, data) {
+    commit('setConnected', false)
+  },
+  SOCKET_connect_timeout ({ commit }, data) {
+    commit('setConnected', false)
+  },
+  SOCKET_user ({ commit }, data) {
+    commit('insertMessage', {
+      type: 'user',
+      nick: data.nick,
+      text: data.message
+    })
+  },
+  SOCKET_users_list ({ commit }, data) {
+    commit('setUsers', data.users)
+  },
+  SOCKET_join ({ commit }, data) {
     commit('insertUser', data)
   },
-  removeUser ({ commit }, data) {
-    commit('removeUser', data)
-  },
-  setUsers ({ commit }, data) {
-    commit('setUsers', data)
-  },
-  resetUsers ({ commit }, data) {
-    commit('resetUsers', data)
+  SOCKET_leave ({ commit }, data) {
+    commit('removeUser', data.nick)
   }
 }
 
 const mutations = {
   setNick (state, data) {
     state.nick = data
+  },
+  setConnected (state, data) {
+    state.connected = data
   },
   insertMessage (state, data) {
     state.messages.push(data)
