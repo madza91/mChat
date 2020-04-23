@@ -2,6 +2,11 @@
   <aside class="main-sidebar">
     <SideBarHeader />
     <div class="scrollable">
+      <ListSectionItem section-name="Channels" />
+      <ul class="sidebar-nav">
+        <ListChannelItem channel="general" />
+      </ul>
+      <ListSectionItem section-name="People" />
       <ul class="sidebar-nav">
         <ListUserItem v-for="user in users" :key="user.nick" :nick="user.nick"/>
       </ul>
@@ -12,6 +17,8 @@
 <script>
 import ListUserItem from './ListUserItem'
 import SideBarHeader from './SideBarHeader'
+import ListSectionItem from './ListSectionItem'
+import ListChannelItem from './ListChannelItem'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('chat')
 
@@ -21,7 +28,9 @@ export default {
     ...mapState(['users'])
   },
   components: {
+    ListSectionItem,
     ListUserItem,
+    ListChannelItem,
     SideBarHeader
   }
 }
@@ -32,6 +41,7 @@ export default {
     list-style: none;
     padding: 0;
     margin: 0;
+    padding-bottom: 10px;
   }
   .main-sidebar {
     position: absolute;

@@ -2,7 +2,7 @@
   <li>
     <div class="message-data clearfix">
       <span class="message-data-name"><i class="fa fa-circle online"></i> {{ nick }}</span>
-      <span class="message-data-time">vreme, Today</span>
+      <span class="message-data-time">{{ formattedTime }}</span>
     </div>
     <div class="message messageArrow my-message">
       {{ message }}
@@ -11,8 +11,15 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'UserMessage',
+  computed: {
+    formattedTime () {
+      return moment(this.date).format('H:m')
+    }
+  },
   props: {
     nick: {
       type: String,
@@ -21,6 +28,10 @@ export default {
     message: {
       type: String,
       required: true
+    },
+    date: {
+      type: Date,
+      required: false
     }
   }
 }
@@ -61,6 +72,7 @@ export default {
 .message-data-time {
   color: #a8aab1;
   padding-left: 6px;
+  font-size: 10px;
 }
 .my-message {
   background: #86BB71;

@@ -32,7 +32,7 @@ export default {
       const data = {
         type: 'message',
         message: this.message,
-        name: 'Neki_lik'
+        time: Date.now()
       }
       this.$socket.emit('cMessage', data)
       this.message = ''

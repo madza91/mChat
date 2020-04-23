@@ -40,7 +40,8 @@ const actions = {
     commit('insertMessage', {
       type: 'user',
       nick: data.nick,
-      text: data.message
+      text: data.message,
+      date: data.date
     })
   },
   SOCKET_users_list ({ commit }, data) {

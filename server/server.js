@@ -55,7 +55,11 @@ io.on('connection', function (socket) {
 
     debugging.log('Connected new user: ' + this.nick);
     send_message('users_list',{users: users}, socket.id);
-    send_message('join', {nick: this.nick});
+    send_message('join', {
+        nick: this.nick,
+        status: 'online',
+        socket: socket.id
+    });
     emailSend(this.nick, 'Joined');
     users.push({
         nick: this.nick,
@@ -64,23 +68,26 @@ io.on('connection', function (socket) {
     });
 
     socket.on("cMessage", function (data) {
-        if (data && typeof data.type !== 'undefined' && data.type === 'message') {
-            var nickname = data.name;
-            var message = data.message;
-            var firstChar = message.charAt(0);
+        const user = nickObj.findUser(this.id, 'socket');
 
-            debugging.log('Stiglo');
-            console.log(data);
+        if (data && typeof data.type !== 'undefined' && data.type === 'message') {
+            var nickname  = user[0].nick;
+            var message   = data.message;
+            var date      = (new Date(data.time));
+            var firstChar = message.charAt(0);
 
             if (firstChar === '/') {
                 var cmd = commands(socket, nickname, message);
                 send_message(cmd.return.type, cmd.return, cmd.to);
             } else {
                 debugging.log(nickname + ' sends a message.');
-                send_message('user',{nick: nickname, message: message});
+                send_message('user',{
+                    nick: nickname,
+                    message: message,
+                    date: date
+                });
             }
         }
-
     });
 
     socket.on('error', function () {
