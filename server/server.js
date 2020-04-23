@@ -141,6 +141,7 @@ function commands(socket, user, message) {
                         preparedReturn = {
                             type: 'command',
                             command: 'nick',
+                            socket: socketID,
                             oldNick: user,
                             newNick: validation.nick
                         };

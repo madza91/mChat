@@ -51,7 +51,7 @@ export default {
 }
 .messageArrow:after {
   bottom: 100%;
-  left: 7%;
+  left: 3%;
   border: solid transparent;
   content: " ";
   height: 0;
