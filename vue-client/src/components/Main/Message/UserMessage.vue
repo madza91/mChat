@@ -17,7 +17,7 @@ export default {
   name: 'UserMessage',
   computed: {
     formattedTime () {
-      return moment(this.date).format('H:m')
+      return moment(this.date).format('H:mm')
     }
   },
   props: {
