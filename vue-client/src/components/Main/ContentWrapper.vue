@@ -10,6 +10,7 @@
           :key="index"
           :nick="message.nick"
           :message="message.text"
+          :date="message.date"
         />
       </ul>
     </div>
