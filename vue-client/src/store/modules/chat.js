@@ -41,7 +41,7 @@ const actions = {
       type: 'user',
       nick: data.nick,
       text: data.message,
-      date: data.date
+      date: new Date(data.date)
     })
   },
   SOCKET_users_list ({ commit }, data) {
@@ -52,6 +52,9 @@ const actions = {
   },
   SOCKET_leave ({ commit }, data) {
     commit('removeUser', data.nick)
+  },
+  SOCKET_command ({ commit }, data) {
+    commit('renameUser', data)
   }
 }
 
@@ -70,6 +73,14 @@ const mutations = {
   },
   insertUser (state, data) {
     state.users.push(data)
+  },
+  renameUser (state, data) {
+    const user = state.users.find(user => user.socket === data.socket)
+    user.nick = data.newNick
+
+    state.users = state.users.map(currentUser => {
+      return [user].find(o => o.socket === currentUser.socket) || currentUser
+    })
   },
   removeUser (state, data) {
     state.users = state.users.filter(user => user.nick !== data)
