@@ -7,7 +7,7 @@
     <div class="mb-auto mr-auto mt-auto pl-sm-3">
       #general
     </div>
-    <b-icon-gear
+    <b-icon-three-dots-vertical
       class="icon"
       @click="settingsToggle"
     />
@@ -53,7 +53,7 @@ export default {
     @media only screen and (max-width: 600px) {
       width: var(--main-header-height-mobile);
       height: var(--main-header-height-mobile);
-      padding: calc(var(--main-header-height-mobile) / 3);
+      padding: 10px;
     }
   }
 
