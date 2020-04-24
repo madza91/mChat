@@ -1,5 +1,5 @@
 {
-  "name": "tiny-websocket-chat",
+  "name": "m-chat-server",
   "version": "1.0.0",
   "description": "Madza's tiny websocket chat",
   "main": "server/server.js",

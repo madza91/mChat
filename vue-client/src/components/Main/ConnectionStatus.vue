@@ -8,13 +8,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .connection_info {
   text-align: center;
   position: absolute;
   z-index: 1031;
   background-color: indianred;
   width: 100%;
-  top: 60px;
+  top: var(--main-header-height);
+
+  @media only screen and (max-width: 600px) {
+    height: var(--main-header-height-mobile);
+  }
 }
 </style>
