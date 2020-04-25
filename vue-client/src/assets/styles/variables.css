@@ -4,5 +4,7 @@
     --main-header-height-mobile: 44px;
     --footer-height: 60px;
     --font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    --primary-color: #333a4b;
+    --color-primary: #88c871;
+    --color-default: #F4F4F4;
+    --color-border-light: #DBDBDB;
 }

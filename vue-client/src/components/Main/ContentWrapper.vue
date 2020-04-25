@@ -51,7 +51,7 @@ export default {
     height: 100%;
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
-    transition: transform .3s ease-in-out, margin .3s ease-in-out;
+    transition: transform .2s ease-in-out, margin .2s ease-in-out;
     background-image: url('./../../assets/sports.png');
   }
   @media only screen and (min-width: 600px) {
@@ -78,5 +78,6 @@ export default {
     top: var(--main-header-height-mobile);
     bottom: calc(var(--footer-height) + env(safe-area-inset-bottom)); /* +22 (safe-bottom) */
     overflow-y: scroll;
+    padding-top: 15px;
   }
 </style>

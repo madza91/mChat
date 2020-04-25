@@ -51,7 +51,7 @@ export default {
     width: var(--sidebar-width);
     background-color: #444753;
     z-index: 810;
-    transition: transform .3s ease-in-out, width .3s ease-in-out;
+    transition: transform .2s ease-in-out, width .2s ease-in-out;
   }
   @media only screen and (max-width: 600px) {
     .main-sidebar {
