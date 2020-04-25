@@ -80,4 +80,10 @@ export default {
     overflow-y: scroll;
     padding-top: 15px;
   }
+
+  @media only screen and (min-width: 600px) {
+    .container-fluid {
+      top: var(--main-header-height);
+    }
+  }
 </style>

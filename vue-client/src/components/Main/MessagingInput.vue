@@ -1,5 +1,5 @@
 <template>
-  <footer class="main-footer">
+  <footer class="main-footer" ref="nicknameInput">
     <div class="input-group">
       <input
         name="message-to-send"
@@ -8,6 +8,8 @@
         v-on:keyup.enter="sendMessage"
         v-model="message"
         :disabled="enabled !== true"
+        @focus="onFocus"
+        @blur="onBlur"
       >
     </div>
   </footer>
@@ -36,6 +38,12 @@ export default {
       }
       this.$socket.emit('cMessage', data)
       this.message = ''
+    },
+    onFocus () {
+      this.$refs.nicknameInput.classList.add('focused')
+    },
+    onBlur () {
+      this.$refs.nicknameInput.classList.remove('focused')
     }
   }
 }
@@ -54,6 +62,10 @@ export default {
     border-top: 1px solid var(--color-border-light);
   }
 
+  .main-footer.focused {
+    padding: 10px 15px;
+  }
+
   input {
     width: 100%;
     padding: 8px 20px;
@@ -68,5 +80,6 @@ export default {
 
   input:focus {
     outline: none;
+
   }
 </style>
