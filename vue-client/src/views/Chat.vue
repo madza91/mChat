@@ -36,7 +36,7 @@ export default {
   .wrapper {
     height: 100%;
     width: 100%;
-    position: fixed;
+    position: absolute;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: none;
