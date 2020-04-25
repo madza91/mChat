@@ -48,18 +48,22 @@ export default {
     left: 0;
     right: 0;
     min-height: var(--footer-height);
-    background-color: silver;
-    transition: transform .3s ease-in-out, width .3s ease-in-out;
+    background-color: var(--color-default);
+    transition: transform .2s ease-in-out, width .2s ease-in-out;
     padding: 10px 15px env(safe-area-inset-bottom);
+    border-top: 1px solid var(--color-border-light);
   }
 
   input {
     width: 100%;
-    border: none;
     padding: 8px 20px;
     font: 16px/22px "Lato", Arial, sans-serif;
-    border-radius: 5px;
+    border-radius: 15px;
+    border: 1px solid #e3e3e3;
     resize: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 
   input:focus {

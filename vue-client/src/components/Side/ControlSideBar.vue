@@ -1,11 +1,13 @@
 <template>
   <aside
     class="control-sidebar"
-    :class="{'control-sidebar-open': settingsBar}">
+    :class="{'control-sidebar-open': settingsBar}"
+    @click="settingsToggle"
+  >
     <ul class="sidebar-nav">
       <li class="sidebar-brand">
         <a href="#">
-          Settings
+          Click anywhere to close (WIP)
         </a>
       </li>
     </ul>
@@ -14,12 +16,15 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('ui')
+const { mapState, mapActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ControlSideBar',
   computed: {
     ...mapState(['settingsBar'])
+  },
+  methods: {
+    ...mapActions(['settingsToggle'])
   }
 }
 </script>
@@ -31,7 +36,7 @@ export default {
     top: 0;
     right: calc(-1 * var(--sidebar-width));
     width: var(--sidebar-width);
-    transition: right .3s ease-in-out;
+    transition: right .2s ease-in-out;
     color: white;
     background-color: #222d32;
     z-index: 1050;
