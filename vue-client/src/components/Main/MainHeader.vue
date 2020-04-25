@@ -4,7 +4,7 @@
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
     />
-    <div class="mb-auto mr-auto mt-auto pl-sm-3">
+    <div class="mb-auto mr-auto mt-auto pl-sm-3" ontouchstart="event.preventDefault()">
       #general
     </div>
     <b-icon-three-dots-vertical
@@ -68,9 +68,10 @@ export default {
     width: 100%;
     z-index: 1030;
     transition: transform .3s ease-in-out, width .3s ease-in-out;
-    backdrop-filter: blur(10px);
-    background-color: rgba(144, 144, 144, 0.3);
-    overflow: auto;
+    /*backdrop-filter: blur(10px);*/
+    /*background-color: rgba(144, 144, 144, 0.3);*/
+    background-color: silver;
+    overflow: hidden;
 
     @media only screen and (max-width: 600px) {
       height: var(--main-header-height-mobile);

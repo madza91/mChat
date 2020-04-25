@@ -75,9 +75,8 @@ export default {
   }
   .container-fluid {
     position: absolute;
-    top: 0;
-    bottom: var(--footer-height);
+    top: var(--main-header-height-mobile);
+    bottom: calc(var(--footer-height) + env(safe-area-inset-bottom)); /* +22 (safe-bottom) */
     overflow-y: scroll;
-    padding-top: 80px;
   }
 </style>

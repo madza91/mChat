@@ -43,13 +43,12 @@ export default {
 
 <style>
   .main-footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     min-height: var(--footer-height);
-    backdrop-filter: blur(10px);
-    background-color: rgba(144, 144, 144, 0.3);
+    background-color: silver;
     transition: transform .3s ease-in-out, width .3s ease-in-out;
     padding: 10px 15px env(safe-area-inset-bottom);
   }
