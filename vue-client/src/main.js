@@ -8,6 +8,7 @@ import VueSocketIO from 'vue-socket.io'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/styles/variables.css'
+import './assets/styles/global.css'
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)

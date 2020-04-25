@@ -18,7 +18,7 @@ export default {
   top: var(--main-header-height);
 
   @media only screen and (max-width: 600px) {
-    height: var(--main-header-height-mobile);
+    top: var(--main-header-height-mobile);
   }
 }
 </style>
