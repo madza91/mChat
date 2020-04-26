@@ -52,6 +52,7 @@ users.push({
 io.on('connection', function (socket) {
     debugging.log('Connected new unauthenticated user: ' + socket.id);
     send_message('users_list',{users: users}, socket.id);
+    send_message('auth_request', {err: 'Please, identify yourself!'})
 
     socket.on("cMessage", function (data) {
         const user = nickObj.findUser(this.id, 'socket');
@@ -80,7 +81,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('client_auth', (nickname) => {
-        // const chosenNick = this.handshake.query.user;
         const validation = nickObj.validate(nickname);
         const nick = validation.nick;
         // socket.join(chatRoom)
