@@ -57,10 +57,14 @@ const actions = {
     commit('insertUser', data)
   },
   SOCKET_leave ({ commit }, data) {
-    commit('removeUser', data.nick)
+    commit('removeUser', data)
   },
   SOCKET_command ({ commit }, data) {
-    commit('renameUser', data)
+    switch (data.command) {
+      case 'nick':
+        commit('renameUser', data)
+        break
+    }
   }
 }
 
@@ -84,6 +88,13 @@ const mutations = {
   },
   insertUser (state, data) {
     state.users.push(data)
+    state.messages.push({
+      nick: data.nick,
+      date: new Date(data.date),
+      socket: data.socket,
+      type: 'system',
+      text: `${data.nick} has joined.`
+    })
   },
   renameUser (state, data) {
     const user = state.users.find(user => user.socket === data.socket)
@@ -95,11 +106,25 @@ const mutations = {
     })
 
     if (data.socket === state.socketId) {
+      state.messages.push({
+        nick: data.newNick,
+        date: new Date(data.date),
+        socket: data.socket,
+        type: 'system',
+        text: `${data.oldNick} changed nick to ${data.newNick}`
+      })
       state.nick = user.nick
     }
   },
   removeUser (state, data) {
-    state.users = state.users.filter(user => user.nick !== data)
+    state.users = state.users.filter(user => user.nick !== data.nick)
+    state.messages.push({
+      nick: data.nick,
+      date: new Date(data.date),
+      socket: data.socket,
+      type: 'system',
+      text: `${data.nick} has left.`
+    })
   },
   setUsers (state, data) {
     state.users = data

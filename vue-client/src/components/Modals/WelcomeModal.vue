@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     connect () {
-      console.log('emit', this.nickname)
       this.$socket.emit('client_auth', this.nickname)
     }
   }

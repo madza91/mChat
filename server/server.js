@@ -63,7 +63,6 @@ io.on('connection', function (socket) {
         ) {
             var nickname  = user[0].nick;
             var message   = data.message;
-            var date      = (new Date(data.time));
             var firstChar = message.charAt(0);
 
             if (firstChar === '/') {
@@ -74,8 +73,7 @@ io.on('connection', function (socket) {
                 send_message('user',{
                     nick: nickname,
                     socket: socket.id,
-                    message: message,
-                    date: date
+                    message: message
                 });
             }
         }
@@ -126,6 +124,7 @@ function send_message(type, message, socketID) {
     if (typeof message === 'undefined' || message === '') {
         return;
     }
+    message.date = Date.now();
 
     if (typeof socketID !== 'undefined') {
         // send message to specific client
@@ -332,7 +331,10 @@ var nickObj = {
     eventLeave: function (sockedID) {
         var tmpClient = this.findUser(sockedID, 'socket');
         if (tmpClient.length > 0) {
-            send_message('leave', {nick: tmpClient[0].nick});
+            send_message('leave', {
+                nick: tmpClient[0].nick,
+                socket: sockedID
+            });
             this.removeUser(tmpClient[0].nick);
             debugging.log(tmpClient[0].nick + ' is disconnected');
         }
