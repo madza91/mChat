@@ -56,6 +56,9 @@ const actions = {
   SOCKET_users_list ({ commit }, data) {
     commit('setUsers', data.users)
   },
+  SOCKET_history ({ commit }, data) {
+    commit('setHistory', data.history)
+  },
   SOCKET_join ({ commit }, data) {
     commit('insertUser', data)
   },
@@ -134,6 +137,18 @@ const mutations = {
   },
   setUsers (state, data) {
     state.users = data
+  },
+  setHistory (state, data) {
+    state.messages = data.map((item) => {
+      console.log('item', item)
+      return {
+        type: 'user',
+        nick: item.nick,
+        text: item.message,
+        socket: item.socket,
+        date: new Date(item.date)
+      }
+    })
   },
   resetUsers (state) {
     state.users = []

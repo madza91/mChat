@@ -23,6 +23,8 @@ const fs         = require('fs');
 const request    = require('request');
 const debugging  = require('./modules/debugging');
 const chatRoom   = 'general';
+const msgLimit   = 20;
+const msgHistory = [];
 
 // HTTPS Server
 const secureServer = https.createServer({
@@ -51,8 +53,11 @@ users.push({
 // New client connection
 io.on('connection', function (socket) {
     debugging.log('Connected new unauthenticated user: ' + socket.id);
-    send_message('users_list',{users: users}, socket.id);
-    send_message('auth_request', {err: 'Please, identify yourself!'}, socket.id)
+    sendMessage('auth_request', {err: 'Please, identify yourself!'}, socket.id)
+    sendMessage('users_list',{users: users}, socket.id);
+
+    const msgHistoryLimited = msgHistory.slice((msgHistory.length - msgLimit), msgHistory.length)
+    sendMessage('history',{history: msgHistoryLimited}, socket.id);
 
     socket.on("cMessage", function (data) {
         const user = nickObj.findUser(this.id, 'socket');
@@ -68,14 +73,16 @@ io.on('connection', function (socket) {
 
             if (firstChar === '/') {
                 var cmd = commands(socket, nickname, message);
-                send_message(cmd.return.type, cmd.return, cmd.to);
+                sendMessage(cmd.return.type, cmd.return, cmd.to);
             } else {
                 debugging.log(nickname + ' sends a message.');
-                send_message('user',{
+                const data = {
                     nick: nickname,
                     socket: socket.id,
                     message: message
-                });
+                }
+                sendMessage('user', data);
+                addHistoryMessage('user', data)
             }
         }
     });
@@ -87,18 +94,18 @@ io.on('connection', function (socket) {
         // io.to(chatRoom).emit('new user has joined the room');
 
         if (nickname !== nick) {
-            send_message('nick', {
+            sendMessage('nick', {
                 socket: socket.id,
                 oldNick: nickname,
                 newNick: nick,
                 reason: validation.reason
             }, socket.id);
         }
-        send_message('welcome', {
+        sendMessage('welcome', {
             socket: socket.id,
             nick: nick
         }, socket.id);
-        send_message('join', {
+        sendMessage('join', {
             nick: nick,
             status: 'online',
             socket: socket.id
@@ -120,7 +127,7 @@ io.on('connection', function (socket) {
     });
 });
 
-function send_message(type, message, socketID) {
+function sendMessage(type, message, socketID) {
     if (typeof message === 'undefined' || message === '') {
         return;
     }
@@ -134,6 +141,11 @@ function send_message(type, message, socketID) {
         io.sockets.emit(type, message);
     }
     return true;
+}
+
+function addHistoryMessage(type, data) {
+    data.date = Date.now()
+    msgHistory.push(data)
 }
 
 function commands(socket, user, message) {
@@ -331,7 +343,7 @@ var nickObj = {
     eventLeave: function (sockedID) {
         var tmpClient = this.findUser(sockedID, 'socket');
         if (tmpClient.length > 0) {
-            send_message('leave', {
+            sendMessage('leave', {
                 nick: tmpClient[0].nick,
                 socket: sockedID
             });
