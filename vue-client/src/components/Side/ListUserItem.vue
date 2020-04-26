@@ -3,7 +3,7 @@
     <b-icon-hash v-if="isChannel" class="icon-channel" />
     <b-icon-circle-fill v-else class="icon-user" :class="status" />
     <div class="name">
-      {{ name }} <b-badge v-if="badge > 0" class="float-right" variant="danger">{{ badge }}</b-badge>
+      {{ name }} <b-badge v-if="badgeNumber" class="float-right" variant="danger">{{ badgeNumber }}</b-badge>
     </div>
   </li>
 </template>
@@ -38,6 +38,20 @@ export default {
       type: String,
       default: 'online',
       required: false
+    }
+  },
+  data () {
+    return {
+      badgeLimit: 9
+    }
+  },
+  computed: {
+    badgeNumber () {
+      if (this.badge > 0) {
+        return (this.badge > this.badgeLimit) ? `${this.badgeLimit}+` : this.badge
+      }
+
+      return null
     }
   },
   methods: {
