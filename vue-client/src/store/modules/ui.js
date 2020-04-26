@@ -24,7 +24,6 @@ const actions = {
     commit('setSettingsState', data)
   },
   setSelectedChat ({ commit }, data) {
-    console.log('setSelectedChat', data)
     commit('setSelectedChat', data)
   }
 }

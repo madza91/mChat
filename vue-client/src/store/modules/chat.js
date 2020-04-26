@@ -140,7 +140,6 @@ const mutations = {
   },
   setHistory (state, data) {
     state.messages = data.map((item) => {
-      console.log('item', item)
       return {
         type: 'user',
         nick: item.nick,
