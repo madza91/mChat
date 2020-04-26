@@ -3,14 +3,19 @@
     <MainHeader />
     <div class="container-fluid" id="container-fluid">
       <ul class="list">
-        <SystemMessage message="Welcome" />
-        <UserMessage
-          v-for="(message, index) in messages"
-          :key="index"
-          :nick="message.nick"
-          :message="message.text"
-          :date="message.date"
-        />
+        <li v-for="(data, index) in messages" :key="index">
+          <UserMessage
+            v-if="data.type === 'user'"
+            :nick="data.nick"
+            :message="data.text"
+            :date="data.date"
+          />
+          <SystemMessage
+            v-else
+            :message="data.text"
+            :date="data.date"
+          />
+        </li>
       </ul>
     </div>
     <MessagingInput :enabled="connected" />

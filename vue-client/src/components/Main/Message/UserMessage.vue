@@ -1,13 +1,13 @@
 <template>
-  <li>
-    <div class="message-data clearfix">
-      <span class="message-data-name"><i class="fa fa-circle online"></i> {{ nick }}</span>
+  <div>
+    <div class="message-data">
+      <span class="message-data-name">{{ nick }}</span>
       <span class="message-data-time">{{ formattedTime }}</span>
     </div>
     <div class="message messageArrow my-message">
       {{ message }}
     </div>
-  </li>
+  </div>
 </template>
 
 <script>

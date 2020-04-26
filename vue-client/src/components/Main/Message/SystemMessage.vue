@@ -1,27 +1,41 @@
 <template>
-  <li>
-    <div class="message-data text-center">
-      <div class="message-info">
-        <span class="message-data-name">{{ message }}</span>
-        <span class="message-data-time">vreme, Today</span>
-      </div>
+  <div class="message-data text-center">
+    <div class="message-info">
+      <span class="message-data-name">{{ message }}</span>
+      <span class="message-data-time">{{ formattedTime }}</span>
     </div>
-  </li>
+  </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'SystemMessage',
+  computed: {
+    formattedTime () {
+      return moment(this.date).format('H:mm')
+    }
+  },
   props: {
     message: {
       type: String,
       required: true
+    },
+    date: {
+      type: Date,
+      required: false
     }
   }
 }
 </script>
 
 <style scoped>
+  .message-data {
+    margin-top: 15px;
+    font-size: 12px;
+  }
+
   .message-info {
     display: inline-block;
     background-color: #fdf2c0;
@@ -45,5 +59,6 @@ export default {
   .message-data-time {
     color: #a8aab1;
     padding-left: 6px;
+    font-size: 10px;
   }
 </style>
