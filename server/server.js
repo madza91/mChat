@@ -52,7 +52,7 @@ users.push({
 io.on('connection', function (socket) {
     debugging.log('Connected new unauthenticated user: ' + socket.id);
     send_message('users_list',{users: users}, socket.id);
-    send_message('auth_request', {err: 'Please, identify yourself!'})
+    send_message('auth_request', {err: 'Please, identify yourself!'}, socket.id)
 
     socket.on("cMessage", function (data) {
         const user = nickObj.findUser(this.id, 'socket');
