@@ -1,5 +1,5 @@
 <template>
-  <li class="clearfix list-item-user" :class="{'active': isActive}" @click="setSelectedChat(id)">
+  <li class="clearfix list-item-user" :class="{'active': isActive}" @click="setSelected">
     <b-icon-hash v-if="isChannel" class="icon-channel" />
     <b-icon-circle-fill v-else class="icon-user" :class="status" />
     <div class="name">
@@ -16,8 +16,7 @@ export default {
   name: 'ListUserItem',
   props: {
     id: {
-      type: String,
-      required: true
+      type: String
     },
     name: {
       type: String,
@@ -42,9 +41,10 @@ export default {
     }
   },
   methods: {
-    ...mapUiActions(['setSelectedChat']),
-    nesto () {
-      console.log('uradi nesto')
+    ...mapUiActions(['setSelectedChat', 'sidebarToggle']),
+    setSelected () {
+      this.setSelectedChat(this.id)
+      this.sidebarToggle()
     }
   }
 }
