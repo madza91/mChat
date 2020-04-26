@@ -46,6 +46,7 @@ const actions = {
       type: 'user',
       nick: data.nick,
       text: data.message,
+      socket: data.socket,
       date: new Date(data.date)
     })
   },

@@ -1,0 +1,27 @@
+/* Custom variables */
+:root{
+  --sidebar-width: 230px;
+  --main-header-height: 60px;
+  --main-header-height-mobile: 44px;
+  --footer-height: 60px;
+  --font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+/* Custom colors */
+$mColorPrimary: #88c871;
+$mColorDefault: #F4F4F4;
+$mColorDefaultDark: #161616;
+$mColorBorder: #DBDBDB;
+$mColorBorderDark: #414242;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+(
+  'color-primary': $mColorPrimary,
+  'color-default': $mColorDefault,
+  'color-default-dark': $mColorDefaultDark,
+  'color-border': $mColorBorder,
+  'color-border-dark': $mColorBorderDark,
+),
+$theme-colors
+);

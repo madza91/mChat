@@ -43,13 +43,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .content-wrapper {
     height: 100%;
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
     transition: transform .2s ease-in-out, margin .2s ease-in-out;
     background-image: url('./../../assets/sports.png');
+
+    @media screen and (prefers-color-scheme: dark) {
+      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('./../../assets/sports.png')
+    }
   }
   @media only screen and (min-width: 600px) {
     .content-wrapper {
