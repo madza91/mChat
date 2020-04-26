@@ -1,5 +1,5 @@
 <template>
-  <li class="clearfix list-item-user" :class="{'active': isActive}">
+  <li class="clearfix list-item-user" :class="{'active': isActive}" @click="setSelectedChat(id)">
     <b-icon-hash v-if="isChannel" class="icon-channel" />
     <b-icon-circle-fill v-else class="icon-user" :class="status" />
     <div class="name">
@@ -9,9 +9,16 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
+
 export default {
   name: 'ListUserItem',
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     name: {
       type: String,
       required: true
@@ -32,6 +39,12 @@ export default {
       type: String,
       default: 'online',
       required: false
+    }
+  },
+  methods: {
+    ...mapUiActions(['setSelectedChat']),
+    nesto () {
+      console.log('uradi nesto')
     }
   }
 }
