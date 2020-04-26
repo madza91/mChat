@@ -39,7 +39,10 @@ const actions = {
     commit('setConnected', false)
   },
   SOCKET_welcome ({ commit }, data) {
-    commit('authenticated', data)
+    commit('setAuthenticated', data)
+  },
+  SOCKET_auth_request ({ commit }, data) {
+    commit('setNotAuthenticated', data)
   },
   SOCKET_user ({ commit }, data) {
     commit('insertMessage', {
@@ -69,10 +72,13 @@ const actions = {
 }
 
 const mutations = {
-  authenticated (state, data) {
+  setAuthenticated (state, data) {
     state.authenticated = true
     state.nick = data.nick
     state.socketId = data.socket
+  },
+  setNotAuthenticated (state) {
+    state.authenticated = false
   },
   setNick (state, data) {
     state.nick = data
