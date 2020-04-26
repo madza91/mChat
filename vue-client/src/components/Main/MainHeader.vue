@@ -7,6 +7,12 @@
     <div class="mb-auto mr-auto mt-auto pl-sm-3" ontouchstart="event.preventDefault()">
       #general
     </div>
+    <b-icon-exclamation-triangle-fill
+      variant="warning"
+      class="icon"
+      v-show="connected === false"
+      @click="settingsToggle"
+    />
     <b-icon-three-dots-vertical
       class="icon"
       @click="settingsToggle"
@@ -29,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapChatState(['messages'])
+    ...mapChatState(['messages', 'connected'])
   },
   updated () {
     const messages = this.getMessagesByRoom('ads')

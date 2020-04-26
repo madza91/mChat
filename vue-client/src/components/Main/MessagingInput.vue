@@ -63,7 +63,7 @@ export default {
   }
 
   .main-footer.focused {
-    padding: 10px 15px;
+    padding: 10px 15px 0;
   }
 
   input {

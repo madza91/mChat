@@ -1,7 +1,6 @@
 <template>
   <div class="content-wrapper" id="content-wrapper">
     <MainHeader />
-    <ConnectionStatus v-show="connected === false" />
     <div class="container-fluid" id="container-fluid">
       <ul class="list">
         <SystemMessage message="Welcome" />
@@ -22,7 +21,6 @@
 import { createNamespacedHelpers } from 'vuex'
 import MessagingInput from './MessagingInput'
 import MainHeader from './MainHeader'
-import ConnectionStatus from './ConnectionStatus'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
 const { mapState } = createNamespacedHelpers('chat')
@@ -36,8 +34,7 @@ export default {
     UserMessage,
     SystemMessage,
     MessagingInput,
-    MainHeader,
-    ConnectionStatus
+    MainHeader
   },
   updated () {
     const container = this.$el.querySelector('#container-fluid')
