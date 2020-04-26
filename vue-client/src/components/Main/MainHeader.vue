@@ -4,7 +4,7 @@
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
     />
-    <div class="mb-auto mr-auto mt-auto pl-sm-3" ontouchstart="event.preventDefault()">
+    <div class="mb-auto mr-auto mt-auto pl-sm-3">
       #general
     </div>
     <b-icon-exclamation-triangle-fill
@@ -36,11 +36,6 @@ export default {
   },
   computed: {
     ...mapChatState(['messages', 'connected'])
-  },
-  updated () {
-    const messages = this.getMessagesByRoom('ads')
-
-    console.log('messages2', messages)
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'settingsToggle']),
@@ -75,8 +70,14 @@ export default {
     z-index: 1030;
     transition: transform .2s ease-in-out, width .2s ease-in-out;
     background-color: var(--color-default);
-    border-bottom: 1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border);
     overflow: hidden;
+
+    @media screen and (prefers-color-scheme: dark) {
+      color: white;
+      border-bottom: 1px solid var(--color-border-dark);
+      background-color: var(--color-default-dark)
+    }
 
     @media only screen and (max-width: 600px) {
       height: var(--main-header-height-mobile);

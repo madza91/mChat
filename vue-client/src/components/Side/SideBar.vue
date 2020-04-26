@@ -43,13 +43,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '../../assets/styles';
+
   .sidebar-nav {
     list-style: none;
     padding: 0;
     margin: 0;
     padding-bottom: 10px;
   }
+
   .main-sidebar {
     position: absolute;
     top: 0;
@@ -60,15 +63,17 @@ export default {
     z-index: 810;
     transition: transform .2s ease-in-out, width .2s ease-in-out;
   }
-  @media only screen and (max-width: 600px) {
+  @include media-breakpoint-down(xs) {
     .main-sidebar {
-      -webkit-transform: translate(-230px, 0);
-      transform: translate(-230px, 0);
+      -webkit-transform: translate(calc(-1 * var(--sidebar-width)), 0);
+      transform: translate(calc(-1 * var(--sidebar-width)), 0);
     }
   }
+
   .sidebar-open .main-sidebar {
     transform: translate(0, 0);
   }
+
   .scrollable {
     top: 60px;
     left: 0;

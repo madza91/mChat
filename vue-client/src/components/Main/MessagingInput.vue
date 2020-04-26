@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
   .main-footer {
     position: absolute;
     bottom: 0;
@@ -59,7 +59,13 @@ export default {
     background-color: var(--color-default);
     transition: transform .2s ease-in-out, width .2s ease-in-out;
     padding: 10px 15px env(safe-area-inset-bottom);
-    border-top: 1px solid var(--color-border-light);
+    border-top: 1px solid var(--color-border);
+
+    @media screen and (prefers-color-scheme: dark) {
+      color: white;
+      border-top: 1px solid var(--color-border-dark);
+      background-color: var(--color-default-dark)
+    }
   }
 
   .main-footer.focused {
@@ -76,6 +82,12 @@ export default {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+
+    @media screen and (prefers-color-scheme: dark) {
+      color: white;
+      background-color: #272729;
+      border: 1px solid var(--color-border-dark)
+    }
   }
 
   input:focus {

@@ -22,6 +22,7 @@ const https      = require('https');
 const fs         = require('fs');
 const request    = require('request');
 const debugging  = require('./modules/debugging');
+const chatRoom   = 'general';
 
 // HTTPS Server
 const secureServer = https.createServer({
@@ -72,6 +73,7 @@ io.on('connection', function (socket) {
                 debugging.log(nickname + ' sends a message.');
                 send_message('user',{
                     nick: nickname,
+                    socket: socket.id,
                     message: message,
                     date: date
                 });
@@ -83,6 +85,8 @@ io.on('connection', function (socket) {
         // const chosenNick = this.handshake.query.user;
         const validation = nickObj.validate(nickname);
         const nick = validation.nick;
+        // socket.join(chatRoom)
+        // io.to(chatRoom).emit('new user has joined the room');
 
         if (nickname !== nick) {
             send_message('nick', {
