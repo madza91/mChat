@@ -6,6 +6,15 @@
  * Date: 31.10.2017
  */
 
+// var ogs = require('open-graph-scraper');
+//
+// var options = {'url': 'https://madza.rs'};
+// ogs(options, function (error, results) {
+//     console.log('error:', error); // This is returns true or false. True if there was a error. The error it self is inside the results object.
+//     console.log('results:', results.data.ogImage);
+// });
+//
+
 const env        = require('dotenv').config({path: __dirname + '/.env'});
 const config     = env.parsed;
 const expressApp = require('express')();
@@ -34,8 +43,8 @@ var users = [];
 debugging.log('Adding bot named ' + config.BOT_NAME);
 users.push({
     nick: config.BOT_NAME,
-    status: 'bot',
-    socket: null
+    status: 'online',
+    socket: 'bot'
 });
 
 // New client connection
