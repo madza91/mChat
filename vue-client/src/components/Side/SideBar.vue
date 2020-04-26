@@ -4,11 +4,11 @@
     <div class="scrollable">
       <ListSectionItem section-name="Channels" />
       <ul class="sidebar-nav">
-        <ListChannelItem channel="general" />
+        <ListUserItem name="general" :is-channel="true" :is-active="true"/>
       </ul>
       <ListSectionItem section-name="People" />
       <ul class="sidebar-nav">
-        <ListUserItem v-for="user in users" :key="user.nick" :nick="user.nick"/>
+        <ListUserItem v-for="user in users" :key="user.nick" :name="user.nick" badge="1"/>
       </ul>
     </div>
   </aside>
@@ -18,7 +18,6 @@
 import ListUserItem from './ListUserItem'
 import SideBarHeader from './SideBarHeader'
 import ListSectionItem from './ListSectionItem'
-import ListChannelItem from './ListChannelItem'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('chat')
 
@@ -30,7 +29,6 @@ export default {
   components: {
     ListSectionItem,
     ListUserItem,
-    ListChannelItem,
     SideBarHeader
   }
 }
