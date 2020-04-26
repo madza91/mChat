@@ -9,6 +9,7 @@
         <a href="#">
           Click anywhere to close (WIP)
         </a>
+        <p class="build-number">Build: {{ getBuildDate }}</p>
       </li>
     </ul>
   </aside>
@@ -16,12 +17,17 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import moment from 'moment'
 const { mapState, mapActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ControlSideBar',
   computed: {
-    ...mapState(['settingsBar'])
+    ...mapState(['settingsBar']),
+    getBuildDate () {
+      // ToDo Remove this, it's for debugging only
+      return moment(document.documentElement.dataset.buildTimestampUtc).format('D.MM.Y H:mm:ss')
+    }
   },
   methods: {
     ...mapActions(['settingsToggle'])
@@ -44,5 +50,13 @@ export default {
 
   .control-sidebar.control-sidebar-open {
     right: 0;
+  }
+
+  .build-number {
+    position: absolute;
+    bottom: 10px;
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
   }
 </style>
