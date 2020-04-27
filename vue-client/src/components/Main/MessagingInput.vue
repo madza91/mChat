@@ -91,6 +91,5 @@ export default {
 
   input:focus {
     outline: none;
-
   }
 </style>

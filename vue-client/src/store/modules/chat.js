@@ -1,3 +1,5 @@
+import { myMixin } from '../../mixins/NotificationMixin'
+
 const state = {
   nick: null,
   socketId: null,
@@ -91,6 +93,9 @@ const mutations = {
   },
   insertMessage (state, data) {
     state.messages.push(data)
+    if (data.socket !== state.socketId) {
+      myMixin.methods.sendNotification(data.text)
+    }
   },
   resetMessages (state, data) {
     state.messages = []

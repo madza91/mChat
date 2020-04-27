@@ -11,7 +11,7 @@
       no-fade
       :visible="!authenticated"
     >
-      <div class="d-block">
+      <div class="d-block us-none">
         <h2 class="mb-3 text-center">Welcome!</h2>
         <p class="mb-4">
           This is a tiny chat app that is using web sockets, nodeJs and it will have some interesting content. WIP :)
