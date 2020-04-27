@@ -4,7 +4,7 @@
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
     />
-    <div class="mb-auto mr-auto mt-auto pl-sm-3">
+    <div class="mb-auto mr-auto mt-auto pl-sm-3 us-none">
       #general
     </div>
     <b-icon-exclamation-triangle-fill
@@ -46,12 +46,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+  @import '../../assets/styles';
+
   .icon {
     width: var(--main-header-height);
     height: var(--main-header-height);
     padding: calc(var(--main-header-height) / 3);
 
-    @media only screen and (max-width: 600px) {
+    @include media-breakpoint-down(xs) {
       width: var(--main-header-height-mobile);
       height: var(--main-header-height-mobile);
       padding: 10px;
@@ -79,7 +81,7 @@ export default {
       background-color: var(--color-default-dark)
     }
 
-    @media only screen and (max-width: 600px) {
+    @include media-breakpoint-down(xs) {
       height: var(--main-header-height-mobile);
     }
   }

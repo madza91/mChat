@@ -49,18 +49,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import '../../assets/styles';
+
   .content-wrapper {
     height: 100%;
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
     transition: transform .2s ease-in-out, margin .2s ease-in-out;
-    background-image: url('./../../assets/sports.png');
+    background-image: url('../../assets/images/sports.png');
 
     @media screen and (prefers-color-scheme: dark) {
-      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('./../../assets/sports.png')
+      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/sports.png')
     }
   }
-  @media only screen and (min-width: 600px) {
+  @include media-breakpoint-up(sm) {
     .content-wrapper {
       width: calc(100% - var(--sidebar-width));
     }
@@ -73,7 +75,7 @@ export default {
     transform: translate(var(--sidebar-width), 0);
     z-index: 800;
   }
-  @media only screen and (max-width: 600px) {
+  @include media-breakpoint-down(xs) {
     .content-wrapper {
       -webkit-transform: translate(0, 0);
       transform: translate(0, 0);
@@ -87,7 +89,7 @@ export default {
     padding-top: 15px;
   }
 
-  @media only screen and (min-width: 600px) {
+  @include media-breakpoint-up(sm) {
     .container-fluid {
       top: var(--main-header-height);
     }

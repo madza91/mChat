@@ -1,5 +1,5 @@
 <template>
-  <aside class="main-sidebar">
+  <aside class="main-sidebar us-none">
     <SideBarHeader />
     <div class="scrollable">
       <ListSectionItem section-name="Channels" />

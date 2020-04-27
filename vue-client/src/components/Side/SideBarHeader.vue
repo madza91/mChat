@@ -1,6 +1,6 @@
 <template>
-  <div class="main-sidebar-header">
-      <img src="./../../assets/default.jpg" class="user-profile-picture" alt="avatar"/>
+  <div class="main-sidebar-header us-none">
+      <img src="../../assets/images/default.jpg" class="user-profile-picture" alt="avatar"/>
       <span class="user-fullname">{{ nick }}</span>
   </div>
 </template>

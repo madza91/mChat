@@ -9,6 +9,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../assets/styles';
+
 .connection_info {
   text-align: center;
   position: absolute;
@@ -17,7 +19,7 @@ export default {
   width: 100%;
   top: var(--main-header-height);
 
-  @media only screen and (max-width: 600px) {
+  @include media-breakpoint-down(xs) {
     top: var(--main-header-height-mobile);
   }
 }
