@@ -6,11 +6,14 @@ import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueSocketIO from 'vue-socket.io'
 import './assets/styles/index.scss'
+import Vue2TouchEvents from 'vue2-touch-events'
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+
+Vue.use(Vue2TouchEvents)
 
 const isProduction = process.env.NODE_ENV === 'production'
 Vue.config.productionTip = false

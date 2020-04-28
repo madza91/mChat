@@ -19,25 +19,33 @@ const env        = require('dotenv').config({path: __dirname + '/.env'});
 const config     = env.parsed;
 const expressApp = require('express')();
 const https      = require('https');
+const http       = require('http');
 const fs         = require('fs');
 const request    = require('request');
 const debugging  = require('./modules/debugging');
 const chatRoom   = 'general';
 const msgLimit   = 20;
 const msgHistory = [];
+let server       = null;
 
 // HTTPS Server
-const secureServer = https.createServer({
-    key: fs.readFileSync(config.SERVER_SSL_KEY),
-    cert: fs.readFileSync(config.SERVER_SSL_CERT)
-}, expressApp);
+if (config.SERVER_SSL_KEY && config.SERVER_SSL_CERT) {
+    server = https.createServer({
+        key: fs.readFileSync(config.SERVER_SSL_KEY),
+        cert: fs.readFileSync(config.SERVER_SSL_CERT)
+    }, expressApp);
+} else {
+    debugging.log(`SSL Keys are not available, started not secure server`);
+    server = http.createServer()
+}
 
-secureServer.listen(config.SERVER_PORT,() => {
+
+server.listen(config.SERVER_PORT,() => {
     debugging.log(`Started server on ${config.SERVER_HOST}, port ${config.SERVER_PORT}`);
 });
 
 // Socket Server
-const io = require('socket.io')(secureServer, {
+const io = require('socket.io')(server, {
     path: '/',
     serveClient: false
 });
