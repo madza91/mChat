@@ -5,9 +5,8 @@
         name="message-to-send"
         id="message-to-send"
         placeholder="Type your message"
-        v-on:keyup.enter="sendMessage"
+        @keyup.enter="sendMessage"
         v-model="message"
-        :disabled="enabled !== true"
         @focus="onFocus"
         @blur="onBlur"
       >
@@ -15,7 +14,8 @@
         icon="paper-plane"
         class="icon"
         :class="{'disabled': !enabled || !message}"
-        v-on:click="sendMessage"
+        v-touch:start="sendMessage"
+        v-touch:end="(e) => e.preventDefault()"
       />
     </b-row>
   </footer>
@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     sendMessage () {
+      this.$el.querySelector('#message-to-send').focus()
       const data = {
         type: 'message',
         message: this.message
