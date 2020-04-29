@@ -7,6 +7,7 @@
         placeholder="Type your message"
         @keyup.enter="sendMessage"
         v-model="message"
+        :disabled="enabled !== true"
         @focus="onFocus"
         @blur="onBlur"
       >
@@ -35,15 +36,22 @@ export default {
       message: null
     }
   },
+  mounted () {
+    this.$refs.nicknameInput.addEventListener('touchmove', (e) => {
+      e.preventDefault()
+    })
+  },
   methods: {
     sendMessage () {
-      this.$el.querySelector('#message-to-send').focus()
-      const data = {
-        type: 'message',
-        message: this.message
+      if (this.enabled && this.message) {
+        this.$el.querySelector('#message-to-send').focus()
+        const data = {
+          type: 'message',
+          message: this.message
+        }
+        this.$socket.emit('cMessage', data)
+        this.message = ''
       }
-      this.$socket.emit('cMessage', data)
-      this.message = ''
     },
     onFocus () {
       this.$refs.nicknameInput.classList.add('focused')
