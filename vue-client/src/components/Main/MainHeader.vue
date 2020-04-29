@@ -1,5 +1,5 @@
 <template>
-  <header class="main-header us-none">
+  <header class="main-header us-none" ref="header">
     <b-icon-list
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
@@ -33,6 +33,11 @@ export default {
       default: '',
       required: false
     }
+  },
+  mounted () {
+    this.$refs.header.addEventListener('touchmove', (e) => {
+      e.preventDefault()
+    })
   },
   computed: {
     ...mapChatState(['messages', 'connected'])
