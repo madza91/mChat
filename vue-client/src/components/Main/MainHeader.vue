@@ -66,11 +66,8 @@ export default {
   }
 
   .main-header {
-    position: fixed;
     display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
+    min-height: var(--main-header-height);
     max-height: var(--main-header-height);
     height: var(--main-header-height);
     width: 100%;
@@ -88,6 +85,7 @@ export default {
 
     @include media-breakpoint-down(xs) {
       height: var(--main-header-height-mobile);
+      min-height: var(--main-header-height-mobile);
     }
   }
 </style>

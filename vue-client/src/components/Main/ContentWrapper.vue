@@ -76,6 +76,8 @@ export default {
   @import '../../assets/styles';
 
   .content-wrapper {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
@@ -106,16 +108,8 @@ export default {
     }
   }
   .container-fluid {
-    position: absolute;
-    top: var(--main-header-height-mobile);
-    bottom: calc(var(--footer-height) + env(safe-area-inset-bottom)); /* +22 (safe-bottom) */
+    flex-grow: 1;
     overflow-y: scroll;
     padding-top: 15px;
-  }
-
-  @include media-breakpoint-up(sm) {
-    .container-fluid {
-      top: var(--main-header-height);
-    }
   }
 </style>

@@ -3,8 +3,9 @@
     <b-icon-hash v-if="isChannel" class="icon-channel" />
     <b-icon-circle-fill v-else class="icon-user" :class="status" />
     <div class="name">
-      {{ name }} <b-badge v-if="badgeNumber" class="float-right" variant="danger">{{ badgeNumber }}</b-badge>
+      <span>{{ name }}</span>
     </div>
+    <b-badge v-if="badgeNumber" class="float-right" variant="danger">{{ badgeNumber }}</b-badge>
   </li>
 </template>
 
@@ -78,11 +79,15 @@ export default {
   }
 
   .name {
-    width: 100%;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .badge {
     margin-top: 3px;
+    margin-left: 5px;
   }
 
   .list-item-user:hover {

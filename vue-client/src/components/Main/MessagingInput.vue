@@ -64,15 +64,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  $bottom-padding: 10px;
+
   .main-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    min-height: var(--footer-height);
     background-color: var(--color-default);
     transition: transform .2s ease-in-out, width .2s ease-in-out;
-    padding: 10px 15px env(safe-area-inset-bottom, 20px);
+    padding: $bottom-padding 15px calc(env(safe-area-inset-bottom) - #{$bottom-padding});
     border-top: 1px solid var(--color-border);
 
     @media screen and (prefers-color-scheme: dark) {
@@ -96,6 +93,7 @@ export default {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    margin-bottom: $bottom-padding;
 
     @media screen and (prefers-color-scheme: dark) {
       color: white;
