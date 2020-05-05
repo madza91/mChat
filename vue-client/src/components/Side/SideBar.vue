@@ -48,12 +48,13 @@ export default {
 
   .sidebar-nav {
     list-style: none;
-    padding: 0;
+    padding: 0 0 10px;
     margin: 0;
-    padding-bottom: 10px;
   }
 
   .main-sidebar {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 0;
     left: 0;
@@ -75,12 +76,9 @@ export default {
   }
 
   .scrollable {
-    top: 60px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    overflow: scroll;
+    padding-top: 15px;
+    flex-grow: 1;
+    overflow-y: scroll;
   }
 
   .info {

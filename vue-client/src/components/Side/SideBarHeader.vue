@@ -17,14 +17,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .main-sidebar-header {
     display: flex;
-    color: white;
-    background-color: #444753;
+    background-color: var(--color-default);
     max-height: 60px;
     height: 60px;
     padding: 10px;
+
+    @media screen and (prefers-color-scheme: dark) {
+      color: white;
+      background-color: var(--color-default-dark)
+    }
   }
 
   .user-profile-picture {
