@@ -1,7 +1,12 @@
 <template>
   <div class="content-wrapper" id="content-wrapper">
     <MainHeader />
-    <div class="container-fluid" id="container-fluid">
+    <div
+      class="container-fluid"
+      id="container-fluid"
+      v-touch:swipe="swipeHandler"
+      v-touch:tap="touchHandler"
+    >
       <ul class="list">
         <li v-for="(data, index) in messages" :key="index">
           <UserMessage
@@ -29,6 +34,7 @@ import MainHeader from './MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
 const { mapState } = createNamespacedHelpers('chat')
+const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ContentWrapper',
@@ -44,6 +50,24 @@ export default {
   updated () {
     const container = this.$el.querySelector('#container-fluid')
     container.scrollTop = container.scrollHeight
+  },
+  methods: {
+    ...mapUiActions(['sidebarToggle']),
+    ...mapUiGetters(['getSidebar']),
+    swipeHandler (direction) {
+      const sideBar = this.getSidebar()
+      if (
+        (direction === 'right' && !sideBar) ||
+        (direction === 'left' && sideBar)
+      ) {
+        this.sidebarToggle()
+      }
+    },
+    touchHandler () {
+      if (this.getSidebar()) {
+        this.sidebarToggle()
+      }
+    }
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <header class="main-header">
+  <header class="main-header us-none" ref="header">
     <b-icon-list
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
     />
-    <div class="mb-auto mr-auto mt-auto pl-sm-3 us-none">
+    <div class="mb-auto mr-auto mt-auto pl-sm-3">
       #general
     </div>
     <b-icon-exclamation-triangle-fill
@@ -33,6 +33,11 @@ export default {
       default: '',
       required: false
     }
+  },
+  mounted () {
+    this.$refs.header.addEventListener('touchmove', (e) => {
+      e.preventDefault()
+    })
   },
   computed: {
     ...mapChatState(['messages', 'connected'])
