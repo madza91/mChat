@@ -58,6 +58,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+    height: 100%;
     min-height: 100%;
     width: var(--sidebar-width);
     background-color: #444753;
@@ -76,7 +77,7 @@ export default {
   }
 
   .scrollable {
-    padding-top: 15px;
+    padding: 15px 0;
     flex-grow: 1;
     overflow-y: scroll;
   }
