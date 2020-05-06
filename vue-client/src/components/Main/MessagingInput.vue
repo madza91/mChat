@@ -67,13 +67,13 @@ export default {
 
 <style scoped lang="scss">
   @import '../../assets/styles';
+  $padding: 10px;
   $icon-size: 40px;
   $icon-size-mobile: 28px;
 
   .main-footer {
     background-color: var(--color-default);
-    padding: 10px 15px;
-    min-height: var(--footer-height-mobile);
+    padding: $padding 15px 0;
     border-top: 1px solid var(--color-border);
 
     @media screen and (prefers-color-scheme: dark) {
@@ -83,12 +83,14 @@ export default {
     }
 
     @include media-breakpoint-down(xs) {
-      padding-bottom: env(safe-area-inset-bottom);
+      margin-bottom: max(env(safe-area-inset-bottom), #{$padding});
     }
   }
 
   .main-footer.focused {
-    padding-bottom: 0;
+    @include media-breakpoint-down(xs) {
+      margin-bottom: $padding;
+    }
   }
 
   input {
