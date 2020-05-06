@@ -82,10 +82,6 @@ export default {
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
     transition: transform .2s ease-in-out, margin .2s ease-in-out;
-
-    @media screen and (prefers-color-scheme: dark) {
-      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/sports.png')
-    }
   }
   @include media-breakpoint-up(sm) {
     .content-wrapper {
@@ -111,5 +107,9 @@ export default {
     overflow-y: scroll;
     padding-top: 15px;
     background-image: url('../../assets/images/sports.png');
+
+    @media screen and (prefers-color-scheme: dark) {
+      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/sports.png')
+    }
   }
 </style>

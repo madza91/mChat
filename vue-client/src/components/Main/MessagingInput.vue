@@ -73,7 +73,7 @@ export default {
 
   .main-footer {
     background-color: var(--color-default);
-    padding: $padding 15px 0;
+    padding: $padding 15px;
     border-top: 1px solid var(--color-border);
 
     @media screen and (prefers-color-scheme: dark) {
@@ -83,6 +83,7 @@ export default {
     }
 
     @include media-breakpoint-down(xs) {
+      padding-bottom: 0;
       margin-bottom: max(env(safe-area-inset-bottom), #{$padding});
     }
   }
