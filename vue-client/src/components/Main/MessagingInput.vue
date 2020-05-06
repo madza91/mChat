@@ -4,10 +4,10 @@
       <input
         name="message-to-send"
         id="message-to-send"
+        class="mr-2"
         placeholder="Type your message"
         @keyup.enter="sendMessage"
         v-model="message"
-        :disabled="enabled !== true"
         @focus="onFocus"
         @blur="onBlur"
       >
@@ -66,11 +66,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  $bottom-padding: 10px;
+  @import '../../assets/styles';
+  $icon-size: 40px;
+  $icon-size-mobile: 28px;
 
   .main-footer {
     background-color: var(--color-default);
-    padding: $bottom-padding 15px calc(env(safe-area-inset-bottom) - #{$bottom-padding});
+    padding: 10px 15px;
+    min-height: var(--footer-height-mobile);
     border-top: 1px solid var(--color-border);
 
     @media screen and (prefers-color-scheme: dark) {
@@ -78,10 +81,14 @@ export default {
       border-top: 1px solid var(--color-border-dark);
       background-color: var(--color-default-dark)
     }
+
+    @include media-breakpoint-down(xs) {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
   }
 
   .main-footer.focused {
-    padding: 10px 15px 0;
+    padding-bottom: 0;
   }
 
   input {
@@ -94,12 +101,16 @@ export default {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin-bottom: $bottom-padding;
 
     @media screen and (prefers-color-scheme: dark) {
       color: white;
       background-color: #272729;
       border: 1px solid var(--color-border-dark)
+    }
+
+    @include media-breakpoint-down(xs) {
+      padding: 0 15px;
+      height: $icon-size-mobile;
     }
   }
 
@@ -108,10 +119,16 @@ export default {
   }
 
   .icon {
-    height: 100%;
-    padding: 10px;
-    width: 40px;
+    width: $icon-size;
+    height: $icon-size;
+    padding: 8px;
     cursor: pointer;
+
+    @include media-breakpoint-down(xs) {
+      width: $icon-size-mobile;
+      height: $icon-size-mobile;
+      padding: 4px;
+    }
   }
 
   .icon.disabled {

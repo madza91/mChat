@@ -39,12 +39,13 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('chat')
+const { mapState, mapGetters } = createNamespacedHelpers('chat')
 
 export default {
   name: 'WelcomeModal',
   computed: {
     ...mapState(['authenticated']),
+    ...mapGetters(['getUserNick']),
     state () {
       return /^[0-9A-Za-z.-/-_!@#$%^&*()|<>?{}'"/[\]]{3,30}$/.test(this.nickname)
     },
@@ -58,6 +59,9 @@ export default {
     validFeedback () {
       return this.state === true ? 'You are ready!' : ''
     }
+  },
+  mounted () {
+    this.nickname = this.getUserNick
   },
   data () {
     return {
