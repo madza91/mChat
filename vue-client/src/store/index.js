@@ -7,7 +7,8 @@ import chat from './modules/chat'
 
 const vuexPersist = new VuexPersist({
   key: 'm-chat',
-  storage: window.localStorage
+  storage: window.localStorage,
+  modules: ['ui']
 })
 
 Vue.use(Vuex)

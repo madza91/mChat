@@ -58,7 +58,10 @@ export default {
   methods: {
     ...mapUiActions(['setSelectedChat', 'sidebarToggle']),
     setSelected () {
-      this.setSelectedChat(this.id)
+      this.setSelectedChat({
+        id: this.id,
+        isChannel: this.isChannel
+      })
       this.sidebarToggle()
     }
   }

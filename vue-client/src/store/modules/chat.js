@@ -1,7 +1,7 @@
 import { myMixin } from '../../mixins/NotificationMixin'
 
 const state = {
-  nick: null,
+  nick: '',
   socketId: null,
   connected: null,
   authenticated: false,
@@ -43,9 +43,6 @@ const actions = {
   SOCKET_welcome ({ commit }, data) {
     commit('setAuthenticated', data)
   },
-  SOCKET_auth_request ({ commit }, data) {
-    commit('setNotAuthenticated', data)
-  },
   SOCKET_user ({ commit }, data) {
     commit('insertMessage', {
       type: 'user',
@@ -81,9 +78,6 @@ const mutations = {
     state.authenticated = true
     state.nick = data.nick
     state.socketId = data.socket
-  },
-  setNotAuthenticated (state) {
-    state.authenticated = false
   },
   setNick (state, data) {
     state.nick = data
