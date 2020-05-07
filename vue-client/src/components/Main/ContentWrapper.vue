@@ -56,6 +56,8 @@ export default {
     ...mapUiGetters(['getSidebar']),
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
+      console.log('test sideBar', sideBar)
+      console.log('test direction', direction)
       if (
         (direction === 'right' && !sideBar) ||
         (direction === 'left' && sideBar)
