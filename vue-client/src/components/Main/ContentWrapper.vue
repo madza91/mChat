@@ -60,11 +60,13 @@ export default {
         (direction === 'right' && !sideBar) ||
         (direction === 'left' && sideBar)
       ) {
+        console.log('sidebarToggle content wrapper 1')
         this.sidebarToggle()
       }
     },
     touchHandler () {
       if (this.getSidebar()) {
+        console.log('sidebarToggle content wrapper FALSE')
         this.sidebarState(false)
       }
     }
