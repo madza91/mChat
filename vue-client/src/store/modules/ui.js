@@ -1,7 +1,10 @@
 const state = {
   sidebar: false,
   settingsBar: false,
-  selectedChat: null
+  selectedChat: {
+    id: null,
+    isChannel: true
+  }
 }
 
 const getters = {
