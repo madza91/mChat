@@ -1,11 +1,12 @@
 <template>
-  <footer class="main-footer" ref="nicknameInput">
+  <footer class="main-footer" ref="footerWrapper">
     <b-row>
       <input
         name="message-to-send"
         id="message-to-send"
         class="mr-2"
         placeholder="Type your message"
+        ref="footerInput"
         @keyup.enter="sendMessage"
         v-model="message"
         @focus="onFocus"
@@ -37,14 +38,17 @@ export default {
     }
   },
   mounted () {
-    this.$refs.nicknameInput.addEventListener('touchmove', (e) => {
+    this.$refs.footerWrapper.addEventListener('touchmove', (e) => {
       e.preventDefault()
     })
   },
   methods: {
     sendMessage () {
-      if (this.enabled && this.message) {
-        this.$el.querySelector('#message-to-send').focus()
+      if (this.message) {
+        if (this.$refs.footerWrapper.classList.contains('focused')) {
+          this.$refs.footerInput.focus()
+        }
+
         const data = {
           type: 'message',
           message: this.message
@@ -54,10 +58,10 @@ export default {
       }
     },
     onFocus () {
-      this.$refs.nicknameInput.classList.add('focused')
+      this.$refs.footerWrapper.classList.add('focused')
     },
     onBlur () {
-      this.$refs.nicknameInput.classList.remove('focused')
+      this.$refs.footerWrapper.classList.remove('focused')
       const container = document.getElementById('container-fluid')
       container.scrollTop = container.scrollHeight
     }
