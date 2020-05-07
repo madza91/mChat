@@ -4,7 +4,6 @@
     <div
       class="container-fluid"
       id="container-fluid"
-      v-touch:swipe="swipeHandler"
       v-touch:tap="touchHandler"
     >
       <ul class="list">
@@ -56,19 +55,15 @@ export default {
     ...mapUiGetters(['getSidebar']),
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
-      console.log('test sideBar', sideBar)
-      console.log('test direction', direction)
       if (
         (direction === 'right' && !sideBar) ||
         (direction === 'left' && sideBar)
       ) {
-        console.log('sidebarToggle content wrapper 1')
         this.sidebarToggle()
       }
     },
     touchHandler () {
       if (this.getSidebar()) {
-        console.log('sidebarToggle content wrapper FALSE')
         this.sidebarState(false)
       }
     }

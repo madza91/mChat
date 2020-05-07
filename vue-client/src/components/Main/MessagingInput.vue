@@ -25,8 +25,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-
-const { mapState: mapUiState } = createNamespacedHelpers('ui')
+const { mapState: mapUiState, mapActions: mapUiActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'MessagingInput',
@@ -50,6 +49,7 @@ export default {
     })
   },
   methods: {
+    ...mapUiActions(['sidebarState']),
     sendMessage () {
       if (this.message) {
         this.checkFocus()
@@ -68,6 +68,7 @@ export default {
       }
     },
     onFocus () {
+      this.sidebarState(false)
       this.$refs.footerWrapper.classList.add('focused')
     },
     onBlur () {

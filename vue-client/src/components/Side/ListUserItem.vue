@@ -62,7 +62,6 @@ export default {
         id: this.id,
         isChannel: this.isChannel
       })
-      console.log('sidebarToggle list user item FALSE')
       this.sidebarState(false)
     }
   }
