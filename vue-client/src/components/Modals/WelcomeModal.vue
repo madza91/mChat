@@ -70,14 +70,18 @@ export default {
   },
   methods: {
     connect () {
-      this.$socket.emit('client_auth', this.nickname)
+      this.$socket.io.opts.query = `nick=${this.nickname}`
+      this.$socket.open()
     }
   }
 }
 </script>
 
-<style scoped>
-.nickname-input {
-  min-height: 100px;
-}
+<style>
+  #fieldset-1 {
+    min-height: 100px;
+  }
+  .modal-content {
+    border-radius: 1rem;
+  }
 </style>

@@ -4,7 +4,7 @@
     <div class="scrollable">
       <ListSectionItem section-name="Channels" />
       <ul class="sidebar-nav">
-        <ListUserItem :id="null" name="general" :is-channel="true" :is-active="selectedChat === null"/>
+        <ListUserItem :id="null" name="general" :is-channel="true" :is-active="selectedChat.id === null"/>
       </ul>
       <ListSectionItem section-name="People" />
       <ul class="sidebar-nav">
@@ -14,7 +14,7 @@
           :name="user.nick"
           :id="user.socket"
           :badge="1"
-          :is-active="user.socket === selectedChat"
+          :is-active="user.socket === selectedChat.id"
         />
       </ul>
     </div>

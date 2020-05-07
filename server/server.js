@@ -60,13 +60,26 @@ users.push({
 
 // New client connection
 io.on('connection', function (socket) {
-    debugging.log('Connected new unauthenticated user: ' + socket.id);
-    sendMessage('auth_request', {err: 'Please, identify yourself!'}, socket.id)
+    const nickname = socket.handshake.query.nick;
+    debugging.log(`Connected new user: ${nickname} (${socket.id})`);
+    const validation = nickObj.validate(nickname);
+    const nick = validation.nick;
+    // socket.join(chatRoom)
+    // io.to(chatRoom).emit('new user has joined the room');
+
     sendMessage('users_list',{users: users}, socket.id);
+    sendMessage('welcome', { socket: socket.id, nick: nick }, socket.id);
+    sendMessage('join', { nick: nick, status: 'online', socket: socket.id });
+    users.push({
+        nick: nick,
+        status: 'online',
+        socket: socket.id
+    });
 
     const msgHistoryLimited = msgHistory.slice((msgHistory.length - msgLimit), msgHistory.length)
     sendMessage('history',{history: msgHistoryLimited}, socket.id);
 
+    // Message from client
     socket.on("cMessage", function (data) {
         const user = nickObj.findUser(this.id, 'socket');
 
@@ -94,37 +107,6 @@ io.on('connection', function (socket) {
             }
         }
     });
-
-    socket.on('client_auth', (nickname) => {
-        const validation = nickObj.validate(nickname);
-        const nick = validation.nick;
-        // socket.join(chatRoom)
-        // io.to(chatRoom).emit('new user has joined the room');
-
-        if (nickname !== nick) {
-            sendMessage('nick', {
-                socket: socket.id,
-                oldNick: nickname,
-                newNick: nick,
-                reason: validation.reason
-            }, socket.id);
-        }
-        sendMessage('welcome', {
-            socket: socket.id,
-            nick: nick
-        }, socket.id);
-        sendMessage('join', {
-            nick: nick,
-            status: 'online',
-            socket: socket.id
-        });
-        users.push({
-            nick: nick,
-            status: 'online',
-            socket: socket.id
-        });
-        // emailSend(this.nick, 'Joined');
-    })
 
     socket.on('error', function () {
         nickObj.eventLeave(socket.id);

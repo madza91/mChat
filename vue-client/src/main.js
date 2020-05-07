@@ -34,7 +34,7 @@ Vue.use(new VueSocketIO({
   },
   options: {
     path: process.env.VUE_APP_SOCKET_PATH,
-    autoConnect: true
+    autoConnect: false
   } // Optional options
 }))
 
