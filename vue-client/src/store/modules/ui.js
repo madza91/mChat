@@ -21,9 +21,11 @@ const getters = {
 
 const actions = {
   sidebarToggle ({ commit }, data) {
+    console.log('sidebarToggle actions1')
     commit('setSidebarToggle', data)
   },
   sidebarState ({ commit }, data) {
+    console.log('sidebarState actions2')
     commit('setSidebarState', data)
   },
   settingsToggle ({ commit }, data) {

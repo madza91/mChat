@@ -1,7 +1,7 @@
 <template>
   <div
     class="wrapper"
-    :class="{'sidebar-open': sidebar}">
+    :class="{'sidebar-open': sidebar, 'blur': !authenticated}">
     <SideBar />
     <ControlSideBar />
     <ContentWrapper />
@@ -17,6 +17,7 @@ import WelcomeModal from '../components/Modals/WelcomeModal'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('ui')
+const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'Chat',
@@ -27,7 +28,8 @@ export default {
     ContentWrapper
   },
   computed: {
-    ...mapState(['sidebar'])
+    ...mapState(['sidebar']),
+    ...mapChatState(['authenticated'])
   }
 }
 </script>
