@@ -21,6 +21,9 @@ const getters = {
 
 const actions = {
   sidebarToggle ({ commit }, data) {
+    commit('setSidebarToggle', data)
+  },
+  sidebarState ({ commit }, data) {
     commit('setSidebarState', data)
   },
   settingsToggle ({ commit }, data) {
@@ -32,8 +35,11 @@ const actions = {
 }
 
 const mutations = {
-  setSidebarState (state) {
+  setSidebarToggle (state) {
     state.sidebar = !state.sidebar
+  },
+  setSidebarState (state, data) {
+    state.sidebar = data
   },
   setSettingsState (state) {
     state.settingsBar = !state.settingsBar
