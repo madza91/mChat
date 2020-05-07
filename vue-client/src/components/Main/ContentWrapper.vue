@@ -52,7 +52,7 @@ export default {
     container.scrollTop = container.scrollHeight
   },
   methods: {
-    ...mapUiActions(['sidebarToggle']),
+    ...mapUiActions(['sidebarToggle', 'sidebarState']),
     ...mapUiGetters(['getSidebar']),
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
@@ -65,7 +65,7 @@ export default {
     },
     touchHandler () {
       if (this.getSidebar()) {
-        this.sidebarToggle()
+        this.sidebarState(false)
       }
     }
   }
