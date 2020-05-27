@@ -4,7 +4,9 @@
  */
 module.exports = {
   private(fromSocketID, toSocketID, message) {
-    io.to(fromSocketID).emit('private', {...message, socket: toSocketID});
+    if (fromSocketID !== toSocketID) {
+      io.to(fromSocketID).emit('private', {...message, socket: toSocketID});
+    }
     io.to(toSocketID).emit('private', message);
   },
   channel(channelID, message) {

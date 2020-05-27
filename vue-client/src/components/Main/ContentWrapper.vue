@@ -93,7 +93,9 @@ export default {
   }
   .list {
     list-style: none;
-    padding: 0 10px;
+    padding-bottom: 10px;
+    margin: auto;
+    max-width: 900px;
   }
   .sidebar-open .content-wrapper {
     transform: translate(var(--sidebar-width), 0);
