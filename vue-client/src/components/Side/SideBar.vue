@@ -19,7 +19,7 @@
           :key="user._nick"
           :id="user._socket"
           :name="user._nick"
-          :badge="1"
+          :badge="user._badge"
           :is-active="user._socket === selectedChat.id"
         />
       </ul>

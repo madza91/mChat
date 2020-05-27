@@ -118,6 +118,10 @@ const mutations = {
   },
   setSelectedChat (state, data) {
     state.selectedChat = data
+    if (!data.isChannel) {
+      const user = state.users.find(user => user._socket === data.id)
+      user._badge = 0
+    }
   },
   setConnected (state, data) {
     state.connected = data
@@ -135,6 +139,10 @@ const mutations = {
     const user = state.users.find(user => user._socket === data.socket)
     if (user) {
       user._history.push(data)
+      // ToDo Move logic to the mixin
+      if (state.selectedChat.id !== data.socket) {
+        user._badge += 1
+      }
     }
   },
   insertUser (state, data) {
@@ -161,7 +169,6 @@ const mutations = {
     }
   },
   removeUser (state, data) {
-    console.log('data', data)
     state.users = state.users.filter(user => user._socket !== data.socket)
   },
   setChannels (state, data) {
