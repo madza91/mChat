@@ -1,7 +1,7 @@
 <template>
   <div class="message-data text-center">
     <div class="message-info">
-      <span class="message-data-name">{{ message }}</span>
+      <span class="message-data-name" v-html="message"></span>
       <span class="message-data-time">{{ formattedTime }}</span>
     </div>
   </div>

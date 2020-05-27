@@ -12,6 +12,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
+const { mapActions: mapChatActions } = createNamespacedHelpers('chat')
 
 export default {
   name: 'ListUserItem',
@@ -56,10 +57,12 @@ export default {
     }
   },
   methods: {
-    ...mapUiActions(['setSelectedChat', 'sidebarState']),
+    ...mapUiActions(['sidebarState']),
+    ...mapChatActions(['setSelectedChat']),
     setSelected () {
       this.setSelectedChat({
         id: this.id,
+        name: this.isChannel ? `#${this.name}` : this.name,
         isChannel: this.isChannel
       })
       this.sidebarState(false)
