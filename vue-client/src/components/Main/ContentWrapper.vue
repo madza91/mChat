@@ -7,7 +7,7 @@
       v-touch:tap="touchHandler"
     >
       <ul class="list">
-        <li v-for="(data, index) in messages" :key="index">
+        <li v-for="(data, index) in currentMessages" :key="index">
           <UserMessage
             v-if="data.type === 'user'"
             :nick="data.nick"
@@ -32,13 +32,16 @@ import MessagingInput from './MessagingInput'
 import MainHeader from './MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
-const { mapState } = createNamespacedHelpers('chat')
+const { mapState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ContentWrapper',
   computed: {
-    ...mapState(['messages', 'connected'])
+    ...mapState(['connected']),
+    currentMessages () {
+      return this.getCurrentMessages()
+    }
   },
   components: {
     UserMessage,
@@ -53,6 +56,7 @@ export default {
   methods: {
     ...mapUiActions(['sidebarToggle', 'sidebarState']),
     ...mapUiGetters(['getSidebar']),
+    ...mapChatGetters(['getCurrentMessages']),
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
       if (

@@ -25,7 +25,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState: mapUiState, mapActions: mapUiActions } = createNamespacedHelpers('ui')
+const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
+const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
 export default {
   name: 'MessagingInput',
@@ -36,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapUiState(['selectedChat'])
+    ...mapChatState(['selectedChat'])
   },
   data () {
     return {
@@ -54,10 +55,10 @@ export default {
       if (this.message) {
         this.checkFocus()
 
-        this.$socket.emit('cMessage', {
-          type: 'message',
-          message: this.message,
-          to: this.selectedChat
+        this.$socket.emit('message', {
+          to: this.selectedChat.id,
+          isChannel: this.selectedChat.isChannel,
+          message: this.message
         })
         this.message = ''
       }

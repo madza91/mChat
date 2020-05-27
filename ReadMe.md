@@ -15,7 +15,7 @@ This is a very fast and tiny chat for group chat via web sockets.
 * npm install
 
 ## Server start
-* `npm start` or `forever start server/server.js`
+* `npm start` or `forever start server/app.js`
 
 ## Chat commands
 In this chat you can use commands starting with slash (/).

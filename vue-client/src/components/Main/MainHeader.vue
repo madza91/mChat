@@ -5,7 +5,7 @@
       @click="sidebarToggle"
     />
     <div class="mb-auto mr-auto mt-auto pl-sm-3">
-      #general
+      {{ selectedChat.name }}
     </div>
     <b-icon-exclamation-triangle-fill
       variant="warning"
@@ -40,7 +40,7 @@ export default {
     })
   },
   computed: {
-    ...mapChatState(['messages', 'connected'])
+    ...mapChatState(['connected', 'selectedChat'])
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'settingsToggle']),

@@ -5,16 +5,34 @@ const state = {
   socketId: null,
   connected: null,
   authenticated: false,
-  messages: [],
-  users: []
+  channels: [],
+  users: [],
+  selectedChat: {
+    id: 'general',
+    name: '#general',
+    isChannel: true
+  }
 }
 
 const getters = {
   getUserNick (state) {
     return state.nick
   },
-  getMessagesByRoom: (state) => (roomName) => {
-    return state.messages
+  getCurrentMessages (state) {
+    const { selectedChat, channels, users } = state
+
+    if (selectedChat.isChannel) {
+      const channel = channels.find(channel => channel._title === selectedChat.id)
+
+      return channel ? channel._history : []
+    }
+
+    const user = users.find(user => user._socket === selectedChat.id)
+
+    return user ? user._history : []
+  },
+  getSelectedChat (state) {
+    return state.selectedChat
   },
   getUsers (state) {
     return state.users
@@ -24,6 +42,9 @@ const getters = {
 const actions = {
   setUserNick ({ commit }, data) {
     commit('setNick', data)
+  },
+  setSelectedChat ({ commit }, data) {
+    commit('setSelectedChat', data)
   },
   SOCKET_connect ({ commit }, data) {
     commit('setConnected', true)
@@ -43,20 +64,25 @@ const actions = {
   SOCKET_welcome ({ commit }, data) {
     commit('setAuthenticated', data)
   },
-  SOCKET_user ({ commit }, data) {
-    commit('insertMessage', {
-      type: 'user',
+  SOCKET_channel ({ commit }, data) {
+    commit('insertChannelMessage', {
+      type: data.type,
       nick: data.nick,
       text: data.message,
       socket: data.socket,
+      to: data.to,
       date: new Date(data.date)
     })
   },
-  SOCKET_users_list ({ commit }, data) {
-    commit('setUsers', data.users)
+  SOCKET_private ({ commit }, data) {
+    console.log('Private message received')
+    commit('insertPrivateMessage', data)
   },
-  SOCKET_history ({ commit }, data) {
-    commit('setHistory', data.history)
+  SOCKET_channels_list ({ commit }, channels) {
+    commit('setChannels', channels)
+  },
+  SOCKET_users_list ({ commit }, users) {
+    commit('setUsers', users)
   },
   SOCKET_join ({ commit }, data) {
     commit('insertUser', data)
@@ -70,6 +96,14 @@ const actions = {
         commit('renameUser', data)
         break
     }
+  },
+  SOCKET_system ({ commit }, data) {
+    console.log('system', data)
+    commit('insertChannelMessage', {
+      date: new Date(data.date),
+      type: 'system',
+      text: data.message
+    })
   }
 }
 
@@ -82,27 +116,29 @@ const mutations = {
   setNick (state, data) {
     state.nick = data
   },
+  setSelectedChat (state, data) {
+    state.selectedChat = data
+  },
   setConnected (state, data) {
     state.connected = data
   },
-  insertMessage (state, data) {
-    state.messages.push(data)
-    if (data.socket !== state.socketId) {
-      myMixin.methods.sendNotification(data.text)
+  insertChannelMessage (state, data) {
+    const channel = state.channels.find(channel => channel._title === data.to)
+    if (channel) {
+      channel._history.push(data)
+      if (data.socket && data.socket !== state.socketId) {
+        myMixin.methods.sendNotification(data.text)
+      }
     }
   },
-  resetMessages (state, data) {
-    state.messages = []
+  insertPrivateMessage (state, data) {
+    const user = state.users.find(user => user._socket === data.socket)
+    if (user) {
+      user._history.push(data)
+    }
   },
   insertUser (state, data) {
     state.users.push(data)
-    state.messages.push({
-      nick: data.nick,
-      date: new Date(data.date),
-      socket: data.socket,
-      type: 'system',
-      text: `${data.nick} has joined.`
-    })
   },
   renameUser (state, data) {
     const user = state.users.find(user => user.socket === data.socket)
@@ -114,39 +150,25 @@ const mutations = {
     })
 
     if (data.socket === state.socketId) {
-      state.messages.push({
-        nick: data.newNick,
-        date: new Date(data.date),
-        socket: data.socket,
-        type: 'system',
-        text: `${data.oldNick} changed nick to ${data.newNick}`
-      })
+      // state.messages.push({
+      //   nick: data.newNick,
+      //   date: new Date(data.date),
+      //   socket: data.socket,
+      //   type: 'system',
+      //   text: `${data.oldNick} changed nick to ${data.newNick}`
+      // })
       state.nick = user.nick
     }
   },
   removeUser (state, data) {
-    state.users = state.users.filter(user => user.nick !== data.nick)
-    state.messages.push({
-      nick: data.nick,
-      date: new Date(data.date),
-      socket: data.socket,
-      type: 'system',
-      text: `${data.nick} has left.`
-    })
+    console.log('data', data)
+    state.users = state.users.filter(user => user._socket !== data.socket)
+  },
+  setChannels (state, data) {
+    state.channels = data
   },
   setUsers (state, data) {
     state.users = data
-  },
-  setHistory (state, data) {
-    state.messages = data.map((item) => {
-      return {
-        type: 'user',
-        nick: item.nick,
-        text: item.message,
-        socket: item.socket,
-        date: new Date(item.date)
-      }
-    })
   },
   resetUsers (state) {
     state.users = []

@@ -4,17 +4,18 @@ Socket server for mChat application, that is using NodeJS and Socket.IO for comm
 
 
 ### Server &#x27A1; Client
-**Type**|**Sent to**|**Description**
------|-----|-----
-`users_list`|User|Sends list of all online users when user opens client
-`user`|All Users|Sends a message to all online users
-`welcome`|User|Welcomes new user with generated SocketID and chosen Nickname
-`join`|All Users|Informs users that new user has joined chat
-`leave`|All Users|Informs users that users has left chat
+**Type**|**Sent to**|**Description**|**On event**
+-----|-----|-----|-----
+`users_list`|User|Sends list of all online users|Connect
+`channels_list`|User|Sends list of all channels|Connect
+`user`|All Users|Sends a message to all online users|Message
+`welcome`|User|Welcomes new user with generated SocketID and chosen Nickname|Connect
+`join`|All Users|Informs users that new user has joined chat|Join
+`leave`|All Users|Informs users that users has left chat|Leave
 
 ---
 
 ### Client &#x27A1; Server
 **Type**|**Description**
 ----|----
-`client_auth`|Sends nickname to the Server
+`message`|Sends a message to channel, user or command

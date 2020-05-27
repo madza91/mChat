@@ -1,10 +1,6 @@
 const state = {
   sidebar: false,
-  settingsBar: false,
-  selectedChat: {
-    id: null,
-    isChannel: true
-  }
+  settingsBar: false
 }
 
 const getters = {
@@ -13,9 +9,6 @@ const getters = {
   },
   getSettingsBar (state) {
     return state.settingsBar
-  },
-  getSelectedChat (state) {
-    return state.selectedChat
   }
 }
 
@@ -28,9 +21,6 @@ const actions = {
   },
   settingsToggle ({ commit }, data) {
     commit('setSettingsState', data)
-  },
-  setSelectedChat ({ commit }, data) {
-    commit('setSelectedChat', data)
   }
 }
 
@@ -43,9 +33,6 @@ const mutations = {
   },
   setSettingsState (state) {
     state.settingsBar = !state.settingsBar
-  },
-  setSelectedChat (state, data) {
-    state.selectedChat = data
   }
 }
 
