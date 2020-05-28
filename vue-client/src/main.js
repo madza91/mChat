@@ -7,7 +7,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueSocketIO from 'vue-socket.io'
 import './assets/styles/index.scss'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane, faPaperclip, faMicrophone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue2TouchEvents from 'vue2-touch-events'
 
@@ -20,6 +20,8 @@ Vue.use(Vue2TouchEvents)
 
 /* FA Icons */
 library.add(faPaperPlane)
+library.add(faPaperclip)
+library.add(faMicrophone)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 const isProduction = process.env.NODE_ENV === 'production'

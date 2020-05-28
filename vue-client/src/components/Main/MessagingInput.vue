@@ -1,10 +1,14 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
     <b-row>
+      <font-awesome-icon
+        icon="paperclip"
+        class="icon disabled"
+      />
       <input
         name="message-to-send"
         id="message-to-send"
-        class="mr-2"
+        class="ml-2 mr-2"
         placeholder="Type your message"
         ref="footerInput"
         @keyup.enter="sendMessage"
@@ -13,9 +17,17 @@
         @blur="onBlur"
       >
       <font-awesome-icon
+        v-if="!message"
+        icon="microphone"
+        class="icon disabled"
+        v-touch:start="sendMessage"
+        v-touch:end="(e) => e.preventDefault()"
+      />
+      <font-awesome-icon
+        v-if="message"
         icon="paper-plane"
         class="icon"
-        :class="{'disabled': !enabled || !message}"
+        :class="{'disabled': !enabled}"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
       />

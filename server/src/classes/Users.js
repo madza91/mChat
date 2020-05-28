@@ -1,7 +1,7 @@
 const config = require('../modules/config');
 const User   = require('./User');
 
-module.exports = class UserList {
+module.exports = class Users {
   constructor(){
     this.users = [];
 
