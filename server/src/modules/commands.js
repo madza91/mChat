@@ -1,5 +1,9 @@
 const helpers = require('./helpers');
 
+/**
+ * ToDo: This is copied from an old Server, it requires refactoring
+ * @type {{call: call}}
+ */
 module.exports = {
   call: function (socket, user, message) {
     let socketID = socket.id;
@@ -19,7 +23,7 @@ module.exports = {
       if (availableCommands.indexOf(exploded[0]) !== -1) {
         switch (exploded[0]) {
           case 'nick':
-            var validation = helpers.validate(exploded[1]);
+            let validation = helpers.validate(exploded[1]);
             if (validation.isValid === true) {
               preparedReturn = {
                 type: 'command',
@@ -47,7 +51,7 @@ module.exports = {
             socket.disconnect();
             break;
           case 'help':
-            var commands = '<b>' + availableCommands.join('</b> <b>') + '</b>';
+            let commands = '<b>' + availableCommands.join('</b> <b>') + '</b>';
             preparedReturn = {
               type: 'system',
               message: 'Available commands: ' + commands
@@ -55,8 +59,8 @@ module.exports = {
             break;
           case 'whois':
             if (exploded[1]) {
-              var userID = userList.findByNick(exploded[1]);
-              var isOnline = (userID.length > 0) ? 'online': 'offline';
+              let userID = userList.findByNick(exploded[1]);
+              let isOnline = (userID.length > 0) ? 'online': 'offline';
               preparedReturn = {
                 type: 'system',
                 message: 'This command is under development. We don\'t have info about this user, but it seems he is ' + isOnline
@@ -79,7 +83,7 @@ module.exports = {
             break;
           case 'away':
             message = message.substr(5);
-            var tmpStatus = (message === '') ? 'online' : 'away';
+            let tmpStatus = (message === '') ? 'online' : 'away';
             preparedReturn = {
               type: 'status',
               message: message,

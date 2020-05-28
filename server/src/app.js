@@ -6,8 +6,8 @@
  */
 
 // Classes
-const UserList    = require('./classes/UserList');
-const ChannelList = require('./classes/ChannelList');
+const Users    = require('./classes/Users');
+const Channels = require('./classes/Channels');
 
 // Modules
 const eventConnect = require('./sockets/events/connectEvent');
@@ -16,8 +16,9 @@ const eventLeave   = require('./sockets/events/leaveEvent');
 
 // Globals
 global.io          = require('./modules/server')();
-global.userList    = new UserList();
-global.channelList = new ChannelList();
+global.incremental = 0;
+global.userList    = new Users();
+global.channelList = new Channels();
 
 /**
  * New Client connection
@@ -40,13 +41,13 @@ io.on('connect', function (socket) {
      * Client error
      */
     socket.on('error', () => {
-        eventLeave(socket.id);
+        eventLeave(socket);
     });
 
     /**
      * Client has been disconnected
      */
     socket.on('disconnect', () => {
-        eventLeave(socket.id);
+        eventLeave(socket);
     });
 });

@@ -6,9 +6,9 @@
  * @returns {*}
  */
 module.exports = (socket, nick, reason) => {
-  return io.sockets.emit('leave', {
-    socket: socket,
-    nick: nick,
-    reason: reason || 'unknown reason'
+  return io.sockets.emit('server_leave', {
+    socket: socket.id,
+    channels: Object.keys(socket.adapter.rooms),
+    reason: reason || null
   })
 }

@@ -1,6 +1,6 @@
 const Channel = require('./Channel');
 
-module.exports = class ChannelList {
+module.exports = class Channels {
   constructor () {
     this._channels = [];
 

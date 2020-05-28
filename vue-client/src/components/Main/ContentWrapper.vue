@@ -11,12 +11,12 @@
           <UserMessage
             v-if="data.type === 'user'"
             :nick="data.nick"
-            :message="data.text"
+            :message="data.message"
             :date="data.date"
           />
           <SystemMessage
             v-else
-            :message="data.text"
+            :message="data.message"
             :date="data.date"
           />
         </li>

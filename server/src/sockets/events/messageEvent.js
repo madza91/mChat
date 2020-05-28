@@ -9,9 +9,10 @@ const messageEmit = require('../emit/messageEmit');
  * When new User sends a message
  * @param socket
  * @param data
+ * @param messageId
  * @returns {boolean}
  */
-module.exports = (socket, data) => {
+module.exports = (socket, data, messageId) => {
   const user = userList.findBySocket(socket.id);
 
   if (user && data && data.message) {
@@ -24,7 +25,7 @@ module.exports = (socket, data) => {
       let cmd = commands.call(socket, nickname, message);
       send.message(cmd.return.type, cmd.return, cmd.to);
     } else {
-      const messageData = new Message(socket.id, nickname, message, data.to)
+      const messageData = new Message(messageId, socket.id, nickname, message, data.to)
 
       if (isChannel) {
         messageEmit.channel(data.to, messageData);

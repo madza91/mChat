@@ -5,7 +5,8 @@ const Message      = require('../../classes/Message');
 const channelsEmit = require('../emit/channelsEmit');
 const usersEmit    = require('../emit/usersEmit');
 const welcomeEmit  = require('../emit/welcomeEmit');
-const joinEmit     = require('../emit/joinEmit');
+const serverJoinEmit = require('../emit/serverJoinEmit');
+const channelJoinEmit = require('../emit/channelJoinEmit');
 const messageEmit  = require('../emit/messageEmit');
 
 /**
@@ -26,7 +27,7 @@ module.exports = (socket) => {
     joinChannels(socket, nick);
 
     // To all online users
-    joinEmit(user)
+    serverJoinEmit(user)
 
     userList.add(user);
 
@@ -48,8 +49,7 @@ joinChannels = (socket, nick) => {
     debugging.log('Client has joined all channels.')
 
     allChannels.forEach(channelTitle => {
-      const messageData = new Message(socket.id, nick, `${ nick } has joined the room`, channelTitle, 'system')
-      messageEmit.channel(channelTitle, messageData);
+      channelJoinEmit(channelTitle, socket.id);
     })
   })
 }
