@@ -20,6 +20,7 @@ export const userMutations = {
 
     if (user) {
       user._history.push({
+        id: data.id,
         message: data.message,
         nick: data.nick,
         socket: data.socket,

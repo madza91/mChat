@@ -1,5 +1,5 @@
 module.exports = class Message {
-  constructor(messageId, socketID, nick, message, to, type){
+  constructor(socketID, nick, message, to, type){
     incremental++;
 
     this.id = incremental;

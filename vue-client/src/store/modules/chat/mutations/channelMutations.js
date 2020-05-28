@@ -7,8 +7,10 @@ export const channelMutations = {
   // Insert user message to channel
   insertChannelMessage (state, data) {
     const channel = state.channels.find(channel => channel._title === data.to)
+
     if (channel) {
       channel._history.push({
+        id: data.id,
         nick: data.nick,
         socket: data.socket,
         message: data.message,

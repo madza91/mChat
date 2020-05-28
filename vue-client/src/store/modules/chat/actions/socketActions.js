@@ -65,9 +65,9 @@ export const socketActions = {
       type: 'system',
       message: data.message
     })
-  },
-
-  SOCKET_image ({ commit }, data) {
-    console.log('image received', data)
   }
+
+  // SOCKET_image ({ commit }, data) {
+  //   console.log('image received', data)
+  // }
 }
