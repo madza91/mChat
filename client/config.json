@@ -1,0 +1,13 @@
+{
+  "server": {
+    "host": "https://chat.test",
+    "port": 8080,
+    "botName": "assistent",
+    "sslKey": "/etc/ssl/certs/chat.test/chat.test.key",
+    "sslCert": "/etc/ssl/certs/chat.test/chat.test.crt"
+  },
+  "settings": {
+    "emailService": "http://madza.rs/emailme.php",
+    "sendEmail": true
+  }
+}
