@@ -1,10 +1,28 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row>
+    <b-row v-if="attachment" class="pb-2">
       <font-awesome-icon
-        icon="paperclip"
-        class="icon disabled"
+        icon="times"
+        class="icon invisible"
       />
+      <div class="flex-grow-1 ml-2 mr-2">
+        <b-img :src="attachmentPreview" rounded class="attachment-preview" alt="Attachment image"></b-img>
+      </div>
+      <font-awesome-icon
+        icon="times"
+        class="icon"
+        v-touch:start="removeAttachment"
+      />
+    </b-row>
+    <b-row>
+      <div class="attachment-wrapper">
+        <input type="file" class="attachment-file" ref="file" accept="image/*" v-on:change="handleFileUpload()" />
+        <font-awesome-icon
+          icon="paperclip"
+          class="icon"
+          :class="{'disabled': !enabled || attachment || !settings.attachments }"
+        />
+      </div>
       <input
         name="message-to-send"
         id="message-to-send"
@@ -17,19 +35,18 @@
         @blur="onBlur"
       >
       <font-awesome-icon
-        v-if="!message"
-        icon="microphone"
-        class="icon disabled"
+        v-if="message || attachment"
+        icon="paper-plane"
+        class="icon"
+        :class="{'disabled': !enabled }"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
       />
       <font-awesome-icon
-        v-if="message"
-        icon="paper-plane"
+        v-else
+        icon="microphone"
         class="icon"
-        :class="{'disabled': !enabled}"
-        v-touch:start="sendMessage"
-        v-touch:end="(e) => e.preventDefault()"
+        :class="{'disabled': !enabled || !settings.voice }"
       />
     </b-row>
   </footer>
@@ -53,7 +70,13 @@ export default {
   },
   data () {
     return {
-      message: null
+      message: null,
+      attachment: null,
+      attachmentPreview: null,
+      settings: {
+        attachments: false, // Disabled feature
+        voice: false // Disabled feature
+      }
     }
   },
   mounted () {
@@ -64,15 +87,30 @@ export default {
   methods: {
     ...mapUiActions(['sidebarState']),
     sendMessage () {
-      if (this.message) {
+      if (this.message || this.attachment) {
         this.checkFocus()
 
         this.$socket.emit('message', {
           to: this.selectedChat.id,
           isChannel: this.selectedChat.isChannel,
-          message: this.message
+          message: this.message,
+          attachment: this.attachment
         })
         this.message = ''
+        this.attachment = null
+        this.attachmentPreview = null
+      }
+    },
+    handleFileUpload () {
+      const files = this.$refs.file.files
+
+      if (files.length === 1) {
+        const reader = new FileReader()
+        reader.readAsDataURL(files[0])
+        reader.onload = (e) => {
+          this.attachmentPreview = e.target.result
+          this.attachment = files[0]
+        }
       }
     },
     checkFocus () {
@@ -88,6 +126,10 @@ export default {
       this.$refs.footerWrapper.classList.remove('focused')
       const container = document.getElementById('container-fluid')
       container.scrollTop = container.scrollHeight
+    },
+    removeAttachment () {
+      this.attachment = null
+      this.attachmentPreview = null
     }
   }
 }
@@ -150,6 +192,7 @@ export default {
   }
 
   .icon {
+    margin: auto;
     width: $icon-size;
     height: $icon-size;
     padding: 8px;
@@ -165,6 +208,26 @@ export default {
   .icon.disabled {
     color: grey;
     cursor: auto;
+  }
+
+  .attachment-wrapper {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .attachment-file {
+    position: absolute;
+    overflow: hidden;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    cursor: inherit;
+    display: block;
+  }
+
+  .attachment-preview {
+    max-height: 50px;
   }
 
   .row {

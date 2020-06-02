@@ -12,6 +12,7 @@ const state = {
   nick: '',
   socketId: null,
   connected: null,
+  reconnecting: false,
   authenticated: false,
   channels: [],
   users: [],
