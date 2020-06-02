@@ -20,6 +20,7 @@
     />
     <b-icon-three-dots-vertical
       class="icon"
+      :class="{ 'invisible': !settings.rightMenu }"
       @click="settingsToggle"
     />
   </header>
@@ -43,6 +44,13 @@ export default {
     this.$refs.header.addEventListener('touchmove', (e) => {
       e.preventDefault()
     })
+  },
+  data () {
+    return {
+      settings: {
+        rightMenu: false // Disabled feature for now
+      }
+    }
   },
   computed: {
     ...mapChatState(['connected', 'reconnecting', 'selectedChat'])

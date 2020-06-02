@@ -16,7 +16,7 @@
     </b-row>
     <b-row>
       <div class="attachment-wrapper">
-        <input type="file" class="attachment-file" ref="file" accept="image/*" v-on:change="handleFileUpload()" />
+<!--        <input type="file" class="attachment-file" ref="file" accept="image/*" v-on:change="handleFileUpload()" />-->
         <font-awesome-icon
           icon="paperclip"
           class="icon"
