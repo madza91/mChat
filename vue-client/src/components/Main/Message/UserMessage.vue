@@ -39,14 +39,15 @@ export default {
 
 <style scoped>
 .message {
+  display: inline-block;
+  position: relative;
   color: white;
   padding: 4px 10px;
   line-height: 26px;
   font-size: 14px;
   border-radius: 7px;
   margin-bottom: 5px;
-  width: 90%;
-  position: relative;
+  min-width: 100px;
   word-wrap: break-word;
 }
 .messageArrow:after {

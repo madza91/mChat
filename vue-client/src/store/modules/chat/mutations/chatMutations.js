@@ -1,6 +1,14 @@
 export const chatMutations = {
-  setConnected (state, data) {
-    state.connected = data
+  setConnected (state, isConnected) {
+    state.connected = isConnected
+
+    if (isConnected) {
+      state.reconnecting = false
+    }
+  },
+
+  setReconnecting (state, isReconnecting) {
+    state.reconnecting = isReconnecting
   },
 
   setAuthenticated (state, data) {

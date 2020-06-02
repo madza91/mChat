@@ -7,10 +7,15 @@
     <div class="mb-auto mr-auto mt-auto pl-sm-3">
       {{ selectedChat.name }}
     </div>
+    <font-awesome-icon
+      v-if="reconnecting"
+      icon="sync-alt"
+      class="icon animation-spinning"
+    />
     <b-icon-exclamation-triangle-fill
       variant="warning"
       class="icon"
-      v-show="connected === false"
+      v-show="connected === false && !reconnecting"
       @click="settingsToggle"
     />
     <b-icon-three-dots-vertical
@@ -40,7 +45,7 @@ export default {
     })
   },
   computed: {
-    ...mapChatState(['connected', 'selectedChat'])
+    ...mapChatState(['connected', 'reconnecting', 'selectedChat'])
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'settingsToggle']),

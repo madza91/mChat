@@ -19,6 +19,22 @@ export const socketActions = {
     commit('setConnected', false)
   },
 
+  SOCKET_reconnecting ({ commit }) {
+    commit('setReconnecting', true)
+  },
+
+  SOCKET_reconnect ({ commit }) {
+    commit('setConnected', true)
+  },
+
+  SOCKET_reconnect_error ({ commit }) {
+    commit('setConnected', false)
+  },
+
+  SOCKET_reconnect_failed ({ commit }) {
+    commit('setConnected', false)
+  },
+
   SOCKET_welcome ({ commit }, data) {
     commit('setAuthenticated', data)
   },

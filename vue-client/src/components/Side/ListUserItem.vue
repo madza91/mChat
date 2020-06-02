@@ -1,7 +1,16 @@
 <template>
   <li class="clearfix list-item-user" :class="{'active': isActive}" @click="setSelected">
-    <b-icon-hash v-if="isChannel" class="icon-channel" />
-    <b-icon-circle-fill v-else class="icon-user" :class="status" />
+    <font-awesome-icon
+      v-if="isChannel"
+      icon="hashtag"
+      class="icon icon-channel"
+    />
+    <font-awesome-icon
+      v-else
+      icon="circle"
+      class="icon icon-user"
+      :class="status"
+    />
     <div class="name">
       <span>{{ name }}</span>
     </div>
