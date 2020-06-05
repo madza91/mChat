@@ -40,9 +40,23 @@ module.exports = class Channels {
     this._channels.push(Channel);
   }
 
+  /**
+   * @param channelTitle
+   * @returns {*}
+   */
   findByTitle(channelTitle) {
     return this._channels.find(function (channel) {
       return channel.title === channelTitle;
+    });
+  }
+
+  /**
+   * @param channelId
+   * @returns {*}
+   */
+  findById(channelId) {
+    return this._channels.find(function (channel) {
+      return channel.id === channelId;
     });
   }
 }

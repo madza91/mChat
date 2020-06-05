@@ -1,13 +1,13 @@
 /**
  * Emit User has joined the channel
- * @param channelTitle
- * @param socketID
+ * @param channelId
+ * @param User
  * @returns {*}
  */
-module.exports = (channelTitle, socketID) => {
+module.exports = (channelId, User) => {
   return io.sockets.emit('channel_join', {
-    to: channelTitle,
-    socket: socketID,
+    to: channelId,
+    userId: User.id,
     date: Date.now()
   })
 }

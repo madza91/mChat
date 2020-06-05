@@ -9,7 +9,8 @@ module.exports = {
     }
     io.to(toSocketID).emit('private', message);
   },
-  channel(channelID, message) {
-    io.to(channelID).emit('channel', message)
+  // For Channel, its title is ID
+  channel(channelTitle, message) {
+    io.to(channelTitle).emit('channel', message)
   }
 }

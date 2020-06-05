@@ -1,13 +1,13 @@
 /**
  * Emit User has left the channel
  * @param channelTitle
- * @param socketID
+ * @param User
  * @returns {*}
  */
-module.exports = (channelTitle, socketID) => {
+module.exports = (channelTitle, User) => {
   return io.sockets.emit('channel_leave', {
     to: channelTitle,
-    socket: socketID,
+    socket: User.id,
     date: Date.now()
   })
 }

@@ -2,6 +2,7 @@ module.exports = class Channel {
     #history;
 
     constructor(title, description = null){
+        this._id          = ++incChannel;
         this._title       = title;
         this._description = description;
         this._totalMsg    = 0;
@@ -15,6 +16,10 @@ module.exports = class Channel {
 
     get history() {
         return this.#history;
+    }
+
+    get id() {
+        return this._id;
     }
 
     get title() {

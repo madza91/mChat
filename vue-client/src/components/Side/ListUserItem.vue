@@ -27,7 +27,7 @@ export default {
   name: 'ListUserItem',
   props: {
     id: {
-      type: String
+      type: Number
     },
     name: {
       type: String,
@@ -71,7 +71,7 @@ export default {
     setSelected () {
       this.setSelectedChat({
         id: this.id,
-        name: this.isChannel ? `#${this.name}` : this.name,
+        name: this.isChannel ? `#${this.name}` : this.name, // Not needed
         isChannel: this.isChannel
       })
       this.sidebarState(false)

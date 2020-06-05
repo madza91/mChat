@@ -47,8 +47,12 @@ export const socketActions = {
     dispatch('userMessage', data)
   },
 
-  SOCKET_channels_list ({ commit }, channels) {
+  SOCKET_channels_list ({ commit, dispatch }, channels) {
     commit('setChannels', channels)
+    dispatch('setSelectedChat', {
+      id: 1,
+      isChannel: true
+    })
   },
 
   SOCKET_users_list ({ commit }, users) {

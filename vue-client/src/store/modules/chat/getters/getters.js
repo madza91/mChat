@@ -1,23 +1,26 @@
 export const getters = {
+  getLoggedInUser (state) {
+    return state.loggedInUser
+  },
   getUserNick (state) {
-    return state.nick
+    return state.loggedInUser.nick
   },
-  getUserSocketId (state) {
-    return state.socketId
+  getUserId (state) {
+    return state.loggedInUser.id
   },
-  findUserBySocket: (state) => (socketId) => {
-    return state.users.find(user => user._socket === socketId)
+  findUserById: (state) => (userId) => {
+    return state.users.find(user => user._id === userId)
   },
   getCurrentMessages (state) {
     const { selectedChat, channels, users } = state
 
     if (selectedChat.isChannel) {
-      const channel = channels.find(channel => channel._title === selectedChat.id)
+      const channel = channels.find(channel => channel._id === selectedChat.id)
 
       return channel ? channel._history : []
     }
 
-    const user = users.find(user => user._socket === selectedChat.id)
+    const user = users.find(user => user._id === selectedChat.id)
 
     return user ? user._history : []
   },
@@ -29,5 +32,8 @@ export const getters = {
   },
   getChannels (state) {
     return state.channels
+  },
+  findChannelById: (state) => (channelId) => {
+    return state.channels.find(channel => channel._id === channelId)
   }
 }

@@ -6,21 +6,22 @@
       <ul class="sidebar-nav">
         <ListUserItem
           v-for="channel in channels"
-          :key="channel._title"
-          :id="channel._title"
+          :key="channel._id"
+          :id="channel._id"
           :name="channel._title"
           :is-channel="true"
-          :is-active="selectedChat.id === channel._title"/>
+          :is-active="selectedChat.id === channel._id && selectedChat.isChannel"/>
       </ul>
       <ListSectionItem section-name="People" />
       <ul class="sidebar-nav">
         <ListUserItem
           v-for="user in users"
-          :key="user._nick"
-          :id="user._socket"
+          :key="user._id"
+          :id="user._id"
           :name="user._nick"
           :badge="user._badge"
-          :is-active="user._socket === selectedChat.id"
+          :status="user._status"
+          :is-active="user._id === selectedChat.id && !selectedChat.isChannel"
         />
       </ul>
     </div>

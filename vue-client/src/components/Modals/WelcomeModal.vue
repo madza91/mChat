@@ -39,13 +39,13 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters } = createNamespacedHelpers('chat')
+const { mapState } = createNamespacedHelpers('chat')
+const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 
 export default {
   name: 'WelcomeModal',
   computed: {
     ...mapState(['authenticated']),
-    ...mapGetters(['getUserNick']),
     state () {
       return /^[0-9A-Za-z.-/-_!@#$%^&*()|<>?{}'"/[\]]{3,30}$/.test(this.nickname)
     },
@@ -61,7 +61,7 @@ export default {
     }
   },
   mounted () {
-    this.nickname = this.getUserNick
+    this.nickname = this.getChosenNick()
   },
   data () {
     return {
@@ -69,7 +69,10 @@ export default {
     }
   },
   methods: {
+    ...mapUiActions(['setChosenNick']),
+    ...mapUiGetters(['getChosenNick']),
     connect () {
+      this.setChosenNick(this.nickname)
       this.$socket.io.opts.query = `nick=${this.nickname}`
       this.$socket.open()
     }

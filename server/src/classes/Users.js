@@ -32,15 +32,11 @@ module.exports = class Users {
    * @param User
    */
   removeUser(User) {
-    // const index = this.users.findIndex((user) => user.id === id)
-    //
-    // if (index !== -1) {
-    //   return this.users.splice(index, 1)[0]
-    // }
+    const index = this.users.findIndex((user) => user.id === User.id)
 
-    this.users = this.users.filter(function (user) {
-      return user.nick !== User.nick;
-    });
+    if (index !== -1) {
+      return this.users.splice(index, 1)[0]
+    }
   }
 
   /**
@@ -72,6 +68,17 @@ module.exports = class Users {
   findBySocket(value) {
     return this.users.find(function (user) {
       return user._socket === value;
+    });
+  }
+
+  /**
+   * Find User by Socket
+   * @param value
+   * @returns {*[]}
+   */
+  findById(value) {
+    return this.users.find(function (user) {
+      return user._id === value;
     });
   }
 

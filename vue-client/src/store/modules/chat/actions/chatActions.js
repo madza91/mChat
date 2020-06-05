@@ -3,11 +3,19 @@ export const chatActions = {
     commit('setNick', nick)
   },
 
-  setSelectedChat ({ commit }, data) {
-    commit('setSelectedChat', data)
+  setSelectedChat ({ commit, getters }, data) {
+    let chatWindow = null
 
-    if (!data.isChannel) {
+    if (data.isChannel) {
+      chatWindow = getters.findChannelById(data.id)
+    } else {
+      chatWindow = getters.findUserById(data.id)
       commit('resetUserBadge', data.id)
     }
+
+    commit('setSelectedChat', {
+      ...data,
+      data: chatWindow
+    })
   }
 }

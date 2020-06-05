@@ -2,7 +2,7 @@ import { myMixin } from '../../../../mixins/NotificationMixin'
 
 export const channelActions = {
   insertChannelMessage ({ commit, getters }, data) {
-    if (data.socket && data.socket !== getters.getUserSocketId) {
+    if (data.from !== getters.getLoggedInUser.id) {
       myMixin.methods.sendNotification(data.message)
     }
 
@@ -10,24 +10,24 @@ export const channelActions = {
   },
 
   insertChannelJoin ({ commit, getters }, data) {
-    const user = getters.findUserBySocket(data.socket)
+    const User = getters.findUserById(data.userId)
 
-    if (user) {
+    if (User) {
       commit('insertChannelSystemMessage', {
         to: data.to,
-        message: `${user._nick} has joined the room.`,
+        message: `${User._nick} has joined the room.`,
         date: data.date
       })
     }
   },
 
   insertChannelLeave ({ commit, getters }, data) {
-    const user = getters.findUserBySocket(data.socket)
+    const User = getters.findUserById(data.userId)
 
-    if (user) {
+    if (User) {
       commit('insertChannelSystemMessage', {
         to: data.to,
-        message: `${user._nick} has left the room.`,
+        message: `${User._nick} has left the room.`,
         date: data.date
       })
     }

@@ -1,31 +1,31 @@
 export const userActions = {
   userLeave ({ commit, getters }, data) {
-    const user = getters.findUserBySocket(data.socket)
+    const User = getters.findUserById(data.userId)
 
-    if (user) {
+    if (User) {
       data.channels.forEach((channelTitle) => {
         commit('insertChannelSystemMessage', {
           to: channelTitle,
-          message: `${user._nick} has left the room.`,
+          message: `${User._nick} has left the room.`,
           date: data.date
         })
       })
     }
 
-    commit('removeUser', data)
+    commit('removeUser', User._id)
   },
 
   userMessage ({ commit, getters }, data) {
     commit('insertUserMessage', data)
 
-    if (getters.getSelectedChat.id !== data.socket) {
+    if (![data.from, data.to].includes(getters.getSelectedChat.id)) {
       commit('incrementUserBadge', data)
     }
   },
 
   userRename ({ dispatch, getters }, data) {
-    const user = getters.findUserBySocket(data.socket)
+    const User = getters.findUserById(data.userId)
 
-    dispatch('setUserNick', user.nick)
+    dispatch('setUserNick', User.nick)
   }
 }
