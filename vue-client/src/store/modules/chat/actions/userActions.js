@@ -4,11 +4,15 @@ export const userActions = {
 
     if (User) {
       data.channels.forEach((channelTitle) => {
-        commit('insertChannelSystemMessage', {
-          to: channelTitle,
-          message: `${User._nick} has left the room.`,
-          date: data.date
-        })
+        const Channel = getters.findChannelByTitle(channelTitle)
+
+        if (Channel) {
+          commit('insertChannelSystemMessage', {
+            to: Channel._id,
+            message: `${User._nick} has left the room.`,
+            date: data.date
+          })
+        }
       })
     }
 
@@ -16,7 +20,8 @@ export const userActions = {
   },
 
   userMessage ({ commit, getters }, data) {
-    commit('insertUserMessage', data)
+    const to = (getters.getUserId === data.to) ? data.from : data.to
+    commit('insertUserMessage', { ...data, to })
 
     if (![data.from, data.to].includes(getters.getSelectedChat.id)) {
       commit('incrementUserBadge', data)

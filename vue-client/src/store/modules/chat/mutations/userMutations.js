@@ -35,7 +35,7 @@ export const userMutations = {
    * @param data
    */
   insertUserMessage (state, data) {
-    const user = state.users.find(user => user._id === data.from)
+    const user = state.users.find(user => user._id === data.to)
 
     if (user) {
       user._history.push({

@@ -10,7 +10,7 @@
           :id="channel._id"
           :name="channel._title"
           :is-channel="true"
-          :is-active="selectedChat.id === channel._id && selectedChat.isChannel"/>
+          :is-active="selectedChat.data._id === channel._id && selectedChat.isChannel"/>
       </ul>
       <ListSectionItem section-name="People" />
       <ul class="sidebar-nav">
@@ -21,7 +21,7 @@
           :name="user._nick"
           :badge="user._badge"
           :status="user._status"
-          :is-active="user._id === selectedChat.id && !selectedChat.isChannel"
+          :is-active="user._id === selectedChat.data._id && !selectedChat.isChannel"
         />
       </ul>
     </div>

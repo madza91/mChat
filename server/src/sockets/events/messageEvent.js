@@ -42,7 +42,7 @@ module.exports = (Socket, data) => {
       // Private
       const toUser = userList.findById(data.to);
 
-      messageEmit.private(Socket.id, toUser.socket, messageData);
+      messageEmit.private(User, toUser, messageData);
     }
 
     return true;

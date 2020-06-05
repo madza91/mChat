@@ -18,7 +18,8 @@ export default {
 
 <style scoped>
   .section-name {
-    color: white;
-    padding: 0 15px
+    color: silver;
+    padding: 0 15px 5px;
+    font-size: 10px;
   }
 </style>

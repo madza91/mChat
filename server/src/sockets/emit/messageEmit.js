@@ -3,11 +3,11 @@
  * @type {{private(*=, *=, *=): void, channel(*=, *=): void}}
  */
 module.exports = {
-  private(fromSocketID, toSocketID, message) {
-    if (fromSocketID !== toSocketID) {
-      io.to(fromSocketID).emit('private', {...message, socket: toSocketID});
+  private(fromUser, toUser, message) {
+    if (fromUser.id !== toUser.id) {
+      io.to(fromUser.socket).emit('private', message);
     }
-    io.to(toSocketID).emit('private', message);
+    io.to(toUser.socket).emit('private', message);
   },
   // For Channel, its title is ID
   channel(channelTitle, message) {

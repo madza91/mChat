@@ -20,7 +20,7 @@ export const getters = {
       return channel ? channel._history : []
     }
 
-    const user = users.find(user => user._id === selectedChat.id)
+    const user = users.find(user => user._id === selectedChat.data._id)
 
     return user ? user._history : []
   },
@@ -35,5 +35,8 @@ export const getters = {
   },
   findChannelById: (state) => (channelId) => {
     return state.channels.find(channel => channel._id === channelId)
+  },
+  findChannelByTitle: (state) => (channelTitle) => {
+    return state.channels.find(channel => channel._title === channelTitle)
   }
 }
