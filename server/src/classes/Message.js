@@ -1,13 +1,11 @@
 module.exports = class Message {
-  constructor(socketID, nick, message, to, type){
-    incremental++;
-
-    this.id = incremental;
-    this.nick = nick;
-    this.socket = socketID;
-    this.message = message;
-    this.to = to;
-    this.date = Date.now();
-    this.type = type || 'user';
+  constructor(socketID, fromId, nick, message, to, type){
+    this.messageId = ++incMessage;
+    this.nick      = nick;
+    this.from      = fromId;
+    this.message   = message;
+    this.to        = to;
+    this.date      = Date.now();
+    this.type      = type || 'user';
   }
 }

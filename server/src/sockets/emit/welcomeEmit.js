@@ -1,12 +1,12 @@
 /**
  * Welcome message to the connected User
  * @param socketID
- * @param userNick
+ * @param User
  * @returns {*}
  */
-module.exports = (socketID, userNick) => {
+module.exports = (socketID, User) => {
   return io.to(socketID).emit('welcome', {
-    socket: socketID,
-    nick: userNick
+    id: User.id,
+    nick: User.nick
   })
 }

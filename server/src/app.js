@@ -16,38 +16,40 @@ const eventLeave   = require('./sockets/events/leaveEvent');
 
 // Globals
 global.io          = require('./modules/server')();
-global.incremental = 0;
+global.incMessage  = 0;
+global.incChannel  = 0;
+global.incUser     = 0;
 global.userList    = new Users();
 global.channelList = new Channels();
 
 /**
  * New Client connection
  */
-io.on('connect', function (socket) {
+io.on('connect', function (Socket) {
     /**
      * Handle new Client
      */
-    eventConnect(socket);
+    eventConnect(Socket);
 
     /**
      * Message from Client
      * It can be message for channel, private to user or command
      */
-    socket.on('message', (data) => {
-        eventMessage(socket, data);
+    Socket.on('message', (data) => {
+        eventMessage(Socket, data);
     });
 
     /**
      * Client error
      */
-    socket.on('error', () => {
-        eventLeave(socket);
+    Socket.on('error', () => {
+        eventLeave(Socket);
     });
 
     /**
      * Client has been disconnected
      */
-    socket.on('disconnect', () => {
-        eventLeave(socket);
+    Socket.on('disconnect', () => {
+        eventLeave(Socket);
     });
 });

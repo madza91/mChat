@@ -3,13 +3,13 @@ const leaveEmit = require('../emit/serverLeaveEmit');
 
 /**
  * Users leaves server
- * @param socket
+ * @param Socket
  */
-module.exports = (socket) => {
-  const user = userList.findBySocket(socket.id);
-  if (user) {
-    leaveEmit(socket, user.nick)
-    userList.removeUser(user);
-    debugging.log(`${ user.nick } is disconnected`);
+module.exports = (Socket) => {
+  const User = userList.findBySocket(Socket.id);
+  if (User) {
+    leaveEmit(Socket, User)
+    userList.removeUser(User);
+    debugging.log(`${ User.nick } is disconnected`);
   }
 }

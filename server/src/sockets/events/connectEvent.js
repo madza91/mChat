@@ -1,30 +1,28 @@
-const debugging    = require('../../modules/debugging');
-const helpers      = require('../../modules/helpers');
-const User         = require('../../classes/User');
-const Message      = require('../../classes/Message');
-const channelsEmit = require('../emit/channelsEmit');
-const usersEmit    = require('../emit/usersEmit');
-const welcomeEmit  = require('../emit/welcomeEmit');
-const serverJoinEmit = require('../emit/serverJoinEmit');
+const debugging       = require('../../modules/debugging');
+const helpers         = require('../../modules/helpers');
+const User            = require('../../classes/User');
+const channelsEmit    = require('../emit/channelsListEmit');
+const usersEmit       = require('../emit/usersListEmit');
+const welcomeEmit     = require('../emit/welcomeEmit');
+const serverJoinEmit  = require('../emit/serverJoinEmit');
 const channelJoinEmit = require('../emit/channelJoinEmit');
-const messageEmit  = require('../emit/messageEmit');
 
 /**
  * When new User is connected
- * @param socket
+ * @param Socket
  * @returns {boolean}
  */
-module.exports = (socket) => {
-  const nickname = socket.handshake.query.nick;
+module.exports = (Socket) => {
+  const nickname = Socket.handshake.query.nick;
 
   if (nickname) {
-    debugging.log(`Connected new user: ${nickname} (${socket.id})`);
+    debugging.log(`Connected new user: ${nickname} (${Socket.id})`);
     const validation = helpers.validate(nickname);
     const nick = validation.nick;
-    const user = new User(nick, 'online', socket.id)
+    const user = new User(nick, 'online', Socket.id)
 
-    sendChatData(socket, nick);
-    joinChannels(socket, nick);
+    sendChatData(Socket, user);
+    joinChannels(Socket, user);
 
     // To all online users
     serverJoinEmit(user)
@@ -35,31 +33,32 @@ module.exports = (socket) => {
   }
 
   debugging.log('User tried to connect without nick parameter.');
-  socket.disconnect()
+  Socket.disconnect()
 }
 
 /**
  * Add Client to all available channels
- * @param socket
- * @param nick
+ * @param Socket
+ * @param User
  */
-joinChannels = (socket, nick) => {
+joinChannels = (Socket, User) => {
   const allChannels = channelList.getAllTitles();
-  socket.join(allChannels, () => {
+  Socket.join(allChannels, () => {
     debugging.log('Client has joined all channels.')
 
     allChannels.forEach(channelTitle => {
-      channelJoinEmit(channelTitle, socket.id);
+      const channel = channelList.findByTitle(channelTitle);
+      channelJoinEmit(channel.id, User);
     })
   })
 }
 
 /**
- * @param socket
- * @param nick
+ * @param Socket
+ * @param User
  */
-sendChatData = (socket, nick) => {
-  welcomeEmit(socket.id, nick);
-  channelsEmit(socket.id);
-  usersEmit(socket.id);
+sendChatData = (Socket, User) => {
+  welcomeEmit(Socket.id, User);
+  channelsEmit(Socket.id);
+  usersEmit(Socket.id);
 }

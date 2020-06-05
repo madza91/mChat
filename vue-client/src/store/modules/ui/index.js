@@ -1,9 +1,13 @@
 const state = {
+  chosenNick: null,
   sidebar: false,
   settingsBar: false
 }
 
 const getters = {
+  getChosenNick (state) {
+    return state.chosenNick
+  },
   getSidebar (state) {
     return state.sidebar
   },
@@ -13,6 +17,9 @@ const getters = {
 }
 
 const actions = {
+  setChosenNick ({ commit }, data) {
+    commit('setChosenNick', data)
+  },
   sidebarToggle ({ commit }, data) {
     commit('setSidebarToggle', data)
   },
@@ -25,6 +32,9 @@ const actions = {
 }
 
 const mutations = {
+  setChosenNick (state, nick) {
+    state.chosenNick = nick
+  },
   setSidebarToggle (state) {
     state.sidebar = !state.sidebar
   },

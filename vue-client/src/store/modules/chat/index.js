@@ -9,17 +9,19 @@ import { commandActions } from './actions/commandActions'
 import { getters } from './getters/getters'
 
 const state = {
-  nick: '',
-  socketId: null,
+  loggedInUser: {
+    id: null,
+    nick: null
+  },
   connected: null,
   reconnecting: false,
   authenticated: false,
   channels: [],
   users: [],
   selectedChat: {
-    id: 'general',
-    name: '#general',
-    isChannel: true
+    id: 1,
+    isChannel: true,
+    data: null
   }
 }
 

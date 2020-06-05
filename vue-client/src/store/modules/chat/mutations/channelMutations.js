@@ -6,13 +6,12 @@ export const channelMutations = {
 
   // Insert user message to channel
   insertChannelMessage (state, data) {
-    const channel = state.channels.find(channel => channel._title === data.to)
+    const Channel = state.channels.find(channel => channel._id === data.to)
 
-    if (channel) {
-      channel._history.push({
+    if (Channel) {
+      Channel._history.push({
         id: data.id,
         nick: data.nick,
-        socket: data.socket,
         message: data.message,
         type: data.type,
         date: data.date
@@ -22,10 +21,10 @@ export const channelMutations = {
 
   // Insert system message to channel
   insertChannelSystemMessage (state, data) {
-    const channel = state.channels.find(channel => channel._title === data.to)
+    const Channel = state.channels.find(channel => channel._id === data.to)
 
-    if (channel) {
-      channel._history.push({
+    if (Channel) {
+      Channel._history.push({
         message: data.message,
         date: data.date,
         type: 'system'

@@ -4,8 +4,19 @@
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
     />
-    <div class="mb-auto mr-auto mt-auto pl-sm-3">
-      {{ selectedChat.name }}
+    <div v-if="selectedChat.data" class="mb-auto mr-auto mt-auto">
+      <ListUserItem
+        v-if="!selectedChat.isChannel"
+        :id="selectedChat.data._id"
+        :name="selectedChat.data._nick"
+        :status="selectedChat.data._status"
+      />
+      <ListUserItem
+        v-if="selectedChat.isChannel"
+        :id="selectedChat.data._id"
+        :name="selectedChat.data._title"
+        :is-channel="true"
+      />
     </div>
     <font-awesome-icon
       v-if="reconnecting"
@@ -28,6 +39,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import ListUserItem from '../Side/ListUserItem'
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -51,6 +63,9 @@ export default {
         rightMenu: false // Disabled feature for now
       }
     }
+  },
+  components: {
+    ListUserItem
   },
   computed: {
     ...mapChatState(['connected', 'reconnecting', 'selectedChat'])

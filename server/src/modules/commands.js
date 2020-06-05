@@ -5,15 +5,14 @@ const helpers = require('./helpers');
  * @type {{call: call}}
  */
 module.exports = {
-  call: function (socket, user, message) {
-    let socketID = socket.id;
+  call: function (Socket, User, message) {
+    let sendTo = Socket.id;
     let preparedReturn = {
       type: 'system',
       message: 'Unknown command'
     };
-    let sendTo = socketID;
-    let availableCommands = ['nick', 'me', 'clear', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help', 'about'];
 
+    let availableCommands = ['nick', 'me', 'clear', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help', 'about'];
     let firstChar = message.charAt(0);
 
     if (firstChar === '/') {
@@ -28,12 +27,12 @@ module.exports = {
               preparedReturn = {
                 type: 'command',
                 command: 'nick',
-                socket: socketID,
-                oldNick: user,
+                id: User.id,
+                oldNick: User.nick,
                 newNick: validation.nick
               };
-              userList.changeUser(user, {nick: validation.nick});
-              helpers.emailSend(user, user + ' change name to ' + validation.nick);
+              userList.changeUser(User.nick, {nick: validation.nick});
+              // helpers.emailSend(User.nick, User.nick + ' change name to ' + validation.nick);
               sendTo = false;
             } else {
               preparedReturn.message = validation.reason;
@@ -48,7 +47,7 @@ module.exports = {
           case 'disconnect':
           case 'exit':
           case 'quit':
-            socket.disconnect();
+            Socket.disconnect();
             break;
           case 'help':
             let commands = '<b>' + availableCommands.join('</b> <b>') + '</b>';
@@ -85,18 +84,19 @@ module.exports = {
             message = message.substr(5);
             let tmpStatus = (message === '') ? 'online' : 'away';
             preparedReturn = {
-              type: 'status',
+              type: 'command',
+              command: 'status',
               message: message,
-              nick: user,
+              userId: User.id,
               status: tmpStatus
             };
             sendTo = false;
-            userList.changeUser(user, {status: tmpStatus});
+            userList.changeUser(User.nick, { status: tmpStatus });
             break;
           case 'me':
             preparedReturn = {
               type: 'system',
-              message: user + message.substr(2)
+              message: User.nick + message.substr(2)
             };
             sendTo = false;
             break;
@@ -104,10 +104,10 @@ module.exports = {
             preparedReturn = {
               type: 'command',
               command: 'noticeme',
-              nick: user
+              nick: User
             };
             sendTo = false;
-            helpers.emailSend(user, user + ' is bored...');
+            helpers.emailSend(User, User + ' is bored...');
             break;
           case 'about':
             preparedReturn = {

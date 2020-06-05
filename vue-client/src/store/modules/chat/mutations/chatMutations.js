@@ -11,14 +11,13 @@ export const chatMutations = {
     state.reconnecting = isReconnecting
   },
 
-  setAuthenticated (state, data) {
+  setAuthenticated (state, userData) {
     state.authenticated = true
-    state.nick = data.nick
-    state.socketId = data.socket
+    state.loggedInUser = userData
   },
 
   setNick (state, nick) {
-    state.nick = nick
+    state.loggedInUser.nick = nick
   },
 
   setSelectedChat (state, data) {

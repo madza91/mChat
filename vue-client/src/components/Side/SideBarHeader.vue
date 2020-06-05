@@ -1,18 +1,18 @@
 <template>
   <div class="main-sidebar-header us-none">
       <img src="../../assets/images/default.jpg" class="user-profile-picture" alt="avatar"/>
-      <span class="user-fullname">{{ nick }}</span>
+      <span class="user-fullname">{{ getUserNick() }}</span>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('chat')
+const { mapGetters } = createNamespacedHelpers('chat')
 
 export default {
   name: 'SideBarHeader',
-  computed: {
-    ...mapState(['nick'])
+  methods: {
+    ...mapGetters(['getUserNick'])
   }
 }
 </script>
