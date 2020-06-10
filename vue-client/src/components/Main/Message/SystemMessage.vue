@@ -32,16 +32,16 @@ export default {
 
 <style scoped>
   .message-data {
-    margin-top: 15px;
+    margin: 4px 0 9px;
     font-size: 12px;
   }
 
   .message-info {
     display: inline-block;
     background-color: #fdf2c0;
-    padding: 5px 25px;
+    padding: 3px 25px;
     border-radius: 5px;
-    box-shadow: 2px 2px 7px 0px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 7px 0 rgba(0, 0, 0, 0.2);
   }
 
   .message-info a {
@@ -49,11 +49,6 @@ export default {
     border-radius: 5px;
     background-color: #cfd0c9;
     padding: 1px 5px;
-  }
-
-  .message-info i {
-    position: relative;
-    top: -2px;
   }
 
   .message-data-time {

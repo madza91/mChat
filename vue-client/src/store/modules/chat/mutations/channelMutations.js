@@ -10,8 +10,9 @@ export const channelMutations = {
 
     if (Channel) {
       Channel._history.push({
-        id: data.id,
+        from: data.from,
         nick: data.nick,
+        messageId: data.messageId,
         message: data.message,
         type: data.type,
         date: data.date

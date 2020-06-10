@@ -11,7 +11,9 @@
           <UserMessage
             v-if="data.type === 'user'"
             :nick="data.nick"
+            :right="data.from === loggedInUser.id"
             :message="data.message"
+            :shape="data.shape"
             :date="data.date"
           />
           <SystemMessage
@@ -38,9 +40,27 @@ const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedH
 export default {
   name: 'ContentWrapper',
   computed: {
-    ...mapState(['connected']),
+    ...mapState(['connected', 'loggedInUser']),
     currentMessages () {
-      return this.getCurrentMessages()
+      const currentMessages = this.getCurrentMessages()
+
+      // Calculating position of every message for choosing the right shape of balloon
+      return currentMessages.map((item, i) => {
+        const prevItem = currentMessages[i - 1]
+        const nextItem = currentMessages[i + 1]
+
+        if (item.type === 'user') {
+          return {
+            ...item,
+            shape: {
+              isFirst: !prevItem || item.from !== prevItem.from,
+              isLast: !nextItem || item.from !== nextItem.from
+            }
+          }
+        }
+
+        return item
+      })
     }
   },
   components: {
