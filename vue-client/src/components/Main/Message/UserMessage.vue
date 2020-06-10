@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div class="message-data">
-      <span class="message-data-name">{{ nick }}</span>
-      <span class="message-data-time">{{ formattedTime }}</span>
-    </div>
-    <div class="message messageArrow my-message">
-      {{ message }}
+  <div :class="[right ? 'right-message' : 'left-message']">
+    <div class="message" :class="formattedShape">
+      <div class="message-data-top" :class="{'d-none': !shape.isFirst}">
+        <span class="message-data-name">{{ nick }}</span>
+        <span class="message-data-time">{{ formattedTime }}</span>
+      </div>
+      <span class="message-data-text">{{ message }}</span>
     </div>
   </div>
 </template>
@@ -18,6 +18,12 @@ export default {
   computed: {
     formattedTime () {
       return moment(this.date).format('H:mm')
+    },
+    formattedShape () {
+      const prefix = this.right ? 'right' : 'left'
+      const shape = !this.shape.isLast ? 'first' : 'last'
+
+      return `${prefix}-message-shape-${shape}`
     }
   },
   props: {
@@ -29,6 +35,14 @@ export default {
       type: String,
       required: true
     },
+    right: {
+      type: Boolean,
+      default: false
+    },
+    shape: {
+      type: Object,
+      required: true
+    },
     date: {
       type: Number,
       required: false
@@ -37,53 +51,55 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../../assets/styles';
+
 .message {
   display: inline-block;
-  position: relative;
   color: white;
-  padding: 4px 10px;
+  padding: 3px 10px;
   line-height: 26px;
   font-size: 14px;
-  border-radius: 7px;
   margin-bottom: 5px;
   min-width: 100px;
-  word-wrap: break-word;
+  max-width: 50%;
+
+  @include media-breakpoint-down(xs) {
+    max-width: 90%;
+  }
 }
-.messageArrow:after {
-  bottom: 100%;
-  left: 25px;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-bottom-color: #86BB71;
-  border-width: 10px;
-  margin-left: -10px;
-}
-.message-data {
-  color: black;
-  font-size: smaller;
-  margin-bottom: 10px;
-  margin-top: 15px;
-  width: 100%;
+.message-data-top {
+  display: flex;
+  justify-content: space-between;
+  color: #ccc;
+  font-size: 10px;
+  line-height: 16px;
 }
 .message-data-time {
-  color: #a8aab1;
-  padding-left: 6px;
-  font-size: 10px;
+  padding-left: 20px;
 }
-.my-message {
+.left-message .message {
   background: #86BB71;
-  border-bottom-color: #86BB71;
 }
-.other-message {
+.right-message {
+  display: flex;
+  justify-content: flex-end;
+}
+.right-message .message {
   background: #94C2ED;
 }
-.other-message:after {
-  border-bottom-color: #94C2ED;
-  left: 93%;
+.left-message-shape-full, .left-message-shape-last {
+  border-radius: 0 10px 10px;
+}
+.left-message-shape-first, .left-message-shape-mid {
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 2px;
+}
+.right-message-shape-full, .right-message-shape-last {
+  border-radius: 10px 0 10px 10px;
+}
+.right-message-shape-first, .right-message-shape-mid {
+  border-radius: 10px 0 0 10px;
+  margin-bottom: 2px;
 }
 </style>
