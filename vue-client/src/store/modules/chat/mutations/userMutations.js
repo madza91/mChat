@@ -35,10 +35,10 @@ export const userMutations = {
    * @param data
    */
   insertUserMessage (state, data) {
-    const user = state.users.find(user => user._id === data.to)
+    const User = state.users.find(user => user._id === data.to)
 
-    if (user) {
-      user._history.push({
+    if (User) {
+      User._history.push({
         from: data.from,
         message: data.message,
         nick: data.nick,
@@ -54,9 +54,11 @@ export const userMutations = {
    * @param data
    */
   renameUser (state, data) {
-    const user = state.users.find(user => user._id === data.id)
+    const User = state.users.find(user => user._id === data.id)
 
-    user._nick = data.newNick
+    if (User) {
+      User._nick = data.newNick
+    }
   },
 
   /**
@@ -64,10 +66,10 @@ export const userMutations = {
    * @param data
    */
   incrementUserBadge (state, data) {
-    const user = state.users.find(user => user._id === data.from)
+    const User = state.users.find(user => user._id === data.from)
 
-    if (user) {
-      user._badge += 1
+    if (User) {
+      User._badge += 1
     }
   },
 
@@ -89,6 +91,17 @@ export const userMutations = {
     if (User) {
       User._status = data.status
       User._statusMessage = data.message
+    }
+  },
+
+  setUserNoticeMe (state, userId) {
+    const User = state.users.find(user => user._id === userId)
+
+    if (User) {
+      User._noticeMe = true
+      setTimeout(() => {
+        User._noticeMe = false
+      }, 1500)
     }
   }
 }

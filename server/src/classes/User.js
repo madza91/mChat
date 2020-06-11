@@ -12,6 +12,7 @@ module.exports = class User {
     this._history       = [];
     this._joined        = Date.now();
     this._badge         = 0;
+    this._noticeMe      = false;
     this._totalMessages = 0;
   }
 

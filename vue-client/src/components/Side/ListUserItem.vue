@@ -11,7 +11,7 @@
       class="icon icon-user"
       :class="status"
     />
-    <div class="name">
+    <div class="name" :class="{'animation-shake': shake}">
       <span>{{ name }}</span>
     </div>
     <b-badge v-if="badgeNumber" class="float-right" variant="danger">{{ badgeNumber }}</b-badge>
@@ -49,6 +49,10 @@ export default {
       type: String,
       default: 'online',
       required: false
+    },
+    shake: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -117,7 +121,7 @@ export default {
   }
 
   .icon-channel {
-    color: #86BB71;
+    color: var(--color-user-status-online);
     height: 24px;
     width: 24px;
     padding: 5px;

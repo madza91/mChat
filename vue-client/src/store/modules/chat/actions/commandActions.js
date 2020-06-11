@@ -23,6 +23,9 @@ export const commandActions = {
           commit('setStatus', data.status)
         }
         break
+      case 'noticeme':
+        commit('setUserNoticeMe', data.userId)
+        break
       default:
         console.log('Command is not found.')
     }
