@@ -5,9 +5,8 @@
       @click="sidebarToggle"
     />
     <div v-if="selectedChat.data" class="mb-auto mr-auto mt-auto">
-      <ListUserItem
+      <MainHeaderUserItem
         v-if="!selectedChat.isChannel"
-        :id="selectedChat.data._id"
         :name="selectedChat.data._nick"
         :status="selectedChat.data._status"
       />
@@ -42,8 +41,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import ListUserItem from '../Side/ListUserItem'
 import MainHeaderChannelItem from './MainHeaderChannelItem'
+import MainHeaderUserItem from './MainHeaderUserItem'
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -69,8 +68,8 @@ export default {
     }
   },
   components: {
-    ListUserItem,
-    MainHeaderChannelItem
+    MainHeaderChannelItem,
+    MainHeaderUserItem
   },
   computed: {
     ...mapChatState(['connected', 'reconnecting', 'selectedChat'])
