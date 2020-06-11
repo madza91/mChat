@@ -124,10 +124,10 @@ export default {
   }
 
   .online {
-    color: #86BB71;
+    color: var(--color-user-status-online);
   }
 
   .away {
-    color: #da9d3e;
+    color: var(--color-user-status-away);
   }
 </style>

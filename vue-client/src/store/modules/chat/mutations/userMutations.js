@@ -39,7 +39,7 @@ export const userMutations = {
 
     if (user) {
       user._history.push({
-        id: data.id,
+        from: data.from,
         message: data.message,
         nick: data.nick,
         to: data.to,
