@@ -11,7 +11,7 @@
           <UserMessage
             v-if="data.type === 'user'"
             :nick="data.nick"
-            :right="data.from === loggedInUser.id"
+            :right="isMyMessage(data.from)"
             :message="data.message"
             :shape="data.shape"
             :date="data.date"
@@ -35,12 +35,13 @@ import MainHeader from './MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
 const { mapState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
-const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
+const { mapActions: mapUiActions, mapGetters: mapUiGetters, mapState: mapUiState } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ContentWrapper',
   computed: {
     ...mapState(['connected', 'loggedInUser']),
+    ...mapUiState(['prevIds']),
     currentMessages () {
       const currentMessages = this.getCurrentMessages()
 
@@ -77,6 +78,9 @@ export default {
     ...mapUiActions(['sidebarToggle', 'sidebarState']),
     ...mapUiGetters(['getSidebar']),
     ...mapChatGetters(['getCurrentMessages']),
+    isMyMessage (fromUserId) {
+      return this.prevIds.includes(fromUserId)
+    },
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
       if (

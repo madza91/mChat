@@ -11,11 +11,10 @@
         :name="selectedChat.data._nick"
         :status="selectedChat.data._status"
       />
-      <ListUserItem
+      <MainHeaderChannelItem
         v-if="selectedChat.isChannel"
-        :id="selectedChat.data._id"
-        :name="selectedChat.data._title"
-        :is-channel="true"
+        :title="selectedChat.data._title"
+        :description="selectedChat.data._description"
       />
     </div>
     <font-awesome-icon
@@ -29,9 +28,13 @@
       v-show="connected === false && !reconnecting"
       @click="settingsToggle"
     />
+    <b-icon-info-circle-fill
+      class="icon"
+      @click="aboutToggle"
+    />
     <b-icon-three-dots-vertical
       class="icon"
-      :class="{ 'invisible': !settings.rightMenu }"
+      :class="{ 'd-none': !settings.rightMenu }"
       @click="settingsToggle"
     />
   </header>
@@ -40,6 +43,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import ListUserItem from '../Side/ListUserItem'
+import MainHeaderChannelItem from './MainHeaderChannelItem'
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -65,13 +69,14 @@ export default {
     }
   },
   components: {
-    ListUserItem
+    ListUserItem,
+    MainHeaderChannelItem
   },
   computed: {
     ...mapChatState(['connected', 'reconnecting', 'selectedChat'])
   },
   methods: {
-    ...mapUiActions(['sidebarToggle', 'settingsToggle']),
+    ...mapUiActions(['sidebarToggle', 'settingsToggle', 'aboutToggle']),
     ...mapUiGetters(['getSidebar'])
   }
 }
@@ -82,6 +87,7 @@ export default {
   @import '../../assets/styles';
 
   .icon {
+    cursor: pointer;
     width: var(--main-header-height);
     height: var(--main-header-height);
     padding: calc(var(--main-header-height) / 3);

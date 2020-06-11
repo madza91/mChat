@@ -1,7 +1,9 @@
 const state = {
   chosenNick: null,
+  prevIds: [],
   sidebar: false,
-  settingsBar: false
+  settingsBar: false,
+  aboutModal: false
 }
 
 const getters = {
@@ -20,6 +22,9 @@ const actions = {
   setChosenNick ({ commit }, data) {
     commit('setChosenNick', data)
   },
+  insertUserID ({ commit }, data) {
+    commit('pushUserID', data)
+  },
   sidebarToggle ({ commit }, data) {
     commit('setSidebarToggle', data)
   },
@@ -28,12 +33,18 @@ const actions = {
   },
   settingsToggle ({ commit }, data) {
     commit('setSettingsState', data)
+  },
+  aboutToggle ({ commit }, data) {
+    commit('setAboutModalState', data)
   }
 }
 
 const mutations = {
   setChosenNick (state, nick) {
     state.chosenNick = nick
+  },
+  pushUserID (state, userId) {
+    state.prevIds.push(userId)
   },
   setSidebarToggle (state) {
     state.sidebar = !state.sidebar
@@ -43,6 +54,9 @@ const mutations = {
   },
   setSettingsState (state) {
     state.settingsBar = !state.settingsBar
+  },
+  setAboutModalState (state) {
+    state.aboutModal = !state.aboutModal
   }
 }
 
