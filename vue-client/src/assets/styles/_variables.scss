@@ -17,6 +17,8 @@ $mColorBorderDark: #414242;
 
 $mColorUserStatusOnline: #86BB71;
 $mColorUserStatusAway: #DA9D3E;
+$mColorUserStatusOffline: #B9B8B9;
+$mColorUserStatusBusy: #E86709;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -28,6 +30,8 @@ $theme-colors: map-merge(
   'color-border-dark': $mColorBorderDark,
   'color-user-status-online': $mColorUserStatusOnline,
   'color-user-status-away': $mColorUserStatusAway,
+  'color-user-status-busy': $mColorUserStatusBusy,
+  'color-user-status-offline': $mColorUserStatusOffline,
 ),
 $theme-colors
 );

@@ -10,7 +10,10 @@
         <span>{{ name }}</span>
       </div>
     </div>
-    <div class="user-status">{{ status }}</div>
+    <div class="user-status-wrapper">
+      <span>{{ status }}</span>
+      <span class="user-status-message" v-if="statusMessage">{{ statusMessage }}</span>
+    </div>
   </div>
 </template>
 
@@ -25,6 +28,11 @@ export default {
     status: {
       type: String,
       default: 'online',
+      required: false
+    },
+    statusMessage: {
+      type: String,
+      default: null,
       required: false
     }
   }
@@ -69,8 +77,16 @@ export default {
     }
   }
 
-  .user-status {
+  .user-status-wrapper {
     font-size: 10px;
     color: darkgrey;
+  }
+
+  .user-status-message {
+    font-style: italic;
+  }
+
+  .user-status-message::before {
+    content: ' - ';
   }
 </style>
