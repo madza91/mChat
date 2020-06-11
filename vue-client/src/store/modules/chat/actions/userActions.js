@@ -21,7 +21,7 @@ export const userActions = {
 
   userMessage ({ commit, getters }, data) {
     const toWindow = (getters.getUserId === data.to) ? data.from : data.to
-    commit('insertUserMessage', { ...data, toWindow })
+    commit('insertUserMessage', { ...data, to: toWindow })
 
     if (toWindow !== getters.getSelectedChat.id) {
       commit('incrementUserBadge', data)
