@@ -9,6 +9,7 @@
         v-if="!selectedChat.isChannel"
         :name="selectedChat.data._nick"
         :status="selectedChat.data._status"
+        :statusMessage="selectedChat.data._statusMessage"
       />
       <MainHeaderChannelItem
         v-if="selectedChat.isChannel"

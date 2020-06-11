@@ -4,13 +4,14 @@ module.exports = class User {
           STATUS_AWAY   = 2,
           STATUS_HIDDEN = 3;
 
-    this._id      = ++incUser;
-    this._nick    = nick;
-    this._status  = status;
-    this._socket  = socket;
-    this._history = [];
-    this._joined  = Date.now();
-    this._badge   = 0;
+    this._id            = ++incUser;
+    this._nick          = nick;
+    this._status        = status;
+    this._statusMessage = null;
+    this._socket        = socket;
+    this._history       = [];
+    this._joined        = Date.now();
+    this._badge         = 0;
     this._totalMessages = 0;
   }
 
@@ -32,6 +33,22 @@ module.exports = class User {
 
   set status(status) {
     return this._status = status;
+  }
+
+  get statusMessage() {
+    return this._statusMessage;
+  }
+
+  set statusMessage(message) {
+    return this._statusMessage = message;
+  }
+
+  get totalMessages() {
+    return this._statusMessage;
+  }
+
+  set totalMessages(int) {
+    return this._totalMessages = int;
   }
 
   get socket() {

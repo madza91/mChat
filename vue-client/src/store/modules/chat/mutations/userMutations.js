@@ -88,6 +88,7 @@ export const userMutations = {
 
     if (User) {
       User._status = data.status
+      User._statusMessage = data.message
     }
   }
 }
