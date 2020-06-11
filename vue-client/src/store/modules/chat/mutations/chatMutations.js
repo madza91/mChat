@@ -20,6 +20,10 @@ export const chatMutations = {
     state.loggedInUser.nick = nick
   },
 
+  setStatus (state, status) {
+    state.loggedInUser.status = status
+  },
+
   setSelectedChat (state, data) {
     state.selectedChat = data
   }

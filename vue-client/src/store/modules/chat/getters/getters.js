@@ -2,11 +2,14 @@ export const getters = {
   getLoggedInUser (state) {
     return state.loggedInUser
   },
+  getUserId (state) {
+    return state.loggedInUser.id
+  },
   getUserNick (state) {
     return state.loggedInUser.nick
   },
-  getUserId (state) {
-    return state.loggedInUser.id
+  getUserStatus (state) {
+    return state.loggedInUser.status
   },
   findUserById: (state) => (userId) => {
     return state.users.find(user => user._id === userId)

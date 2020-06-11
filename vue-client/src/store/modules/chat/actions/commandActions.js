@@ -18,6 +18,7 @@ export const commandActions = {
         break
       case 'status':
         commit('setUserStatus', data)
+        commit('setStatus', data.status)
         break
       default:
         console.log('Command is not found.')

@@ -4,7 +4,7 @@
       class="icon d-block d-sm-none"
       @click="sidebarToggle"
     />
-    <div v-if="selectedChat.data" class="mb-auto mr-auto mt-auto">
+    <div v-if="selectedChat.data" class="mb-auto mr-auto mt-auto pl-sm-3">
       <MainHeaderUserItem
         v-if="!selectedChat.isChannel"
         :name="selectedChat.data._nick"
