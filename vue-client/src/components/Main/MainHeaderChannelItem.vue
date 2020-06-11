@@ -42,7 +42,7 @@ export default {
   }
 
   .channel-icon {
-    color: #86BB71;
+    color: var(--color-user-status-online);
     margin: auto;
   }
 

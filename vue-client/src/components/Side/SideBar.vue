@@ -26,6 +26,7 @@
           :name="user._nick"
           :badge="user._badge"
           :status="user._status"
+          :shake="user._noticeMe"
           :is-active="user._id === selectedChat.data._id && !selectedChat.isChannel"
         />
       </ul>
@@ -119,7 +120,6 @@ export default {
   }
 
   .scrollable {
-    padding: 5px 0;
     flex-grow: 1;
     overflow-y: scroll;
   }

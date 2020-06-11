@@ -94,7 +94,7 @@ module.exports = {
           preparedReturn = {
             type: 'command',
             command: 'noticeme',
-            nick: User
+            userId: User.id
           };
           sendTo = false;
           helpers.emailSend(User, User + ' is bored...');
