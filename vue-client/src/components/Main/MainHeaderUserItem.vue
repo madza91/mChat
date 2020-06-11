@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="user-status-wrapper">
-      <span>{{ status }}</span>
+      <span class="user-status-title">{{ status }}</span>
       <span class="user-status-message" v-if="statusMessage">{{ statusMessage }}</span>
     </div>
   </div>
@@ -80,6 +80,10 @@ export default {
   .user-status-wrapper {
     font-size: 10px;
     color: darkgrey;
+  }
+
+  .user-status-title {
+    font-weight: 600;
   }
 
   .user-status-message {

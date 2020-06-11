@@ -11,7 +11,8 @@ import { getters } from './getters/getters'
 const state = {
   loggedInUser: {
     id: null,
-    nick: null
+    nick: null,
+    status: null
   },
   connected: null,
   reconnecting: false,

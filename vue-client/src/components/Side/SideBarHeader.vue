@@ -1,7 +1,10 @@
 <template>
   <div class="main-sidebar-header us-none">
-      <img src="../../assets/images/default.jpg" class="user-profile-picture" alt="avatar"/>
+    <img src="../../assets/images/default.jpg" class="user-profile-picture" alt="avatar"/>
+    <div class="user-wrapper">
       <span class="user-fullname">{{ getUserNick() }}</span>
+      <span class="user-status" :class="'user-status-' + getUserStatus()">{{ getUserStatus() }}</span>
+    </div>
   </div>
 </template>
 
@@ -12,7 +15,7 @@ const { mapGetters } = createNamespacedHelpers('chat')
 export default {
   name: 'SideBarHeader',
   methods: {
-    ...mapGetters(['getUserNick'])
+    ...mapGetters(['getUserNick', 'getUserStatus'])
   }
 }
 </script>
@@ -20,26 +23,46 @@ export default {
 <style scoped lang="scss">
   .main-sidebar-header {
     display: flex;
-    background-color: var(--color-default);
     max-height: 60px;
     height: 60px;
     padding: 10px;
 
     @media screen and (prefers-color-scheme: dark) {
       color: white;
-      background-color: var(--color-default-dark)
     }
   }
 
   .user-profile-picture {
     width: 40px;
     height: 40px;
-    border-radius: 12px 3px;
+    border-radius: 30px;
+  }
+
+  .user-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: auto 0;
+    font-size: 12px;
+    padding-left: 10px;
   }
 
   .user-fullname {
-    font-size: 12px;
-    line-height: 40px;
-    padding-left: 10px;
+    font-weight: bold;
+  }
+
+  .user-status {
+    font-size: 10px;
+  }
+
+  .user-status-online {
+    color: var(--color-user-status-online);
+  }
+
+  .user-status-away {
+    color: var(--color-user-status-away);
+  }
+
+  .user-status-offline {
+    color: var(--color-user-status-offline);
   }
 </style>
