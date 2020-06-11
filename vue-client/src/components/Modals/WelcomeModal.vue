@@ -84,7 +84,4 @@ export default {
   #fieldset-1 {
     min-height: 100px;
   }
-  .modal-content {
-    border-radius: 1rem;
-  }
 </style>

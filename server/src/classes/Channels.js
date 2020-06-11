@@ -4,8 +4,8 @@ module.exports = class Channels {
   constructor () {
     this._channels = [];
 
-    this.add(new Channel('general', 'General discussion'));
-    this.add(new Channel('help', 'There is no help for ya'));
+    this.add(new Channel('general', 'Channel for discussion about anything'));
+    this.add(new Channel('help', 'Do you need help? Do you offer help? This is the right channel for it'));
   }
 
   /**

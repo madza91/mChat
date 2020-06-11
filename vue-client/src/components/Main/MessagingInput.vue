@@ -187,10 +187,6 @@ export default {
     }
   }
 
-  input:focus {
-    outline: none;
-  }
-
   .icon {
     margin: auto;
     width: $icon-size;

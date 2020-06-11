@@ -1,11 +1,16 @@
 <template>
   <aside class="main-sidebar us-none">
     <SideBarHeader />
+    <div class="search-wrapper">
+      <label>
+        <input v-model="filterTerm" placeholder="Filter channels and users" />
+      </label>
+    </div>
     <div class="scrollable">
       <ListSectionItem section-name="Channels" />
       <ul class="sidebar-nav">
         <ListUserItem
-          v-for="channel in channels"
+          v-for="channel in filteredChannels"
           :key="channel._id"
           :id="channel._id"
           :name="channel._title"
@@ -15,7 +20,7 @@
       <ListSectionItem section-name="People" />
       <ul class="sidebar-nav">
         <ListUserItem
-          v-for="user in users"
+          v-for="user in filteredUsers"
           :key="user._id"
           :id="user._id"
           :name="user._nick"
@@ -38,7 +43,18 @@ const { mapState } = createNamespacedHelpers('chat')
 export default {
   name: 'SideBar',
   computed: {
-    ...mapState(['users', 'channels', 'selectedChat'])
+    ...mapState(['users', 'channels', 'selectedChat']),
+    filteredChannels () {
+      return this.channels && this.channels.filter(channel => channel._title.toLowerCase().includes(this.filterTerm.toLowerCase()))
+    },
+    filteredUsers () {
+      return this.users && this.users.filter(user => user._nick.toLowerCase().includes(this.filterTerm.toLowerCase()))
+    }
+  },
+  data () {
+    return {
+      filterTerm: ''
+    }
   },
   components: {
     ListSectionItem,
@@ -81,8 +97,29 @@ export default {
     transform: translate(0, 0);
   }
 
+  .search-wrapper {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .search-wrapper input {
+    width: 90%;
+    font-size: 12px;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: #444753;
+    padding: 4px 10px;
+    color: white;
+    text-align: center;
+  }
+
+  .search-wrapper input::placeholder {
+    font-size: 10px;
+    text-align: center;
+  }
+
   .scrollable {
-    padding: 15px 0;
+    padding: 5px 0;
     flex-grow: 1;
     overflow-y: scroll;
   }

@@ -35,8 +35,9 @@ export const socketActions = {
     commit('setConnected', false)
   },
 
-  SOCKET_welcome ({ commit }, data) {
+  SOCKET_welcome ({ commit, dispatch }, data) {
     commit('setAuthenticated', data)
+    dispatch('ui/insertUserID', data.id, { root: true })
   },
 
   SOCKET_channel ({ dispatch }, data) {
