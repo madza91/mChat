@@ -36,8 +36,8 @@ export const socketActions = {
   },
 
   SOCKET_welcome ({ commit, dispatch }, data) {
-    commit('setAuthenticated', data)
-    dispatch('ui/insertUserID', data.id, { root: true })
+    commit('setAuthenticated', data.user)
+    dispatch('ui/insertHistoryUserID', data, { root: true })
   },
 
   SOCKET_channel ({ dispatch }, data) {

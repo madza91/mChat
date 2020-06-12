@@ -22,6 +22,12 @@
             :date="data.date"
           />
         </li>
+        <li v-if="isCurrentUserOffline">
+          <ButtonMessage
+            message="This user is offline, click to close window"
+            @click="closeWindow"
+          />
+        </li>
       </ul>
     </div>
     <MessagingInput :enabled="connected && !isCurrentUserOffline" />
@@ -34,7 +40,8 @@ import MessagingInput from './Footer/MessagingInput'
 import MainHeader from './Header/MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
-const { mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
+import ButtonMessage from './Message/ButtonMessage'
+const { mapActions: mapChatActions, mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters, mapState: mapUiState } = createNamespacedHelpers('ui')
 
 export default {
@@ -68,6 +75,7 @@ export default {
     }
   },
   components: {
+    ButtonMessage,
     UserMessage,
     SystemMessage,
     MessagingInput,
@@ -80,6 +88,7 @@ export default {
   methods: {
     ...mapUiActions(['sidebarToggle', 'sidebarState']),
     ...mapUiGetters(['getSidebar']),
+    ...mapChatActions(['userRemove']),
     ...mapChatGetters(['getCurrentMessages']),
     isMyMessage (fromUserId) {
       return this.prevIds.includes(fromUserId)
@@ -97,6 +106,9 @@ export default {
       if (this.getSidebar()) {
         this.sidebarState(false)
       }
+    },
+    closeWindow () {
+      this.userRemove(this.selectedChat.data._id)
     }
   }
 }

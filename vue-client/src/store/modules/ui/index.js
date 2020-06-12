@@ -1,9 +1,12 @@
 const state = {
   chosenNick: null,
-  prevIds: [],
   sidebar: false,
   settingsBar: false,
-  aboutModal: false
+  aboutModal: false,
+  server: {
+    build: null,
+    prevIds: []
+  }
 }
 
 const getters = {
@@ -22,8 +25,12 @@ const actions = {
   setChosenNick ({ commit }, data) {
     commit('setChosenNick', data)
   },
-  insertUserID ({ commit }, data) {
-    commit('pushUserID', data)
+  insertHistoryUserID ({ state, commit }, data) {
+    if (state.server.build !== data.server.build) {
+      commit('setServerBuildNumber', data.server.build)
+      commit('clearHistoryUserID')
+    }
+    commit('pushHistoryUserID', data.user.id)
   },
   sidebarToggle ({ commit }, data) {
     commit('setSidebarToggle', data)
@@ -43,8 +50,14 @@ const mutations = {
   setChosenNick (state, nick) {
     state.chosenNick = nick
   },
-  pushUserID (state, userId) {
-    state.prevIds.push(userId)
+  setServerBuildNumber (state, version) {
+    state.server.build = version
+  },
+  pushHistoryUserID (state, userId) {
+    state.server.prevIds.push(userId)
+  },
+  clearHistoryUserID (state) {
+    state.server.prevIds = []
   },
   setSidebarToggle (state) {
     state.sidebar = !state.sidebar

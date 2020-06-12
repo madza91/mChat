@@ -15,13 +15,6 @@
       <span>{{ name }}</span>
     </div>
     <b-badge v-if="badgeNumber" variant="danger">{{ badgeNumber }}</b-badge>
-    <span class="close-button" @click.stop="userRemove(id)">
-      <b-icon
-        v-if="status === 'offline'"
-        icon="x-circle-fill"
-        class="m-auto offline">
-      </b-icon>
-    </span>
   </li>
 </template>
 
@@ -78,11 +71,10 @@ export default {
   },
   methods: {
     ...mapUiActions(['sidebarState']),
-    ...mapChatActions(['setSelectedChat', 'userRemove']),
+    ...mapChatActions(['setSelectedChat']),
     setSelected () {
       this.setSelectedChat({
         id: this.id,
-        name: this.isChannel ? `#${this.name}` : this.name, // Not needed
         isChannel: this.isChannel
       })
       this.sidebarState(false)
@@ -119,15 +111,6 @@ export default {
   .list-item-user:hover {
     cursor: pointer;
     background: rgba(0,0,0,0.5);
-  }
-
-  .list-item-user:hover .close-button {
-    display: inline-block;
-  }
-
-  .close-button {
-    display: none;
-    padding: 0 8px;
   }
 
   .icon-user {
