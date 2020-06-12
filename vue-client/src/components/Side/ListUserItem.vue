@@ -14,7 +14,12 @@
     <div class="name" :class="{'animation-shake': shake}">
       <span>{{ name }}</span>
     </div>
-    <b-badge v-if="badgeNumber" class="float-right" variant="danger">{{ badgeNumber }}</b-badge>
+    <b-badge v-if="badgeNumber" variant="danger">{{ badgeNumber }}</b-badge>
+    <span @click.stop="userRemove(id)"><b-icon
+      v-if="status === 'offline'"
+      icon="x-circle-fill"
+      class="m-auto offline close-button">
+    </b-icon></span>
   </li>
 </template>
 
@@ -71,7 +76,7 @@ export default {
   },
   methods: {
     ...mapUiActions(['sidebarState']),
-    ...mapChatActions(['setSelectedChat']),
+    ...mapChatActions(['setSelectedChat', 'userRemove']),
     setSelected () {
       this.setSelectedChat({
         id: this.id,
@@ -114,6 +119,10 @@ export default {
     background: rgba(0,0,0,0.5);
   }
 
+  .list-item-user:hover .close-button {
+    visibility: visible;
+  }
+
   .icon-user {
     height: 24px;
     width: 24px;
@@ -133,5 +142,13 @@ export default {
 
   .away {
     color: var(--color-user-status-away);
+  }
+
+  .offline {
+    color: var(--color-user-status-offline);
+  }
+
+  .close-button {
+    visibility: hidden;
   }
 </style>

@@ -24,7 +24,7 @@
         </li>
       </ul>
     </div>
-    <MessagingInput :enabled="connected" />
+    <MessagingInput :enabled="connected && !isCurrentUserOffline" />
   </div>
 </template>
 
@@ -34,13 +34,13 @@ import MessagingInput from './Footer/MessagingInput'
 import MainHeader from './Header/MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
-const { mapState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
+const { mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters, mapState: mapUiState } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ContentWrapper',
   computed: {
-    ...mapState(['connected', 'loggedInUser']),
+    ...mapChatState(['connected', 'loggedInUser', 'selectedChat']),
     ...mapUiState(['prevIds']),
     currentMessages () {
       const currentMessages = this.getCurrentMessages()
@@ -62,6 +62,9 @@ export default {
 
         return item
       })
+    },
+    isCurrentUserOffline () {
+      return this.selectedChat.data && this.selectedChat.data._status === 'offline'
     }
   },
   components: {

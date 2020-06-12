@@ -16,7 +16,11 @@ export const userActions = {
       })
     }
 
-    commit('removeUser', User._id)
+    commit('setUserStatus', {
+      userId: User._id,
+      status: 'offline',
+      message: null
+    })
   },
 
   userMessage ({ commit, getters }, data) {
@@ -32,5 +36,13 @@ export const userActions = {
     const User = getters.findUserById(data.userId)
 
     dispatch('setUserNick', User.nick)
+  },
+
+  userRemove ({ commit, dispatch }, userId) {
+    commit('removeUser', userId)
+    dispatch('setSelectedChat', {
+      id: 1,
+      isChannel: true
+    })
   }
 }
