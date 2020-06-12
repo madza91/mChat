@@ -33,6 +33,7 @@
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
+        :disabled="!enabled"
       >
       <font-awesome-icon
         v-if="message || attachment"
