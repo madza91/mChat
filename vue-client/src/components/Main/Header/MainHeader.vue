@@ -1,10 +1,10 @@
 <template>
   <header class="main-header us-none" ref="header">
-    <b-icon-list
-      class="icon d-block d-sm-none"
-      @click="sidebarToggle"
-    />
-    <div v-if="selectedChat.data" class="mb-auto mr-auto mt-auto pl-sm-3">
+    <div class="icon-wrapper d-sm-none">
+      <b-icon icon="list" @click="sidebarToggle"></b-icon>
+      <b-icon v-if="isUnreads" icon="circle-fill" variant="danger" class="icon-badge" />
+    </div>
+    <div v-if="selectedChat.data" class="main-header-content mb-auto mr-auto mt-auto pl-sm-3">
       <MainHeaderUserItem
         v-if="!selectedChat.isChannel"
         :name="selectedChat.data._nick"
@@ -17,26 +17,23 @@
         :description="selectedChat.data._description"
       />
     </div>
-    <font-awesome-icon
-      v-if="reconnecting"
-      icon="sync-alt"
-      class="icon animation-spinning"
-    />
-    <b-icon-exclamation-triangle-fill
-      variant="warning"
-      class="icon"
-      v-show="connected === false && !reconnecting"
-      @click="settingsToggle"
-    />
-    <b-icon-info-circle-fill
-      class="icon"
-      @click="aboutToggle"
-    />
-    <b-icon-three-dots-vertical
-      class="icon"
-      :class="{ 'd-none': !settings.rightMenu }"
-      @click="settingsToggle"
-    />
+    <div class="icon-wrapper" v-if="reconnecting">
+      <b-icon icon="arrow-repeat" animation="spin"></b-icon>
+    </div>
+    <div class="icon-wrapper" v-if="connected === false && !reconnecting">
+      <b-icon
+        icon="exclamation-triangle-fill"
+        variant="warning"
+        @click="settingsToggle">
+      </b-icon>
+    </div>
+    <div class="icon-wrapper">
+      <b-icon icon="info-circle-fill" @click="aboutToggle"></b-icon>
+    </div>
+
+    <div class="icon-wrapper" v-if="settings.rightMenu">
+      <b-icon icon="three-dots-vertical" @click="settingsToggle"></b-icon>
+    </div>
   </header>
 </template>
 
@@ -45,7 +42,7 @@ import { createNamespacedHelpers } from 'vuex'
 import MainHeaderChannelItem from './MainHeaderChannelItem'
 import MainHeaderUserItem from './MainHeaderUserItem'
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
-const { mapState: mapChatState } = createNamespacedHelpers('chat')
+const { mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 
 export default {
   name: 'MainHeader',
@@ -73,29 +70,48 @@ export default {
     MainHeaderUserItem
   },
   computed: {
-    ...mapChatState(['connected', 'reconnecting', 'selectedChat'])
+    ...mapChatState(['connected', 'reconnecting', 'selectedChat']),
+    isUnreads () {
+      return this.getUnreadMessageCount() > 0
+    }
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'settingsToggle', 'aboutToggle']),
-    ...mapUiGetters(['getSidebar'])
+    ...mapUiGetters(['getSidebar']),
+    ...mapChatGetters(['getUnreadMessageCount'])
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  @import '../../assets/styles';
+  @import '../../../assets/styles';
 
-  .icon {
+  .icon-wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
     cursor: pointer;
     width: var(--main-header-height);
     height: var(--main-header-height);
-    padding: calc(var(--main-header-height) / 3);
 
     @include media-breakpoint-down(xs) {
       width: var(--main-header-height-mobile);
       height: var(--main-header-height-mobile);
-      padding: 10px;
+    }
+
+    .icon-badge {
+      font-size: 9px;
+      position: absolute;
+      top: 17px;
+      right: 17px;
+
+      @include media-breakpoint-down(xs) {
+        top: 10px;
+        right: 10px;
+      }
     }
   }
 
@@ -121,5 +137,10 @@ export default {
       height: var(--main-header-height-mobile);
       min-height: var(--main-header-height-mobile);
     }
+  }
+
+  .main-header-content {
+    white-space: nowrap;
+    overflow: hidden;
   }
 </style>
