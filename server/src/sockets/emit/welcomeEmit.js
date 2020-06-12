@@ -6,8 +6,13 @@
  */
 module.exports = (socketID, User) => {
   return io.to(socketID).emit('welcome', {
-    id: User.id,
-    nick: User.nick,
-    status: User.status
+    user: {
+      id: User.id,
+      nick: User.nick,
+      status: User.status,
+    },
+    server: {
+      build: serverBuild.getTime()
+    }
   })
 }

@@ -19,6 +19,7 @@ global.io          = require('./modules/server')();
 global.incMessage  = 0;
 global.incChannel  = 0;
 global.incUser     = 0;
+global.serverBuild = new Date();
 global.userList    = new Users();
 global.channelList = new Channels();
 
