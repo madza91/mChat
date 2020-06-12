@@ -11,7 +11,7 @@ const state = {
 
 const getters = {
   getChosenNick (state) {
-    return state.chosenNick
+    return state.chosenNick || ''
   },
   getSidebar (state) {
     return state.sidebar
