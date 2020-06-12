@@ -14,6 +14,9 @@ export const getters = {
   findUserById: (state) => (userId) => {
     return state.users.find(user => user._id === userId)
   },
+  getUnreadMessageCount: (state) => {
+    return state.users.filter(user => user._badge > 0).length
+  },
   getCurrentMessages (state) {
     const { selectedChat, channels, users } = state
 

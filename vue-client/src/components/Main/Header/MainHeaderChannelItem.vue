@@ -62,5 +62,7 @@ export default {
   .channel-description {
     font-size: 10px;
     color: darkgrey;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

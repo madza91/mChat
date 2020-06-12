@@ -30,8 +30,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import MessagingInput from './MessagingInput'
-import MainHeader from './MainHeader'
+import MessagingInput from './Footer/MessagingInput'
+import MainHeader from './Header/MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
 const { mapState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
