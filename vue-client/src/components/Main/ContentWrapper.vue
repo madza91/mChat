@@ -48,7 +48,7 @@ export default {
   name: 'ContentWrapper',
   computed: {
     ...mapChatState(['connected', 'loggedInUser', 'selectedChat']),
-    ...mapUiState(['prevIds']),
+    ...mapUiState(['server']),
     currentMessages () {
       const currentMessages = this.getCurrentMessages()
 
@@ -91,7 +91,7 @@ export default {
     ...mapChatActions(['userRemove']),
     ...mapChatGetters(['getCurrentMessages']),
     isMyMessage (fromUserId) {
-      return this.prevIds.includes(fromUserId)
+      return this.server.prevIds.includes(fromUserId)
     },
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
