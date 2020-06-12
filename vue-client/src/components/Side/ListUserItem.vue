@@ -15,11 +15,13 @@
       <span>{{ name }}</span>
     </div>
     <b-badge v-if="badgeNumber" variant="danger">{{ badgeNumber }}</b-badge>
-    <span @click.stop="userRemove(id)"><b-icon
-      v-if="status === 'offline'"
-      icon="x-circle-fill"
-      class="m-auto offline close-button">
-    </b-icon></span>
+    <span class="close-button" @click.stop="userRemove(id)">
+      <b-icon
+        v-if="status === 'offline'"
+        icon="x-circle-fill"
+        class="m-auto offline">
+      </b-icon>
+    </span>
   </li>
 </template>
 
@@ -120,7 +122,12 @@ export default {
   }
 
   .list-item-user:hover .close-button {
-    visibility: visible;
+    display: inline-block;
+  }
+
+  .close-button {
+    display: none;
+    padding: 0 8px;
   }
 
   .icon-user {
@@ -146,9 +153,5 @@ export default {
 
   .offline {
     color: var(--color-user-status-offline);
-  }
-
-  .close-button {
-    visibility: hidden;
   }
 </style>
