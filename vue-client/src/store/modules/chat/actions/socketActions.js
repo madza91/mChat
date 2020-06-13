@@ -35,20 +35,12 @@ export const socketActions = {
     dispatch('setConnected', false)
   },
 
-  SOCKET_welcome ({ commit, dispatch }, data) {
+  SOCKET_server_welcome ({ commit, dispatch }, data) {
     commit('setAuthenticated', data.user)
     dispatch('ui/insertHistoryUserID', data, { root: true })
   },
 
-  SOCKET_channel ({ dispatch }, data) {
-    dispatch('insertChannelMessage', data)
-  },
-
-  SOCKET_private ({ dispatch, commit }, data) {
-    dispatch('userMessage', data)
-  },
-
-  SOCKET_channels_list ({ commit, dispatch }, channels) {
+  SOCKET_server_channels ({ commit, dispatch }, channels) {
     commit('setChannels', channels)
     dispatch('setSelectedChat', {
       id: 1,
@@ -56,7 +48,7 @@ export const socketActions = {
     })
   },
 
-  SOCKET_users_list ({ commit }, users) {
+  SOCKET_server_users ({ commit }, users) {
     commit('setUsers', users)
   },
 
@@ -72,11 +64,27 @@ export const socketActions = {
     dispatch('insertChannelJoin', data)
   },
 
+  SOCKET_private_message ({ dispatch, commit }, data) {
+    dispatch('insertUserMessage', data)
+  },
+
+  SOCKET_private_system ({ dispatch, commit }, data) {
+    dispatch('insertUserSystem', data)
+  },
+
+  SOCKET_channel_message ({ dispatch }, data) {
+    dispatch('insertChannelMessage', data)
+  },
+
+  SOCKET_channel_system ({ dispatch }, data) {
+    dispatch('insertChannelSystem', data)
+  },
+
   SOCKET_channel_leave ({ dispatch }, data) {
     dispatch('insertChannelLeave', data)
   },
 
-  SOCKET_command ({ commit, dispatch }, data) {
+  SOCKET_server_command ({ commit, dispatch }, data) {
     dispatch('callCommand', data)
   },
 

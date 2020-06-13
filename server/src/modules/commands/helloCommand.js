@@ -1,4 +1,4 @@
-const commandEmit = require('../../sockets/emit/commandEmit')
+const serverCommandEmit = require('../../sockets/emit/serverCommandEmit')
 
 /**
  * User wants to be noticed - activates shake animation
@@ -13,12 +13,12 @@ module.exports = (User, nick) => {
     const foundUser = userList.findByNick(nick);
 
     if (foundUser) {
-      return commandEmit.toUser(foundUser, 'noticeme', {
+      return serverCommandEmit.toUser(foundUser, 'noticeme', {
         userId: User.id
       });
     }
 
     return null;
   }
-  return commandEmit.toAll(User, 'noticeme');
+  return serverCommandEmit.toAll(User, 'noticeme');
 };

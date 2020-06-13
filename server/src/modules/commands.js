@@ -5,7 +5,6 @@ const helloCommand      = require('./commands/helloCommand');
 const helpCommand       = require('./commands/helpCommand');
 const meCommand         = require('./commands/meCommand');
 const nickCommand       = require('./commands/nickCommand');
-const simulateCommand   = require('./commands/simulateCommand');
 const whoisCommand      = require('./commands/whoisCommand');
 const unknownCommand    = require('./commands/unknownCommand');
 
@@ -13,12 +12,13 @@ const unknownCommand    = require('./commands/unknownCommand');
  * Controller for all server commands
  * @param Socket
  * @param User
- * @param message
+ * @param data
  * @returns {void|{type: string, message: string}|*}
  */
-module.exports = (Socket, User, message) => {
+module.exports = (Socket, User, data) => {
   const commandIdentifier = '/';
-  const availableCommands = ['nick', 'me', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'simulate', 'help', 'about'];
+  const availableCommands = ['nick', 'me', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'help', 'about'];
+  const message = data.message;
 
   if (message.charAt(0) === commandIdentifier) {
     const command = message.substr(1).split(' ')[0];
@@ -31,12 +31,10 @@ module.exports = (Socket, User, message) => {
         return helpCommand(User, availableCommands);
       case 'whois':
         return whoisCommand(User, params);
-      case 'simulate':
-        return simulateCommand(User, params);
       case 'away':
         return awayCommand(User, params);
       case 'me':
-        return meCommand(User, params);
+        return meCommand(User, data, params);
       case 'hello':
         return helloCommand(User, params);
       case 'disconnect':

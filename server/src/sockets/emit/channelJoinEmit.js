@@ -9,5 +9,5 @@ module.exports = (channelId, User) => {
     to: channelId,
     userId: User.id,
     date: Date.now()
-  })
+  });
 }

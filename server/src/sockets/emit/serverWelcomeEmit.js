@@ -5,7 +5,7 @@
  * @returns {*}
  */
 module.exports = (socketID, User) => {
-  return io.to(socketID).emit('welcome', {
+  return io.to(socketID).emit('server_welcome', {
     user: {
       id: User.id,
       nick: User.nick,
@@ -14,5 +14,5 @@ module.exports = (socketID, User) => {
     server: {
       build: serverBuild.getTime()
     }
-  })
+  });
 }

@@ -1,3 +1,5 @@
+import { myMixin } from '../../../../mixins/NotificationMixin'
+
 export const userActions = {
   userLeave ({ commit, getters }, data) {
     const User = getters.findUserById(data.userId)
@@ -23,16 +25,6 @@ export const userActions = {
     })
   },
 
-  userMessage ({ commit, getters }, data) {
-    const toWindow = (getters.getUserId === data.to) ? data.from : data.to
-    commit('insertUserMessage', { ...data, to: toWindow })
-
-    const selectedChat = getters.getSelectedChat
-    if (toWindow !== (selectedChat.isChannel ? 0 : selectedChat.id)) {
-      commit('incrementUserBadge', data)
-    }
-  },
-
   userRename ({ dispatch, getters }, data) {
     const User = getters.findUserById(data.userId)
 
@@ -45,5 +37,21 @@ export const userActions = {
       id: 1,
       isChannel: true
     })
+  },
+
+  insertUserMessage ({ commit, getters }, data) {
+    const toWindow = (getters.getUserId === data.to) ? data.from : data.to
+    commit('insertUserMessage', { ...data, to: toWindow })
+
+    const selectedChat = getters.getSelectedChat
+    if (toWindow !== (selectedChat.isChannel ? 0 : selectedChat.id)) {
+      myMixin.methods.sendNotification(data.message)
+      commit('incrementUserBadge', data)
+    }
+  },
+
+  insertUserSystem ({ commit, getters }, data) {
+    const toWindow = (getters.getUserId === data.to) ? data.from : data.to
+    commit('insertUserSystem', { ...data, to: toWindow })
   }
 }

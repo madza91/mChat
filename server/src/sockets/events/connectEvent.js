@@ -1,11 +1,11 @@
-const debugging       = require('../../modules/debugging');
-const helpers         = require('../../modules/helpers');
-const User            = require('../../classes/User');
-const channelsEmit    = require('../emit/channelsListEmit');
-const usersEmit       = require('../emit/usersListEmit');
-const welcomeEmit     = require('../emit/welcomeEmit');
-const serverJoinEmit  = require('../emit/serverJoinEmit');
-const channelJoinEmit = require('../emit/channelJoinEmit');
+const debugging          = require('../../modules/debugging');
+const helpers            = require('../../modules/helpers');
+const User               = require('../../classes/User');
+const serverChannelsEmit = require('../emit/serverChannelsEmit');
+const serverUsersEmit    = require('../emit/serverUsersEmit');
+const serverWelcomeEmit  = require('../emit/serverWelcomeEmit');
+const serverJoinEmit     = require('../emit/serverJoinEmit');
+const channelJoinEmit    = require('../emit/channelJoinEmit');
 
 /**
  * When new User is connected
@@ -58,7 +58,7 @@ joinChannels = (Socket, User) => {
  * @param User
  */
 sendChatData = (Socket, User) => {
-  welcomeEmit(Socket.id, User);
-  channelsEmit(Socket.id);
-  usersEmit(Socket.id);
+  serverWelcomeEmit(Socket.id, User);
+  serverChannelsEmit(Socket.id);
+  serverUsersEmit(Socket.id);
 }

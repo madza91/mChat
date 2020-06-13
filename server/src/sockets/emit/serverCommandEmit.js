@@ -7,7 +7,7 @@
  */
 module.exports = {
   toUser: (User, command, additional) => {
-    io.to(User.socket).emit('command', {
+    return io.to(User.socket).emit('server_command', {
       command: command,
       userId: User.id,
       date: Date.now(),
@@ -15,11 +15,11 @@ module.exports = {
     });
   },
   toAll: (User, command, additional) => {
-    return io.sockets.emit('command', {
+    return io.sockets.emit('server_command', {
       command: command,
       userId: User.id,
       date: Date.now(),
       ...additional
-    })
+    });
   }
 }

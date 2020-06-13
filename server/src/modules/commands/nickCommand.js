@@ -1,6 +1,6 @@
-const botEmit = require('../../sockets/emit/botEmit');
-const commandEmit = require('../../sockets/emit/commandEmit')
-const helpers = require('../helpers');
+const botEmit           = require('../../sockets/emit/botEmit');
+const serverCommandEmit = require('../../sockets/emit/serverCommandEmit')
+const helpers           = require('../helpers');
 
 /**
  * User tryies to change his nickname
@@ -14,7 +14,7 @@ module.exports = (User, params) => {
   if (validation.isValid === true) {
     userList.changeUser(User.nick, {nick: validation.nick});
 
-    return commandEmit.toAll(User, 'nick', {
+    return serverCommandEmit.toAll(User, 'nick', {
       id: User.id,
       oldNick: User.nick,
       newNick: validation.nick

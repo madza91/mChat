@@ -4,5 +4,5 @@
  * @returns {*}
  */
 module.exports = (socketID) => {
-  return io.to(socketID).emit('channels_list', channelList.getAll())
+  return io.to(socketID).emit('server_channels', channelList.getAll());
 }

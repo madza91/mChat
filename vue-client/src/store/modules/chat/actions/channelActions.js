@@ -31,5 +31,13 @@ export const channelActions = {
         date: data.date
       })
     }
+  },
+
+  insertChannelSystem ({ commit, getters }, data) {
+    commit('insertChannelSystemMessage', {
+      to: data.to,
+      message: data.message,
+      date: data.date
+    })
   }
 }
