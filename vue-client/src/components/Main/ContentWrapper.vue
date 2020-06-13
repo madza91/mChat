@@ -14,6 +14,7 @@
             :right="isMyMessage(data.from)"
             :message="data.message"
             :shape="data.shape"
+            :enable-html="isBotMessage()"
             :date="data.date"
           />
           <SystemMessage
@@ -92,6 +93,9 @@ export default {
     ...mapChatGetters(['getCurrentMessages']),
     isMyMessage (fromUserId) {
       return this.server.prevIds.includes(fromUserId)
+    },
+    isBotMessage () {
+      return this.selectedChat.data._status === 'bot'
     },
     swipeHandler (direction) {
       const sideBar = this.getSidebar()

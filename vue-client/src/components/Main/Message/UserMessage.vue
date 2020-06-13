@@ -5,7 +5,8 @@
         <span class="message-data-name">{{ nick }}</span>
         <span class="message-data-time">{{ formattedTime }}</span>
       </div>
-      <span class="message-data-text">{{ message }}</span>
+      <span v-if="!enableHtml" class="message-data-text">{{ message }}</span>
+      <span v-else class="message-data-text" v-html="message"></span>
     </div>
   </div>
 </template>
@@ -42,6 +43,10 @@ export default {
     shape: {
       type: Object,
       required: true
+    },
+    enableHtml: {
+      type: Boolean,
+      default: false
     },
     date: {
       type: Number,
