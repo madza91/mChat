@@ -1,6 +1,5 @@
 const debugging   = require('../../modules/debugging');
 const commands    = require('../../modules/commands');
-const send        = require('../emit/sendEmit');
 const Message     = require('../../classes/Message');
 const messageEmit = require('../emit/messageEmit');
 const fileHandler = require('../../modules/fileHandler');
@@ -22,12 +21,10 @@ module.exports = (Socket, data) => {
 
     // Process command and return response to the User
     if (isCommand) {
-      let cmd = commands.call(Socket, User, message);
-
-      return send.message(cmd.return.type, cmd.return, cmd.to);
+      return commands(Socket, User, message);
     }
 
-    const messageData = new Message(Socket.id, User.id, nickname, message, data.to);
+    const messageData = new Message(User.id, nickname, message, data.to);
 
     if (data.attachment) {
       fileHandler(Socket, data, messageData.id);

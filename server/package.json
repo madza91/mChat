@@ -2,7 +2,7 @@
   "name": "m-chat-server",
   "version": "1.0.0",
   "description": "Madza's tiny websocket chat",
-  "main": "server/server.js",
+  "main": "server/src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "devStart": "nodemon src/app.js",

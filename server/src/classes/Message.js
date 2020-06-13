@@ -1,5 +1,5 @@
 module.exports = class Message {
-  constructor(socketID, fromId, nick, message, to, type){
+  constructor(fromId, nick, message, to, type){
     this.messageId = ++incMessage;
     this.nick      = nick;
     this.from      = fromId;
