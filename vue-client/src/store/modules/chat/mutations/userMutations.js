@@ -53,6 +53,25 @@ export const userMutations = {
    * @param state
    * @param data
    */
+  insertUserSystem (state, data) {
+    const User = state.users.find(user => user._id === data.to)
+
+    if (User) {
+      User._history.push({
+        from: data.from,
+        message: data.message,
+        nick: data.nick,
+        to: data.to,
+        date: data.date,
+        type: 'system'
+      })
+    }
+  },
+
+  /**
+   * @param state
+   * @param data
+   */
   renameUser (state, data) {
     const User = state.users.find(user => user._id === data.id)
 

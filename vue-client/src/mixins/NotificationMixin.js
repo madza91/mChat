@@ -3,21 +3,21 @@ export const myMixin = {
   methods: {
     changeTitle (number) {
       const title = process.env.VUE_APP_TITLE
-      document.title = number > 0 ? `${title} (${number})` : title
+      document.title = number > 0 ? `(${number}) ${title}` : title
     },
     playSound () {
       const audio = new Audio('./audio/new_message.mp3')
       audio.play()
     },
     sendNotification (message, totalNew) {
+      this.playSound()
+      // this.changeTitle(totalNew)
+
       // eslint-disable-next-line no-constant-condition
       if (window.Notification) {
         if (!Notification || (!document.hidden && process.env.NODE_ENV === 'production')) {
           return
         }
-
-        this.playSound()
-        this.changeTitle(totalNew)
 
         if (Notification.permission !== 'granted') {
           Notification.requestPermission()

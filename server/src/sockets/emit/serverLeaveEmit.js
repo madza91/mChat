@@ -10,5 +10,5 @@ module.exports = (Socket, User, reason) => {
     userId: User.id,
     channels: Object.keys(Socket.adapter.rooms),
     reason: reason || null
-  })
+  });
 }

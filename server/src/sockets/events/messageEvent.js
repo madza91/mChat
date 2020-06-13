@@ -1,8 +1,9 @@
-const debugging   = require('../../modules/debugging');
-const commands    = require('../../modules/commands');
-const Message     = require('../../classes/Message');
-const messageEmit = require('../emit/messageEmit');
-const fileHandler = require('../../modules/fileHandler');
+const debugging          = require('../../modules/debugging');
+const commands           = require('../../modules/commands');
+const Message            = require('../../classes/Message');
+const privateMessageEmit = require('../emit/privateMessageEmit');
+const channelMessageEmit = require('../emit/channelMessageEmit');
+const fileHandler        = require('../../modules/fileHandler');
 
 /**
  * When new User sends a message
@@ -21,7 +22,7 @@ module.exports = (Socket, data) => {
 
     // Process command and return response to the User
     if (isCommand) {
-      return commands(Socket, User, message);
+      return commands(Socket, User, data);
     }
 
     const messageData = new Message(User.id, nickname, message, data.to);
@@ -32,14 +33,14 @@ module.exports = (Socket, data) => {
 
     if (isChannel) {
       const Channel = channelList.findById(data.to);
-      messageEmit.channel(Channel.title, messageData);
+      channelMessageEmit(Channel.title, messageData);
       Channel.addMessage(messageData);
       debugging.log(`${ nickname } sends a message to #${ Channel._title }`);
     } else {
       // Private
       const toUser = userList.findById(data.to);
 
-      messageEmit.private(User, toUser, messageData);
+      privateMessageEmit(User, toUser, messageData);
     }
 
     return true;

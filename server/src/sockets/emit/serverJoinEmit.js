@@ -4,5 +4,5 @@
  * @returns {*}
  */
 module.exports = (User) => {
-  return io.sockets.emit('server_join', User)
+  return io.sockets.emit('server_join', User);
 }

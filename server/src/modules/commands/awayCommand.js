@@ -1,4 +1,4 @@
-const commandEmit = require('../../sockets/emit/commandEmit')
+const serverCommandEmit = require('../../sockets/emit/serverCommandEmit')
 
 /**
  * User changes his status to Away
@@ -11,7 +11,7 @@ module.exports = (User, statusMessage) => {
   foundUser.status = tmpStatus;
   foundUser.statusMessage = statusMessage;
 
-  commandEmit.toAll(User, 'status', {
+  serverCommandEmit.toAll(User, 'status', {
     status: tmpStatus,
     message: statusMessage
   })
