@@ -46,7 +46,7 @@ module.exports = (Socket, User, message) => {
       case 'about':
         return aboutCommand(User);
       default:
-        return unknownCommand(User);
+        return unknownCommand(User, availableCommands);
     }
   }
 
