@@ -7,6 +7,7 @@
     <ContentWrapper />
     <WelcomeModal />
     <AboutModal />
+    <NoticeModal />
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import ControlSideBar from '../components/Side/ControlSideBar.vue'
 import ContentWrapper from '../components/Main/ContentWrapper.vue'
 import WelcomeModal from '../components/Modals/WelcomeModal'
 import AboutModal from '../components/Modals/AboutModal'
+import NoticeModal from '../components/Modals/NoticeModal'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('ui')
@@ -25,6 +27,7 @@ export default {
   name: 'Chat',
   components: {
     AboutModal,
+    NoticeModal,
     WelcomeModal,
     SideBar,
     ControlSideBar,

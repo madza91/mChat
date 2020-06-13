@@ -3,6 +3,7 @@ const state = {
   sidebar: false,
   settingsBar: false,
   aboutModal: false,
+  noticeModal: false,
   server: {
     build: null,
     prevIds: []
@@ -43,6 +44,9 @@ const actions = {
   },
   aboutToggle ({ commit }, data) {
     commit('setAboutModalState', data)
+  },
+  noticeToggle ({ commit }, data) {
+    commit('setNoticeModalState', data)
   }
 }
 
@@ -70,6 +74,9 @@ const mutations = {
   },
   setAboutModalState (state) {
     state.aboutModal = !state.aboutModal
+  },
+  setNoticeModalState (state) {
+    state.noticeModal = !state.noticeModal
   }
 }
 

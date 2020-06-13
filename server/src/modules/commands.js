@@ -38,7 +38,7 @@ module.exports = (Socket, User, message) => {
       case 'me':
         return meCommand(User, params);
       case 'hello':
-        return helloCommand(User);
+        return helloCommand(User, params);
       case 'disconnect':
       case 'exit':
       case 'quit':

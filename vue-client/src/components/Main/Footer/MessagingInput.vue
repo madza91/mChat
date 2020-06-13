@@ -21,6 +21,7 @@
           icon="paperclip"
           class="icon"
           :class="{'disabled': !enabled || attachment || !settings.attachments }"
+          @click="noticeToggle"
         />
       </div>
       <input
@@ -33,7 +34,7 @@
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
-        :disabled="!enabled"
+        autocomplete="off"
       >
       <font-awesome-icon
         v-if="message || attachment"
@@ -42,12 +43,14 @@
         :class="{'disabled': !enabled }"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
+        :disabled="!enabled"
       />
       <font-awesome-icon
         v-else
         icon="microphone"
         class="icon"
         :class="{'disabled': !enabled || !settings.voice }"
+        @click="noticeToggle"
       />
     </b-row>
   </footer>
@@ -64,6 +67,14 @@ export default {
     enabled: {
       type: Boolean,
       default: false
+    }
+  },
+  watch: {
+    message: function (value) {
+      this.selectedChat.data._input = value
+    },
+    selectedChat: function (value) {
+      this.message = value.data._input
     }
   },
   computed: {
@@ -86,9 +97,9 @@ export default {
     })
   },
   methods: {
-    ...mapUiActions(['sidebarState']),
+    ...mapUiActions(['sidebarState', 'noticeToggle']),
     sendMessage () {
-      if (this.message || this.attachment) {
+      if (this.enabled && (this.message || this.attachment)) {
         this.checkFocus()
 
         this.$socket.emit('message', {

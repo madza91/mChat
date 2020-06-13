@@ -17,5 +17,17 @@ export const chatActions = {
       ...data,
       data: chatWindow
     })
+  },
+
+  setConnected ({ commit, dispatch, getters }, isConnected) {
+    commit('setConnected', isConnected)
+
+    if (!isConnected) {
+      dispatch('callCommand', {
+        command: 'status',
+        status: 'offline',
+        userId: getters.getUserId
+      })
+    }
   }
 }

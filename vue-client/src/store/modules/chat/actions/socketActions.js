@@ -1,38 +1,38 @@
 export const socketActions = {
-  SOCKET_connect ({ commit }) {
-    commit('setConnected', true)
+  SOCKET_connect ({ dispatch }) {
+    dispatch('setConnected', true)
   },
 
-  SOCKET_disconnect ({ commit }) {
-    commit('setConnected', false)
+  SOCKET_disconnect ({ dispatch }) {
+    dispatch('setConnected', false)
   },
 
-  SOCKET_error ({ commit }) {
-    commit('setConnected', false)
+  SOCKET_error ({ dispatch }) {
+    dispatch('setConnected', false)
   },
 
-  SOCKET_connect_error ({ commit }) {
-    commit('setConnected', false)
+  SOCKET_connect_error ({ dispatch }) {
+    dispatch('setConnected', false)
   },
 
-  SOCKET_connect_timeout ({ commit }) {
-    commit('setConnected', false)
+  SOCKET_connect_timeout ({ dispatch }) {
+    dispatch('setConnected', false)
   },
 
   SOCKET_reconnecting ({ commit }) {
     commit('setReconnecting', true)
   },
 
-  SOCKET_reconnect ({ commit }) {
-    commit('setConnected', true)
+  SOCKET_reconnect ({ dispatch }) {
+    dispatch('setConnected', true)
   },
 
-  SOCKET_reconnect_error ({ commit }) {
-    commit('setConnected', false)
+  SOCKET_reconnect_error ({ dispatch }) {
+    dispatch('setConnected', false)
   },
 
-  SOCKET_reconnect_failed ({ commit }) {
-    commit('setConnected', false)
+  SOCKET_reconnect_failed ({ dispatch }) {
+    dispatch('setConnected', false)
   },
 
   SOCKET_welcome ({ commit, dispatch }, data) {
@@ -76,7 +76,7 @@ export const socketActions = {
     dispatch('insertChannelLeave', data)
   },
 
-  SOCKET_command ({ dispatch }, data) {
+  SOCKET_command ({ commit, dispatch }, data) {
     dispatch('callCommand', data)
   },
 
