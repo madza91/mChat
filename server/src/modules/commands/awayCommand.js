@@ -1,18 +1,18 @@
-module.exports = {
-  run: (User, statusMessage) => {
-    console.log('Away command:', User, statusMessage)
+const commandEmit = require('../../sockets/emit/commandEmit')
 
-    const tmpStatus = (statusMessage === '') ? 'online' : 'away';
-    const foundUser = userList.findByNick(User.nick);
-    foundUser.status = tmpStatus;
-    foundUser.statusMessage = statusMessage;
+/**
+ * User changes his status to Away
+ * @param User
+ * @param statusMessage
+ */
+module.exports = (User, statusMessage) => {
+  const tmpStatus = (statusMessage === '') ? 'online' : 'away';
+  const foundUser = userList.findByNick(User.nick);
+  foundUser.status = tmpStatus;
+  foundUser.statusMessage = statusMessage;
 
-    return {
-      type: 'command',
-      command: 'status',
-      userId: User.id,
-      status: tmpStatus,
-      message: statusMessage
-    };
-  }
+  commandEmit.toAll(User, 'status', {
+    status: tmpStatus,
+    message: statusMessage
+  })
 };

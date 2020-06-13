@@ -13,7 +13,8 @@ import {
   faMicrophone,
   faHashtag,
   faCircle,
-  faTimes
+  faTimes,
+  faRobot
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue2TouchEvents from 'vue2-touch-events'
@@ -32,6 +33,7 @@ library.add(faMicrophone)
 library.add(faHashtag)
 library.add(faCircle)
 library.add(faTimes)
+library.add(faRobot)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 const isProduction = process.env.NODE_ENV === 'production'

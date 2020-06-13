@@ -7,7 +7,7 @@ module.exports = class Users {
 
     // Add Bot
     if (config.BOT_NAME) {
-      this.add(new User(config.BOT_NAME, 'online', 'bot'));
+      this.add(new User(config.BOT_NAME, 'bot', 'bot'));
     }
   }
 
