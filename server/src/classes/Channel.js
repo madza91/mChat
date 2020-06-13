@@ -5,6 +5,7 @@ module.exports = class Channel {
         this._id          = ++incChannel;
         this._title       = title;
         this._description = description;
+        this._input       = '';
         this._totalMsg    = 0;
         this.#history     = [];
     }

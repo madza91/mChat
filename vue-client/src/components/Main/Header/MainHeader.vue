@@ -24,7 +24,7 @@
       <b-icon
         icon="exclamation-triangle-fill"
         variant="warning"
-        @click="settingsToggle">
+        @click="setNotAuthenticated">
       </b-icon>
     </div>
     <div class="icon-wrapper">
@@ -42,7 +42,7 @@ import { createNamespacedHelpers } from 'vuex'
 import MainHeaderChannelItem from './MainHeaderChannelItem'
 import MainHeaderUserItem from './MainHeaderUserItem'
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
-const { mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
+const { mapState: mapChatState, mapGetters: mapChatGetters, mapMutations: mapChatMutations } = createNamespacedHelpers('chat')
 
 export default {
   name: 'MainHeader',
@@ -78,7 +78,8 @@ export default {
   methods: {
     ...mapUiActions(['sidebarToggle', 'settingsToggle', 'aboutToggle']),
     ...mapUiGetters(['getSidebar']),
-    ...mapChatGetters(['getUnreadMessageCount'])
+    ...mapChatGetters(['getUnreadMessageCount']),
+    ...mapChatMutations(['setNotAuthenticated'])
   }
 }
 </script>
