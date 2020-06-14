@@ -9,36 +9,33 @@ export const channelActions = {
     commit('insertChannelMessage', data)
   },
 
-  insertChannelJoin ({ commit, getters }, data) {
-    const User = getters.findUserById(data.userId)
+  insertChannelJoin ({ commit, getters }, { to, userId, date }) {
+    const User = getters.findUserById(userId)
 
     if (User) {
-      commit('insertChannelSystemMessage', {
-        to: data.to,
-        message: `${User._nick} has joined the room.`,
-        date: data.date
-      })
+      const iUserId = getters.getUserId
+      const message = (User._id === iUserId)
+        ? 'Welcome to mChat! Please use /help command for list of all available commands.'
+        : `${User._nick} has joined the room.`
+
+      commit('insertChannelSystemMessage', { to, message, date })
     }
   },
 
-  insertChannelLeave ({ commit, getters }, data) {
-    const User = getters.findUserById(data.userId)
+  insertChannelLeave ({ commit, getters }, { to, userId, date }) {
+    const User = getters.findUserById(userId)
 
     if (User) {
       commit('insertChannelSystemMessage', {
-        to: data.to,
+        to,
         message: `${User._nick} has left the room.`,
-        date: data.date
+        date
       })
     }
   },
 
   insertChannelSystem ({ commit, getters }, data) {
-    commit('insertChannelSystemMessage', {
-      to: data.to,
-      message: data.message,
-      date: data.date
-    })
+    commit('insertChannelSystemMessage', data)
   },
 
   changeChannelTopic ({ commit }, data) {
