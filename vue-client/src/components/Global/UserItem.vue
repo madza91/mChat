@@ -3,7 +3,7 @@
     <font-awesome-icon
       :icon="getIcon"
       class="icon user-icon"
-      :class="'user-status-' + status"
+      :class="getClass"
     />
     <div class="user-name" :class="{'user-name-dark': dark}">
       <span>{{ title }}</span>
@@ -31,6 +31,9 @@ export default {
   computed: {
     getIcon () {
       return this.status === 'bot' ? 'robot' : 'circle'
+    },
+    getClass () {
+      return `user-status-${this.status}`
     }
   }
 }
