@@ -15,7 +15,7 @@
         <h2 class="mb-3 text-center">Welcome!</h2>
 
         <b-row class="justify-content-md-center">
-          <b-col cols="10">
+          <b-col cols="10" class="m-auto">
             <p class="text-center mb-4 description">
               This is a tiny chat app that is using web sockets, nodeJs and it will have some interesting content. Enjoy! 🙃
             </p>
@@ -54,16 +54,6 @@ export default {
     ...mapState(['authenticated']),
     getValidationMessage () {
       return this.getValidation() || this.validationMessage
-    },
-    invalidFeedback () {
-      if (this.nickname.length > 0) {
-        return 'Enter at least 3 characters and do not use spaces'
-      } else {
-        return ''
-      }
-    },
-    validFeedback () {
-      return this.state === true ? 'You are ready!' : ''
     }
   },
   mounted () {
