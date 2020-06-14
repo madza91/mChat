@@ -1,6 +1,7 @@
 const aboutCommand      = require('./commands/aboutCommand');
 const awayCommand       = require('./commands/awayCommand');
 const disconnectCommand = require('./commands/disconnectCommand');
+const dieCommand        = require('./commands/dieCommand');
 const helloCommand      = require('./commands/helloCommand');
 const helpCommand       = require('./commands/helpCommand');
 const meCommand         = require('./commands/meCommand');
@@ -44,6 +45,8 @@ module.exports = (Socket, User, data) => {
       case 'exit':
       case 'quit':
         return disconnectCommand(Socket);
+      case 'die':
+        return dieCommand(User);
       case 'about':
         return aboutCommand(User);
       default:

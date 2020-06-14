@@ -34,21 +34,21 @@ module.exports = {
   },
   validate: function (nick) {
     const isValid = this.isNickValid(nick);
-    const userID = userList.findByNick(nick);
-    const reason = isValid ? 'Chosen nickname already exists' : 'Chosen nickname is in invalid format. Check `/help nick` for detailed information.';
-    if (isValid && !userID) {
+    const User = userList.findByNick(nick);
+    const reason = isValid ? 'Nickname is already taken' : 'Please use minimum 3 letters and only letters and numbers';
+    if (isValid && !User) {
       return {
         nick: nick,
         isValid: true,
         reason: null
       };
-    } else {
-      return {
-        nick: this.getRandomNick(),
-        isValid: false,
-        reason: reason
-      };
     }
+
+    return {
+      nick: this.getRandomNick(),
+      isValid: false,
+      reason: reason
+    };
   },
   isMessageValid: (message) => {
     return (typeof message === 'object' && message !== null);

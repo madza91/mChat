@@ -29,5 +29,9 @@ export const chatActions = {
         userId: getters.getUserId
       })
     }
+  },
+
+  resetValidation ({ commit }) {
+    commit('setValidation', null)
   }
 }

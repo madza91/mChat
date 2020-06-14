@@ -60,7 +60,7 @@ export default {
 @import '../../../assets/styles';
 
 .message {
-  display: inline-block;
+  display: table;
   color: white;
   padding: 3px 10px;
   line-height: 26px;

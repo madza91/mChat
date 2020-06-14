@@ -13,11 +13,16 @@ export const chatMutations = {
 
   setAuthenticated (state, userData) {
     state.authenticated = true
+    state.validation = null
     state.loggedInUser = userData
   },
 
   setNotAuthenticated (state) {
     state.authenticated = false
+  },
+
+  setValidation (state, message) {
+    state.validation = message
   },
 
   setNick (state, nick) {

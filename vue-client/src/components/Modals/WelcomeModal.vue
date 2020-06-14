@@ -13,25 +13,31 @@
     >
       <div class="d-block us-none">
         <h2 class="mb-3 text-center">Welcome!</h2>
-        <p class="mb-4">
-          This is a tiny chat app that is using web sockets, nodeJs and it will have some interesting content. WIP :)
-        </p>
 
-        <b-form-group
-          id="fieldset-1"
-          class="nickname-input"
-          label="Enter your nickname"
-          label-for="input-1"
-          :invalid-feedback="invalidFeedback"
-          :valid-feedback="validFeedback"
-          :state="state"
-        >
-          <b-form-input v-on:keyup.enter="connect" id="input-1" v-model="nickname" :state="state" trim autofocus></b-form-input>
-        </b-form-group>
+        <b-row class="justify-content-md-center">
+          <b-col cols="10">
+            <p class="text-center mb-4 description">
+              This is a tiny chat app that is using web sockets, nodeJs and it will have some interesting content. Enjoy! 🙃
+            </p>
 
-        <b-form-group class="text-center">
-          <b-button @click="connect" variant="outline-success">Get in</b-button>
-        </b-form-group>
+            <b-form-group label="Enter your nickname">
+              <b-form-input
+                size="sm"
+                :state="isValid()"
+                v-model="nickname"
+                v-on:keyup.enter="connect"
+                maxlength="30"
+                trim
+                autofocus>
+              </b-form-input>
+              <div class="validation">{{ getValidationMessage }}</div>
+            </b-form-group>
+
+            <b-form-group class="text-center">
+              <b-button block @click="connect" variant="success" :disabled="!isValid()">Get in</b-button>
+            </b-form-group>
+          </b-col>
+        </b-row>
       </div>
     </b-modal>
   </div>
@@ -39,15 +45,15 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('chat')
+const { mapState, mapGetters: mapChatGetters, mapActions: mapChatActions } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 
 export default {
   name: 'WelcomeModal',
   computed: {
     ...mapState(['authenticated']),
-    state () {
-      return /^[0-9A-Za-z.-/-_!@#$%^&*()|<>?{}'"/[\]]{3,30}$/.test(this.nickname)
+    getValidationMessage () {
+      return this.getValidation() || this.validationMessage
     },
     invalidFeedback () {
       if (this.nickname.length > 0) {
@@ -65,23 +71,52 @@ export default {
   },
   data () {
     return {
-      nickname: ''
+      nickname: '',
+      validationMessage: null,
+      tries: 0
+    }
+  },
+  watch: {
+    nickname: function (value) {
+      this.resetValidation()
+      if (value.length < 3) {
+        this.validationMessage = 'Enter at least 3 characters and do not use spaces'
+      } else if (value.length > 30) {
+        this.validationMessage = 'You reached maximum nickname length'
+      } else if (!this.isValid()) {
+        this.validationMessage = 'Invalid nickname. Please use only letters and numbers'
+      } else {
+        this.validationMessage = ''
+      }
     }
   },
   methods: {
     ...mapUiActions(['setChosenNick']),
     ...mapUiGetters(['getChosenNick']),
+    ...mapChatActions(['resetValidation']),
+    ...mapChatGetters(['getValidation']),
     connect () {
+      this.tries++
       this.setChosenNick(this.nickname)
       this.$socket.io.opts.query = `nick=${this.nickname}`
       this.$socket.open()
+    },
+    isValid () {
+      return /^[0-9A-Za-z.-/-_!@#$%^&*()|<>?{}'"/[\]]{3,30}$/.test(this.nickname)
     }
   }
 }
 </script>
 
-<style>
-  #fieldset-1 {
-    min-height: 100px;
+<style scoped>
+  .description {
+    font-size: 12px;
+  }
+
+  .validation {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--red);
+    min-height: 40px;
   }
 </style>
