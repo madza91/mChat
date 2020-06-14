@@ -22,7 +22,6 @@
 
             <b-form-group label="Enter your nickname">
               <b-form-input
-                size="sm"
                 :state="isValid()"
                 v-model="nickname"
                 v-on:keyup.enter="connect"
