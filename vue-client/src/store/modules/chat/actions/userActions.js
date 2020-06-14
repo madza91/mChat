@@ -18,11 +18,16 @@ export const userActions = {
       })
     }
 
-    commit('setUserStatus', {
-      userId: User._id,
-      status: 'offline',
-      message: null
-    })
+    // Close window only if there is no messages
+    if (User._history.length === 0) {
+      commit('removeUser', User._id)
+    } else {
+      commit('setUserStatus', {
+        userId: User._id,
+        status: 'offline',
+        message: null
+      })
+    }
   },
 
   userRename ({ dispatch, getters }, data) {
