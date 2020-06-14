@@ -80,6 +80,10 @@ export const socketActions = {
     dispatch('insertChannelMessage', data)
   },
 
+  SOCKET_channel_topic ({ dispatch }, data) {
+    dispatch('changeChannelTopic', data)
+  },
+
   SOCKET_channel_system ({ dispatch }, data) {
     dispatch('insertChannelSystem', data)
   },

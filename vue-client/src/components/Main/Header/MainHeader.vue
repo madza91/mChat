@@ -14,7 +14,7 @@
       <MainHeaderChannelItem
         v-if="selectedChat.isChannel"
         :title="selectedChat.data._title"
-        :description="selectedChat.data._description"
+        :topic="selectedChat.data._topic"
       />
     </div>
     <div v-else class="mr-auto"></div>

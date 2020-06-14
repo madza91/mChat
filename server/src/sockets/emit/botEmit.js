@@ -8,7 +8,7 @@ const Message            = require('../../classes/Message');
  */
 module.exports = (User, message) => {
   const fromBot = userList.findBySocket('bot');
-  const messageData = new Message(fromBot.id, fromBot.nick, message, User.id);
+  const messageData = new Message(fromBot.id, fromBot.nick, message, User.id, 'bot');
 
   return privateMessageEmit(fromBot, User, messageData);
 }

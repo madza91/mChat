@@ -1,16 +1,18 @@
 module.exports = class User {
-  #isAdmin;
+  #_socket;
+  #_isAdmin;
 
   constructor(nick, status, socket) {
     const STATUS_ONLINE = 1,
           STATUS_AWAY   = 2,
           STATUS_HIDDEN = 3;
 
+    this.#_socket       = socket;
+    this.#_isAdmin       = false;
     this._id            = ++incUser;
     this._nick          = nick;
     this._status        = status;
     this._statusMessage = null;
-    this._socket        = socket;
     this._history       = [];
     this._joined        = new Date();
     this._badge         = 0;
@@ -18,7 +20,6 @@ module.exports = class User {
     this._noticeMe      = false;
     this._totalMessages = 0;
     this._idleFrom      = null;
-    this.#isAdmin       = false;
   }
 
   get id() {
@@ -62,7 +63,11 @@ module.exports = class User {
   }
 
   get socket() {
-    return this._socket;
+    return this.#_socket;
+  }
+
+  set socket(socket) {
+    return this.#_socket = socket
   }
 
   get joined() {
@@ -78,10 +83,10 @@ module.exports = class User {
   }
 
   get isAdmin() {
-    return this.#isAdmin;
+    return this.#_isAdmin;
   }
 
   set isAdmin(value) {
-    return this.#isAdmin = value;
+    return this.#_isAdmin = value;
   }
 }

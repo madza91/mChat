@@ -5,7 +5,7 @@ module.exports = class Channels {
     this._channels = [];
 
     this.add(new Channel('general', 'Channel for discussion about anything'));
-    this.add(new Channel('help', 'Do you need help? Do you offer help? This is the right channel for it'));
+    this.add(new Channel('help', 'Do you need help? This is the right channel for it'));
   }
 
   /**

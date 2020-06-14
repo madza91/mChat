@@ -8,11 +8,12 @@ const serverCommandEmit = require('../../sockets/emit/serverCommandEmit')
 module.exports = (User, statusMessage) => {
   const tmpStatus = (statusMessage === '') ? 'online' : 'away';
   const foundUser = userList.findByNick(User.nick);
+  const strippedStatusMessage = statusMessage.replace(/(<([^>]+)>)/ig,"");
   foundUser.status = tmpStatus;
-  foundUser.statusMessage = statusMessage;
+  foundUser.statusMessage = strippedStatusMessage;
 
   serverCommandEmit.toAll(User, 'status', {
     status: tmpStatus,
-    message: statusMessage
+    message: strippedStatusMessage
   })
 };

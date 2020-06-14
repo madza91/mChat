@@ -39,5 +39,9 @@ export const channelActions = {
       message: data.message,
       date: data.date
     })
+  },
+
+  changeChannelTopic ({ commit }, data) {
+    commit('changeChannelTopic', data)
   }
 }

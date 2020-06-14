@@ -44,7 +44,7 @@ export const userMutations = {
         nick: data.nick,
         to: data.to,
         date: data.date,
-        type: 'user'
+        type: data.type || 'user'
       })
     }
   },
