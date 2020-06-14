@@ -72,8 +72,7 @@ export default {
   data () {
     return {
       nickname: '',
-      validationMessage: null,
-      tries: 0
+      validationMessage: null
     }
   },
   watch: {
@@ -96,7 +95,6 @@ export default {
     ...mapChatActions(['resetValidation']),
     ...mapChatGetters(['getValidation']),
     connect () {
-      this.tries++
       this.setChosenNick(this.nickname)
       this.$socket.io.opts.query = `nick=${this.nickname}`
       this.$socket.open()
