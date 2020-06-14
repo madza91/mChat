@@ -1,25 +1,13 @@
 <template>
   <li class="clearfix list-item-user" :class="{'active': isActive}" @click="setSelected">
-    <font-awesome-icon
-      v-if="isChannel"
-      icon="hashtag"
-      class="icon icon-channel"
-    />
-    <font-awesome-icon
-      v-else
-      icon="circle"
-      class="icon icon-user"
-      :class="status"
-    />
-    <div class="name" :class="{'animation-shake': shake}">
-      <span>{{ name }}</span>
-    </div>
+    <UserItem :title="name" :status="status" :dark="false" :class="{'animation-shake': shake}"/>
     <b-badge v-if="badgeNumber" variant="danger">{{ badgeNumber }}</b-badge>
   </li>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import UserItem from '../Global/UserItem'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapActions: mapChatActions } = createNamespacedHelpers('chat')
 
@@ -32,10 +20,6 @@ export default {
     name: {
       type: String,
       required: true
-    },
-    isChannel: {
-      type: Boolean,
-      default: false
     },
     isActive: {
       type: Boolean,
@@ -75,10 +59,13 @@ export default {
     setSelected () {
       this.setSelectedChat({
         id: this.id,
-        isChannel: this.isChannel
+        isChannel: false
       })
       this.sidebarState(false)
     }
+  },
+  components: {
+    UserItem
   }
 }
 </script>
@@ -86,26 +73,11 @@ export default {
 <style scoped>
   .list-item-user {
     display: flex;
-    height: 28px;
-    width: 100%;
-    color: white;
-    padding: 2px 10px;
+    padding: 2px 15px;
   }
 
   .list-item-user.active {
     background: rgba(0,0,0,0.5);
-  }
-
-  .name {
-    flex-grow: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .badge {
-    margin-top: 3px;
-    margin-left: 5px;
   }
 
   .list-item-user:hover {
@@ -113,28 +85,8 @@ export default {
     background: rgba(0,0,0,0.5);
   }
 
-  .icon-user {
-    height: 24px;
-    width: 24px;
-    padding: 8px;
-  }
-
-  .icon-channel {
-    color: var(--color-user-status-online);
-    height: 24px;
-    width: 24px;
-    padding: 5px;
-  }
-
-  .online {
-    color: var(--color-user-status-online);
-  }
-
-  .away {
-    color: var(--color-user-status-away);
-  }
-
-  .offline {
-    color: var(--color-user-status-offline);
+  .badge {
+    margin-top: 3px;
+    margin-left: 5px;
   }
 </style>

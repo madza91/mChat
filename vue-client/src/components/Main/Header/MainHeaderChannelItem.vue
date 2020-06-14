@@ -1,19 +1,13 @@
 <template>
   <div class="wrapper">
-    <div class="channel-title-wrapper">
-      <font-awesome-icon
-        icon="hashtag"
-        class="icon channel-icon"
-      />
-      <div class="channel-title">
-        <span>{{ title }}</span>
-      </div>
-    </div>
+    <ChannelItem :title="title"/>
     <div class="channel-description">{{ description }}</div>
   </div>
 </template>
 
 <script>
+import ChannelItem from '../../Global/ChannelItem'
+
 export default {
   name: 'MainHeaderChannelItem',
   props: {
@@ -25,6 +19,9 @@ export default {
       type: String,
       required: true
     }
+  },
+  components: {
+    ChannelItem
   }
 }
 </script>
@@ -35,28 +32,6 @@ export default {
     flex-direction: column;
     width: 100%;
     padding: 2px 10px;
-  }
-
-  .channel-title-wrapper {
-    display: flex;
-  }
-
-  .channel-icon {
-    color: var(--color-user-status-online);
-    margin: auto;
-  }
-
-  .channel-title {
-    flex-grow: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-left: 3px;
-
-    @media screen and (prefers-color-scheme: dark) {
-      color: white;
-      background-color: var(--color-default-dark)
-    }
   }
 
   .channel-description {

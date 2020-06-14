@@ -9,12 +9,11 @@
     <div class="scrollable">
       <ListSectionItem section-name="Channels" />
       <ul class="sidebar-nav">
-        <ListUserItem
+        <ListChannelItem
           v-for="channel in filteredChannels"
           :key="channel._id"
           :id="channel._id"
           :name="channel._title"
-          :is-channel="true"
           :is-active="selectedChat.data._id === channel._id && selectedChat.isChannel"/>
       </ul>
       <ListSectionItem section-name="People" />
@@ -35,6 +34,7 @@
 </template>
 
 <script>
+import ListChannelItem from './ListChannelItem'
 import ListUserItem from './ListUserItem'
 import SideBarHeader from './SideBarHeader'
 import ListSectionItem from './ListSectionItem'
@@ -59,6 +59,7 @@ export default {
   },
   components: {
     ListSectionItem,
+    ListChannelItem,
     ListUserItem,
     SideBarHeader
   }
