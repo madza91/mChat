@@ -37,20 +37,17 @@
         autocomplete="off"
       >
       <font-awesome-icon
-        v-if="message || attachment"
         icon="paper-plane"
         class="icon"
-        :class="{'disabled': !enabled }"
+        :class="{'disabled': !enabled || !message }"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
         :disabled="!enabled"
       />
       <font-awesome-icon
-        v-else
         icon="microphone"
         class="icon"
-        :class="{'disabled': !enabled || !settings.voice }"
-        @click="noticeToggle"
+        :class="{'d-none': !enabled || !settings.voice }"
       />
     </b-row>
   </footer>
