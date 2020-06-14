@@ -1,7 +1,7 @@
 const botEmit = require('../../sockets/emit/botEmit');
 
 /**
- * User is asking for help, bot respones to him
+ * User is asking for help, bot responses to him
  * @param User
  * @param availableCommands
  */
