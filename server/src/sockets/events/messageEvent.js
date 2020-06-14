@@ -43,6 +43,10 @@ module.exports = (Socket, data) => {
       privateMessageEmit(User, toUser, messageData);
     }
 
+    // Update User info
+    User.incrementMessages();
+    User.updateIdleFrom();
+
     return true;
   }
 

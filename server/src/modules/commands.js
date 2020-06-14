@@ -5,6 +5,7 @@ const helloCommand      = require('./commands/helloCommand');
 const helpCommand       = require('./commands/helpCommand');
 const meCommand         = require('./commands/meCommand');
 const nickCommand       = require('./commands/nickCommand');
+const versionCommand    = require('./commands/versionCommand');
 const whoisCommand      = require('./commands/whoisCommand');
 const unknownCommand    = require('./commands/unknownCommand');
 
@@ -37,6 +38,8 @@ module.exports = (Socket, User, data) => {
         return meCommand(User, data, params);
       case 'hello':
         return helloCommand(User, params);
+      case 'version':
+        return versionCommand(User);
       case 'disconnect':
       case 'exit':
       case 'quit':

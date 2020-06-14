@@ -26,6 +26,11 @@ label {
     width: 100%;
 }
 
+td:first-child {
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
 ::-webkit-scrollbar {
     width: 12px;
 }

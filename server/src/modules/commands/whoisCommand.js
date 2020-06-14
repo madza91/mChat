@@ -1,4 +1,5 @@
 const botEmit = require('../../sockets/emit/botEmit');
+const tableTemplate = require('../templates/tableTemplate');
 
 /**
  * User requesting info about other user
@@ -8,9 +9,21 @@ const botEmit = require('../../sockets/emit/botEmit');
 module.exports = (User, params) => {
   if (params) {
     const foundUser = userList.findByNick(params);
-    const isOnline = foundUser ? 'online': 'offline';
 
-    return botEmit(User, 'This command is under development. We don\'t have info about this user, but it seems he is ' + isOnline);
+    if (foundUser) {
+      const render = tableTemplate({
+        'Nick': foundUser.nick,
+        'Joined': foundUser.joined,
+        'Status': foundUser.status,
+        'Away status': foundUser.statusMessage,
+        'Messages': foundUser.totalMessages,
+        'Idle': foundUser.idleFrom
+      })
+
+      return botEmit(User, render);
+    }
+
+    return botEmit(User, 'I have not found that user, try again with another nick.');
   }
 
   return botEmit(User, 'Uncompleted command. Please type in <b>/whois nick</b>.');

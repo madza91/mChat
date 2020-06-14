@@ -10,11 +10,12 @@ module.exports = class User {
     this._statusMessage = null;
     this._socket        = socket;
     this._history       = [];
-    this._joined        = Date.now();
+    this._joined        = new Date();
     this._badge         = 0;
     this._input         = '';
     this._noticeMe      = false;
     this._totalMessages = 0;
+    this._idleFrom      = null;
   }
 
   get id() {
@@ -46,11 +47,15 @@ module.exports = class User {
   }
 
   get totalMessages() {
-    return this._statusMessage;
+    return this._totalMessages;
   }
 
   set totalMessages(int) {
     return this._totalMessages = int;
+  }
+
+  incrementMessages() {
+    return this._totalMessages++;
   }
 
   get socket() {
@@ -59,5 +64,13 @@ module.exports = class User {
 
   get joined() {
     return this._joined;
+  }
+
+  get idleFrom() {
+    return this._idleFrom;
+  }
+
+  updateIdleFrom() {
+    return this._idleFrom = new Date();
   }
 }
