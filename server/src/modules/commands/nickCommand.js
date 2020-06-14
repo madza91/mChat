@@ -12,11 +12,12 @@ module.exports = (User, params) => {
   const validation = helpers.validate(params);
 
   if (validation.isValid === true) {
+    const oldNick = User.nick;
     userList.changeUser(User.nick, {nick: validation.nick});
 
     return serverCommandEmit.toAll(User, 'nick', {
       id: User.id,
-      oldNick: User.nick,
+      oldNick,
       newNick: validation.nick
     })
   }
