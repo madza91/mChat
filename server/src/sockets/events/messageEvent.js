@@ -13,6 +13,7 @@ const fileHandler        = require('../../modules/fileHandler');
  */
 module.exports = (Socket, data) => {
   const User = userList.findBySocket(Socket.id);
+  data.message = data.message.trim();
 
   if (User && data && (data.message || data.attachment)) {
     const nickname  = User.nick;
@@ -50,5 +51,5 @@ module.exports = (Socket, data) => {
     return true;
   }
 
-  debugging.log(`Message from ${ user.nick } is empty.`)
+  debugging.log(`Message from ${ User.nick } is empty.`)
 }

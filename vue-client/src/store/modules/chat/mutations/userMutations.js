@@ -72,11 +72,11 @@ export const userMutations = {
    * @param state
    * @param data
    */
-  renameUser (state, data) {
-    const User = state.users.find(user => user._id === data.id)
+  renameUser (state, { id, newNick }) {
+    const User = state.users.find(user => user._id === id)
 
     if (User) {
-      User._nick = data.newNick
+      User._nick = newNick
     }
   },
 
@@ -84,8 +84,8 @@ export const userMutations = {
    * @param state
    * @param data
    */
-  incrementUserBadge (state, data) {
-    const User = state.users.find(user => user._id === data.from)
+  incrementUserBadge (state, { from }) {
+    const User = state.users.find(user => user._id === from)
 
     if (User) {
       User._badge += 1
@@ -104,12 +104,12 @@ export const userMutations = {
     }
   },
 
-  setUserStatus (state, data) {
-    const User = state.users.find(user => user._id === data.userId)
+  setUserStatus (state, { userId, status, message }) {
+    const User = state.users.find(user => user._id === userId)
 
     if (User) {
-      User._status = data.status
-      User._statusMessage = data.message
+      User._status = status
+      User._statusMessage = message
     }
   },
 

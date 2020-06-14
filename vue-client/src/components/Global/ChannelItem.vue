@@ -32,6 +32,7 @@ export default {
   }
 
   .channel-icon {
+    font-size: 14px;
     color: var(--color-user-status-online);
     margin: auto;
   }
