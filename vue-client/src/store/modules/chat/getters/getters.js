@@ -1,4 +1,7 @@
 export const getters = {
+  getValidation (state) {
+    return state.validation
+  },
   getLoggedInUser (state) {
     return state.loggedInUser
   },

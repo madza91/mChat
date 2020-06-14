@@ -52,6 +52,10 @@ server = () => {
     process.exit(1);
   })
 
+  process.on('exit', code => {
+    debugging.log(`Server is turned off (code ${ code })`);
+  })
+
   /**
    * Start listening
    */

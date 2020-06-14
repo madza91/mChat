@@ -17,6 +17,7 @@
         :description="selectedChat.data._description"
       />
     </div>
+    <div v-else class="mr-auto"></div>
     <div class="icon-wrapper" v-if="reconnecting">
       <b-icon icon="arrow-repeat" animation="spin"></b-icon>
     </div>

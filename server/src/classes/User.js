@@ -1,4 +1,6 @@
 module.exports = class User {
+  #isAdmin;
+
   constructor(nick, status, socket) {
     const STATUS_ONLINE = 1,
           STATUS_AWAY   = 2,
@@ -16,6 +18,7 @@ module.exports = class User {
     this._noticeMe      = false;
     this._totalMessages = 0;
     this._idleFrom      = null;
+    this.#isAdmin       = false;
   }
 
   get id() {
@@ -72,5 +75,13 @@ module.exports = class User {
 
   updateIdleFrom() {
     return this._idleFrom = new Date();
+  }
+
+  get isAdmin() {
+    return this.#isAdmin;
+  }
+
+  set isAdmin(value) {
+    return this.#isAdmin = value;
   }
 }

@@ -17,6 +17,7 @@ const state = {
   connected: null,
   reconnecting: false,
   authenticated: false,
+  validation: null,
   channels: [],
   users: [],
   selectedChat: {
