@@ -7,7 +7,7 @@
 module.exports = (channelId, message) => {
   return io.sockets.emit('channel_system', {
     to: channelId,
-    message: message,
+    message,
     date: Date.now()
   });
 }

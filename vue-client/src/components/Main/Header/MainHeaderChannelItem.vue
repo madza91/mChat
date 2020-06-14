@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <ChannelItem :title="title"/>
-    <div class="channel-description">{{ description }}</div>
+    <div class="channel-topic">{{ topic }}</div>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
       type: String,
       required: true
     },
-    description: {
+    topic: {
       type: String,
       required: true
     }
@@ -34,7 +34,7 @@ export default {
     padding: 2px 10px;
   }
 
-  .channel-description {
+  .channel-topic {
     font-size: 10px;
     color: darkgrey;
     overflow: hidden;

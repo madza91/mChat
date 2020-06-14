@@ -8,7 +8,7 @@ const disconnectCommand = require('../../modules/commands/disconnectCommand');
  */
 module.exports = (Socket, message) => {
   io.to(Socket.id).emit('server_validation', {
-    message: message,
+    message,
     date: Date.now()
   });
 

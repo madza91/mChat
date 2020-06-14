@@ -9,12 +9,12 @@
       <ul class="list">
         <li v-for="(data, index) in currentMessages" :key="index">
           <UserMessage
-            v-if="data.type === 'user'"
+            v-if="isUserMessage(data.type) || isBotMessage(data.type)"
             :nick="data.nick"
             :right="isMyMessage(data.from)"
             :message="data.message"
             :shape="data.shape"
-            :enable-html="isBotMessage()"
+            :enable-html="isBotMessage(data.type)"
             :date="data.date"
           />
           <SystemMessage
@@ -58,7 +58,7 @@ export default {
         const prevItem = currentMessages[i - 1]
         const nextItem = currentMessages[i + 1]
 
-        if (item.type === 'user') {
+        if (['bot', 'user'].includes(item.type)) {
           return {
             ...item,
             shape: {
@@ -94,8 +94,11 @@ export default {
     isMyMessage (fromUserId) {
       return this.server.prevIds.includes(fromUserId)
     },
-    isBotMessage () {
-      return this.selectedChat.data._status === 'bot'
+    isBotMessage (messageType) {
+      return messageType === 'bot'
+    },
+    isUserMessage (messageType) {
+      return messageType === 'user'
     },
     swipeHandler (direction) {
       const sideBar = this.getSidebar()

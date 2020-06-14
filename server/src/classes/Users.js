@@ -67,7 +67,7 @@ module.exports = class Users {
    */
   findBySocket(value) {
     return this.users.find(function (user) {
-      return user._socket === value;
+      return user.socket === value;
     });
   }
 
