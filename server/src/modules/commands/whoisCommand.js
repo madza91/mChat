@@ -14,7 +14,7 @@ module.exports = (User, params) => {
       if (foundUser.status === 'bot') {
         botEmit(User, 'Hey! You are interested in me 😍');
 
-        return botEmit(User, 'I\'m here to inform and help you whatever you need.');
+        return botEmit(User, 'I\'m here to inform and help you with whatever you need.');
       }
 
       return botEmit(User, tableTemplate({
