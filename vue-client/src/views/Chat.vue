@@ -3,7 +3,6 @@
     class="wrapper"
     :class="{'sidebar-open': sidebar, 'blur': !authenticated}">
     <SideBar />
-    <ControlSideBar />
     <ContentWrapper />
     <WelcomeModal />
     <AboutModal />
@@ -13,7 +12,6 @@
 
 <script>
 import SideBar from '../components/Side/SideBar.vue'
-import ControlSideBar from '../components/Side/ControlSideBar.vue'
 import ContentWrapper from '../components/Main/ContentWrapper.vue'
 import WelcomeModal from '../components/Modals/WelcomeModal'
 import AboutModal from '../components/Modals/AboutModal'
@@ -30,7 +28,6 @@ export default {
     NoticeModal,
     WelcomeModal,
     SideBar,
-    ControlSideBar,
     ContentWrapper
   },
   computed: {
@@ -48,5 +45,10 @@ export default {
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: none;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      overflow-x: visible;
+      overflow-y: visible;
+    }
   }
 </style>

@@ -165,6 +165,10 @@ export default {
       padding-bottom: 0;
       margin-bottom: max(env(safe-area-inset-bottom), #{$padding});
     }
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      background-color: #F4F4F4;
+    }
   }
 
   .main-footer.focused {

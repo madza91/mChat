@@ -85,8 +85,12 @@ export default {
     min-height: 100%;
     width: var(--sidebar-width);
     background-color: #444753;
-    z-index: 810;
+    //z-index: 810;
     transition: transform .2s ease-in-out, width .2s ease-in-out;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      width: 250px;
+    }
   }
   @include media-breakpoint-down(xs) {
     .main-sidebar {

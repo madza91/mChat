@@ -78,17 +78,33 @@ export default {
     color: var(--color-user-status-online);
     margin-left: 1px;
     margin-right: 1px;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      color: #86BB71;
+    }
   }
 
   .user-status-bot {
     color: var(--color-user-status-online);
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      color: #86BB71;
+    }
   }
 
   .user-status-away {
     color: var(--color-user-status-away);
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      color: #DA9D3E;
+    }
   }
 
   .user-status-offline {
     color: var(--color-user-status-offline);
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      color: #B9B8B9;
+    }
   }
 </style>
