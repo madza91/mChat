@@ -9,13 +9,13 @@ This is a very fast and tiny chat for group chat via web sockets.
 * Sending browser notifications
 * Sound on received message
 * Commands (combined IRC and custom)
+* PWA Enabled
 
 ## Installation
-* npm install socket.io
+* npm install
 
 ## Server start
-* node server.js
-* forever start server.js
+* `npm start` or `forever start server/app.js`
 
 ## Chat commands
 In this chat you can use commands starting with slash (/).
@@ -36,7 +36,7 @@ Available commands:
 * Websockets enabled on server
 
 ## Helpful links
-* [Visit chat online](http://madza.rs/chat)
+* [Visit chat online](https://chat.madza.rs)
 
-# Credits
-Written by Nemanja Madzovski (nemanja at madza dot rs)
+## Credits
+Written by Nemanja Madžovski (nemanja at madza dot rs)

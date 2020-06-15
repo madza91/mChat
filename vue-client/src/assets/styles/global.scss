@@ -1,0 +1,12 @@
+@include media-breakpoint-down(xs) {
+    .us-none {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}
+
+.blur {
+    filter: blur(5px);
+}
