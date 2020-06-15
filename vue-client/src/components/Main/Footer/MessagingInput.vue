@@ -99,7 +99,7 @@ export default {
       if (this.enabled && (this.message || this.attachment)) {
         this.checkFocus()
 
-        this.$socket.emit('message', {
+        this.$socket.client.emit('message', {
           to: this.selectedChat.id,
           isChannel: this.selectedChat.isChannel,
           message: this.message,

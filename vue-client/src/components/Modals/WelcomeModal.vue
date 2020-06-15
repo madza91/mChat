@@ -85,8 +85,8 @@ export default {
     ...mapChatGetters(['getValidation']),
     connect () {
       this.setChosenNick(this.nickname)
-      this.$socket.io.opts.query = `nick=${this.nickname}`
-      this.$socket.open()
+      this.$socket.client.io.opts.query = `nick=${this.nickname}`
+      this.$socket.client.open()
     },
     isValid () {
       return /^[0-9A-Za-z.-/-_!@#$%^&*()|<>?{}'"/[\]]{3,30}$/.test(this.nickname)

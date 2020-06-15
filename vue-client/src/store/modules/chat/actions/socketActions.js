@@ -1,50 +1,50 @@
 export const socketActions = {
-  SOCKET_connect ({ dispatch }) {
+  socket_connect ({ dispatch }) {
     dispatch('setConnected', true)
   },
 
-  SOCKET_disconnect ({ dispatch }) {
+  socket_disconnect ({ dispatch }) {
     dispatch('setConnected', false)
   },
 
-  SOCKET_error ({ dispatch }) {
+  socket_error ({ dispatch }) {
     dispatch('setConnected', false)
   },
 
-  SOCKET_connect_error ({ dispatch }) {
+  socket_connectError ({ dispatch }) {
     dispatch('setConnected', false)
   },
 
-  SOCKET_connect_timeout ({ dispatch }) {
+  socket_connectTimeout ({ dispatch }) {
     dispatch('setConnected', false)
   },
 
-  SOCKET_reconnecting ({ commit }) {
+  socket_reconnecting ({ commit }) {
     commit('setReconnecting', true)
   },
 
-  SOCKET_reconnect ({ dispatch }) {
+  socket_reconnect ({ dispatch }) {
     dispatch('setConnected', true)
   },
 
-  SOCKET_reconnect_error ({ dispatch }) {
+  socket_reconnectError ({ dispatch }) {
     dispatch('setConnected', false)
   },
 
-  SOCKET_reconnect_failed ({ dispatch }) {
+  socket_reconnectFailed ({ dispatch }) {
     dispatch('setConnected', false)
   },
 
-  SOCKET_server_validation ({ commit }, data) {
+  socket_serverValidation ({ commit }, data) {
     commit('setValidation', data.message)
   },
 
-  SOCKET_server_welcome ({ commit, dispatch }, data) {
+  socket_serverWelcome ({ commit, dispatch }, data) {
     commit('setAuthenticated', data.user)
     dispatch('ui/insertHistoryUserID', data, { root: true })
   },
 
-  SOCKET_server_channels ({ commit, dispatch }, channels) {
+  socket_serverChannels ({ commit, dispatch }, channels) {
     commit('setChannels', channels)
     dispatch('setSelectedChat', {
       id: 1,
@@ -52,51 +52,51 @@ export const socketActions = {
     })
   },
 
-  SOCKET_server_users ({ commit }, users) {
+  socket_serverUsers ({ commit }, users) {
     commit('setUsers', users)
   },
 
-  SOCKET_server_join ({ commit }, data) {
+  socket_serverJoin ({ commit }, data) {
     commit('insertUser', data)
   },
 
-  SOCKET_server_leave ({ dispatch }, data) {
+  socket_serverLeave ({ dispatch }, data) {
     dispatch('userLeave', data)
   },
 
-  SOCKET_channel_join ({ dispatch }, data) {
+  socket_channelJoin ({ dispatch }, data) {
     dispatch('insertChannelJoin', data)
   },
 
-  SOCKET_private_message ({ dispatch, commit }, data) {
+  socket_privateMessage ({ dispatch, commit }, data) {
     dispatch('insertUserMessage', data)
   },
 
-  SOCKET_private_system ({ dispatch, commit }, data) {
+  socket_privateSystem ({ dispatch, commit }, data) {
     dispatch('insertUserSystem', data)
   },
 
-  SOCKET_channel_message ({ dispatch }, data) {
+  socket_channelMessage ({ dispatch }, data) {
     dispatch('insertChannelMessage', data)
   },
 
-  SOCKET_channel_topic ({ dispatch }, data) {
+  socket_channelTopic ({ dispatch }, data) {
     dispatch('changeChannelTopic', data)
   },
 
-  SOCKET_channel_system ({ dispatch }, data) {
+  socket_channelSystem ({ dispatch }, data) {
     dispatch('insertChannelSystem', data)
   },
 
-  SOCKET_channel_leave ({ dispatch }, data) {
+  socket_channelLeave ({ dispatch }, data) {
     dispatch('insertChannelLeave', data)
   },
 
-  SOCKET_server_command ({ commit, dispatch }, data) {
+  socket_serverCommand ({ commit, dispatch }, data) {
     dispatch('callCommand', data)
   },
 
-  SOCKET_system ({ commit }, data) {
+  socket_system ({ commit }, data) {
     commit('insertChannelMessage', {
       date: data.date,
       type: 'system',
@@ -104,7 +104,7 @@ export const socketActions = {
     })
   }
 
-  // SOCKET_image ({ commit }, data) {
+  // socket_image ({ commit }, data) {
   //   console.log('image received', data)
   // }
 }
