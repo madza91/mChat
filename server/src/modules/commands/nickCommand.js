@@ -3,7 +3,7 @@ const serverCommandEmit = require('../../sockets/emit/serverCommandEmit')
 const helpers           = require('../helpers');
 
 /**
- * User tryies to change his nickname
+ * User tries to change his nickname
  * @param User
  * @param params
  * @returns {void|*}

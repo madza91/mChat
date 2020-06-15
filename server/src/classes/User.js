@@ -19,7 +19,7 @@ module.exports = class User {
     this._input         = '';
     this._noticeMe      = false;
     this._totalMessages = 0;
-    this._idleFrom      = null;
+    this._idleFrom      = new Date();
   }
 
   get id() {
