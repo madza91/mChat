@@ -1,0 +1,62 @@
+[
+  {
+    "command":"nick",
+    "params":"{nick}",
+    "description":"Allows you to change your chat nickname",
+    "permission":"All users"
+  },
+  {
+    "command":"whois",
+    "params":"{nick}",
+    "description":"Returns all available information about the user",
+    "permission":"All users"
+  },
+  {
+    "command":"away",
+    "params":"{message}",
+    "description":"Changes your status to away with the message. If {message} is omitted, the away status is removed",
+    "permission":"All users"
+  },
+  {
+    "command":"me",
+    "params":"{message}",
+    "description":"Sends an action message to the current channel or private window",
+    "permission":"All users"
+  },
+  {
+    "command":"hello",
+    "params":"{nick}",
+    "description":"Sends notice with shake animation to the user. If {nick} is omitted, it will be sent to all users",
+    "permission":"All users"
+  },
+  {
+    "command":"topic",
+    "params":"{#channel} {message}",
+    "description":"Allows you to set the channel topic",
+    "permission":"All users"
+  },
+  {
+    "command":"help",
+    "params":"{command}",
+    "description":"Returns usage and description about command. If {command} is omitted, return all available commands",
+    "permission":"All users"
+  },
+  {
+    "command":"quit",
+    "params":null,
+    "description":"Disconnects you from chat. Aliases: disconnect, offline, exit",
+    "permission":"All users"
+  },
+  {
+    "command":"version",
+    "params":null,
+    "description":"Returns information about server build number",
+    "permission":"All users"
+  },
+  {
+    "command":"about",
+    "params":null,
+    "description":"Returns short note about mChat",
+    "permission":"All users"
+  }
+]

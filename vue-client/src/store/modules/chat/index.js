@@ -12,7 +12,8 @@ const state = {
   loggedInUser: {
     id: null,
     nick: null,
-    status: null
+    status: null,
+    statusMessage: null
   },
   connected: null,
   reconnecting: false,

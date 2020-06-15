@@ -18,7 +18,7 @@ module.exports = (User, params) => {
     foundChannel.topic = newChannelTopic;
     channelTopicEmit(foundChannel.id, newChannelTopic);
 
-    return botEmit(User, `You successfully changed topic for #${ foundChannel.title }`);
+    return botEmit(User, `You successfully changed topic for #${ foundChannel.title }.`);
   }
 
   return botEmit(User, `Channel ${ channelTitle } is not found.`)

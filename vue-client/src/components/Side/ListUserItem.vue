@@ -1,7 +1,7 @@
 <template>
   <li class="clearfix list-item-user" :class="{'active': isActive}" @click="setSelected">
     <UserItem :title="name" :status="status" :dark="false" :class="{'animation-shake': shake}"/>
-    <b-badge v-if="badgeNumber" variant="danger">{{ badgeNumber }}</b-badge>
+    <b-badge v-if="badgeNumber" pill variant="danger" class="m-auto">{{ badgeNumber }}</b-badge>
   </li>
 </template>
 
@@ -83,10 +83,5 @@ export default {
   .list-item-user:hover {
     cursor: pointer;
     background: rgba(0,0,0,0.5);
-  }
-
-  .badge {
-    margin-top: 3px;
-    margin-left: 5px;
   }
 </style>

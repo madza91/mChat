@@ -20,7 +20,7 @@ export const commandActions = {
         commit('setUserStatus', data)
 
         if (data.userId === getters.getUserId) {
-          commit('setStatus', data.status)
+          commit('setStatus', data)
         }
         break
       case 'noticeme':

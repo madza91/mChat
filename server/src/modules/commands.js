@@ -19,8 +19,6 @@ const unknownCommand    = require('./commands/unknownCommand');
  * @returns {void|{type: string, message: string}|*}
  */
 module.exports = (Socket, User, data) => {
-  const commandIdentifier = '/';
-  const availableCommands = ['nick', 'me', 'hello', 'away', 'exit', 'disconnect', 'quit', 'whois', 'help', 'about'];
   const message = data.message;
 
   if (message.charAt(0) === commandIdentifier) {
@@ -31,7 +29,7 @@ module.exports = (Socket, User, data) => {
       case 'nick':
         return nickCommand(User, params);
       case 'help':
-        return helpCommand(User, availableCommands);
+        return helpCommand(User, params);
       case 'whois':
         return whoisCommand(User, params);
       case 'away':
@@ -45,6 +43,7 @@ module.exports = (Socket, User, data) => {
       case 'version':
         return versionCommand(User);
       case 'disconnect':
+      case 'offline':
       case 'exit':
       case 'quit':
         return disconnectCommand(Socket);
@@ -53,7 +52,7 @@ module.exports = (Socket, User, data) => {
       case 'about':
         return aboutCommand(User);
       default:
-        return unknownCommand(User, availableCommands);
+        return unknownCommand(User);
     }
   }
 

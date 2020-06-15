@@ -14,6 +14,9 @@ export const getters = {
   getUserStatus (state) {
     return state.loggedInUser.status
   },
+  getUserStatusMessage (state) {
+    return state.loggedInUser.statusMessage
+  },
   findUserById: (state) => (userId) => {
     return state.users.find(user => user._id === userId)
   },

@@ -4,13 +4,37 @@
  * @returns {string}
  */
 module.exports = (data) => {
-  let templateRows = '';
+  if (Array.isArray(data)) {
+    return renderTable(data.map((row => {
+      if (row.v) {
+        return renderTableRow(row.k, row.v);
+      }
+    })));
+  }
 
+  let templateRows = [];
   for (let [key, value] of Object.entries(data)) {
     if (value) {
-      templateRows += `<tr><td>${ key }</td><td>${ value }</td></tr>`
+      templateRows.push(renderTableRow(key, value))
     }
   }
 
-  return `<table>${ templateRows }</table>`
+  return renderTable(templateRows)
 };
+
+renderTableRow = (key, value) => {
+  return (
+    `<tr>
+      <td>${ key }</td>
+      <td>${ value }</td>
+    </tr>`
+  )
+}
+
+renderTable = (rows) => {
+  return (
+    `<table>
+        ${ rows.join('') }
+    </table>`
+  )
+}
