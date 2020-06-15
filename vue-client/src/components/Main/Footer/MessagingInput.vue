@@ -99,7 +99,7 @@ export default {
       if (this.enabled && (this.message || this.attachment)) {
         this.checkFocus()
 
-        this.$socket.emit('message', {
+        this.$socket.client.emit('message', {
           to: this.selectedChat.id,
           isChannel: this.selectedChat.isChannel,
           message: this.message,
@@ -164,6 +164,10 @@ export default {
     @include media-breakpoint-down(xs) {
       padding-bottom: 0;
       margin-bottom: max(env(safe-area-inset-bottom), #{$padding});
+    }
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      background-color: #F4F4F4;
     }
   }
 

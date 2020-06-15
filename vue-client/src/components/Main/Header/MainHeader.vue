@@ -104,6 +104,10 @@ export default {
       height: var(--main-header-height-mobile);
     }
 
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      width: 60px;
+    }
+
     .icon-badge {
       font-size: 9px;
       position: absolute;
@@ -128,6 +132,14 @@ export default {
     background-color: var(--color-default);
     border-bottom: 1px solid var(--color-border);
     overflow: hidden;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      min-height: 60px;
+      max-height: 60px;
+      height: 60px;
+      background-color: #F4F4F4;
+      border-bottom: #DBDBDB;
+    }
 
     @media screen and (prefers-color-scheme: dark) {
       color: white;

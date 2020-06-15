@@ -4,7 +4,8 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import VueSocketIO from 'vue-socket.io'
+import VueSocketIOExt from 'vue-socket.io-extended'
+import io from 'socket.io-client'
 import './assets/styles/index.scss'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -36,21 +37,12 @@ library.add(faTimes)
 library.add(faRobot)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-const isProduction = process.env.NODE_ENV === 'production'
-Vue.config.productionTip = false
+const socket = io(`${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}`, {
+  path: process.env.VUE_APP_SOCKET_PATH,
+  autoConnect: false
+})
 
-Vue.use(new VueSocketIO({
-  debug: !isProduction,
-  connection: `${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}`,
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_'
-  },
-  options: {
-    path: process.env.VUE_APP_SOCKET_PATH,
-    autoConnect: false
-  } // Optional options
-}))
+Vue.use(VueSocketIOExt, socket, { store })
 
 new Vue({
   router,

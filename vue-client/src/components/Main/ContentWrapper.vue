@@ -131,10 +131,18 @@ export default {
     min-height: 100%;
     transform: translate(var(--sidebar-width), 0);
     transition: transform .2s ease-in-out, margin .2s ease-in-out;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      transform: translate(250px, 0);
+    }
   }
   @include media-breakpoint-up(sm) {
     .content-wrapper {
       width: calc(100% - var(--sidebar-width));
+
+      @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        width: calc(100% - 250px);
+      }
     }
   }
   .list {

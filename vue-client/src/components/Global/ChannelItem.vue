@@ -35,6 +35,10 @@ export default {
     font-size: 14px;
     color: var(--color-user-status-online);
     margin: auto;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      color: #86BB71;
+    }
   }
 
   .channel-title {
