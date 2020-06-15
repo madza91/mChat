@@ -45,7 +45,7 @@ export default {
     transition: right .2s ease-in-out;
     color: white;
     background-color: #222d32;
-    //z-index: 1050;
+    z-index: 1050;
   }
 
   .control-sidebar.control-sidebar-open {

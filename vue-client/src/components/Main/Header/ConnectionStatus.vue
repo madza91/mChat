@@ -14,7 +14,7 @@ export default {
 .connection_info {
   text-align: center;
   position: absolute;
-  //z-index: 1031;
+  z-index: 1031;
   background-color: indianred;
   width: 100%;
   top: var(--main-header-height);

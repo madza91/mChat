@@ -153,7 +153,7 @@ export default {
   }
   .sidebar-open .content-wrapper {
     transform: translate(var(--sidebar-width), 0);
-    //z-index: 800;
+    z-index: 800;
   }
   @include media-breakpoint-down(xs) {
     .content-wrapper {

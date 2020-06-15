@@ -127,7 +127,7 @@ export default {
     max-height: var(--main-header-height);
     height: var(--main-header-height);
     width: 100%;
-    //z-index: 1030;
+    z-index: 1030;
     transition: transform .2s ease-in-out, width .2s ease-in-out;
     background-color: var(--color-default);
     border-bottom: 1px solid var(--color-border);
