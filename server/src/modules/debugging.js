@@ -1,3 +1,6 @@
+/**
+ * @type {{log: log}}
+ */
 module.exports = {
     log: (word) => {
         const time = new Date;

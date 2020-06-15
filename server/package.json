@@ -28,7 +28,6 @@
     "express": "^4.17.1",
     "file-type": "^14.6.2",
     "npm": "^6.14.5",
-    "open-graph-scraper": "^3.6.2",
     "request": "^2.88.2",
     "socket.io": "^2.3.0"
   },

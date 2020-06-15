@@ -1,3 +1,6 @@
+/**
+ * @type {Channel}
+ */
 module.exports = class Channel {
     #history;
 
