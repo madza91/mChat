@@ -26,8 +26,13 @@ label {
     width: 100%;
 }
 
+table {
+    font-size: 12px;
+}
+
 td:first-child {
     white-space: nowrap;
+    font-weight: 600;
     padding-right: 10px;
 }
 

@@ -11,16 +11,14 @@ module.exports = (User, params) => {
     const foundUser = userList.findByNick(params);
 
     if (foundUser) {
-      const render = tableTemplate({
+      return botEmit(User, tableTemplate({
         'Nick': foundUser.nick,
         'Joined': foundUser.joined,
         'Status': foundUser.status,
         'Away status': foundUser.statusMessage,
         'Messages': foundUser.totalMessages,
         'Idle': foundUser.idleFrom
-      })
-
-      return botEmit(User, render);
+      }));
     }
 
     return botEmit(User, 'I have not found that user, try again with another nick.');

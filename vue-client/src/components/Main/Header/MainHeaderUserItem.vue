@@ -46,6 +46,8 @@ export default {
   .user-status-wrapper {
     font-size: 10px;
     color: darkgrey;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .user-status-title {

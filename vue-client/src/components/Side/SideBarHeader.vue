@@ -3,7 +3,10 @@
     <img src="../../assets/images/default.jpg" class="user-profile-picture" alt="avatar"/>
     <div class="user-wrapper">
       <span class="user-fullname">{{ getUserNick() }}</span>
-      <span class="user-status" :class="'user-status-' + getUserStatus()">{{ getUserStatus() }}</span>
+      <div class="user-status-wrapper">
+        <span class="user-status-title" :class="getStatusClass">{{ getUserStatus() }}</span>
+        <span class="user-status-message" v-if="getUserStatusMessage()">{{ getUserStatusMessage() }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -14,8 +17,13 @@ const { mapGetters } = createNamespacedHelpers('chat')
 
 export default {
   name: 'SideBarHeader',
+  computed: {
+    getStatusClass () {
+      return 'user-status-' + this.getUserStatus()
+    }
+  },
   methods: {
-    ...mapGetters(['getUserNick', 'getUserStatus'])
+    ...mapGetters(['getUserNick', 'getUserStatus', 'getUserStatusMessage'])
   }
 }
 </script>
@@ -44,14 +52,31 @@ export default {
     margin: auto 0;
     font-size: 12px;
     padding-left: 10px;
+    overflow: hidden;
   }
 
   .user-fullname {
+    color: white;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .user-status {
+  .user-status-wrapper {
+    color: darkgrey;
     font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-status-message {
+    color: darkgrey;
+    font-style: italic;
+  }
+
+  .user-status-message::before {
+    content: ' - ';
   }
 
   .user-status-online {

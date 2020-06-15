@@ -5,5 +5,5 @@ const botEmit = require('../../sockets/emit/botEmit');
  */
 module.exports = (User) => {
   const version = serverBuild.getTime()
-  return botEmit(User, `Current server version is <b>${ version }</b>, build at ${ serverBuild }`);
+  return botEmit(User, `Current server version is <b>${ version }</b>, build at ${ serverBuild }.`);
 };
