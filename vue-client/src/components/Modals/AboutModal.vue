@@ -56,7 +56,7 @@ export default {
         '* express\n' +
         '* bootstrap\n' +
         '* bootstrap-vue\n' +
-        '* fontawesome' +
+        '* fontawesome\n' +
         '* moment'
     }
   },
