@@ -1,5 +1,5 @@
 // define a mixin object
-export const myMixin = {
+export const notificationMixin = {
   methods: {
     changeTitle (number) {
       const title = process.env.VUE_APP_TITLE

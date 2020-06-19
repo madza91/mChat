@@ -1,6 +1,9 @@
 const config = require('../modules/config');
 const User   = require('./User');
 
+/**
+ * @type {Users}
+ */
 module.exports = class Users {
   constructor(){
     this.users = [];
@@ -66,7 +69,7 @@ module.exports = class Users {
    * @returns {*[]}
    */
   findBySocket(value) {
-    return this.users.find(function (user) {
+    return this.users.find(user => {
       return user.socket === value;
     });
   }
@@ -77,7 +80,7 @@ module.exports = class Users {
    * @returns {*[]}
    */
   findById(value) {
-    return this.users.find(function (user) {
+    return this.users.find(user => {
       return user._id === value;
     });
   }
@@ -88,7 +91,7 @@ module.exports = class Users {
    * @returns {*[]}
    */
   findByNick(value) {
-    return this.users.find(function (user) {
+    return this.users.find(user => {
       return user.nick === value;
     });
   }

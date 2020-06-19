@@ -1,5 +1,8 @@
 const Channel = require('./Channel');
 
+/**
+ * @type {Channels}
+ */
 module.exports = class Channels {
   constructor () {
     this._channels = [];
@@ -45,7 +48,7 @@ module.exports = class Channels {
    * @returns {*}
    */
   findByTitle(channelTitle) {
-    return this._channels.find(function (channel) {
+    return this._channels.find(channel => {
       return channel.title === channelTitle;
     });
   }
@@ -55,7 +58,7 @@ module.exports = class Channels {
    * @returns {*}
    */
   findById(channelId) {
-    return this._channels.find(function (channel) {
+    return this._channels.find(channel => {
       return channel.id === channelId;
     });
   }

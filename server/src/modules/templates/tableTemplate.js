@@ -22,6 +22,11 @@ module.exports = (data) => {
   return renderTable(templateRows)
 };
 
+/**
+ * @param key
+ * @param value
+ * @returns {string}
+ */
 renderTableRow = (key, value) => {
   return (
     `<tr>
@@ -31,6 +36,10 @@ renderTableRow = (key, value) => {
   )
 }
 
+/**
+ * @param rows
+ * @returns {string}
+ */
 renderTable = (rows) => {
   return (
     `<table>

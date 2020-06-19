@@ -31,7 +31,7 @@ global.commandsList      = Commands;
 /**
  * New Client connection
  */
-io.on('connect', function (Socket) {
+io.on('connect', Socket => {
     /**
      * Handle new Client
      */

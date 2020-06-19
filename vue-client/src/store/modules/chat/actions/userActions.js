@@ -1,4 +1,4 @@
-import { myMixin } from '../../../../mixins/NotificationMixin'
+import { notificationMixin } from '../../../../mixins/NotificationMixin'
 
 export const userActions = {
   userLeave ({ commit, getters }, data) {
@@ -50,7 +50,7 @@ export const userActions = {
 
     const selectedChat = getters.getSelectedChat
     if (toWindow !== (selectedChat.isChannel ? 0 : selectedChat.id)) {
-      myMixin.methods.sendNotification(data.message)
+      notificationMixin.methods.sendNotification(data.message)
       commit('incrementUserBadge', data)
     }
   },

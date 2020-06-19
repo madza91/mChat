@@ -21,7 +21,7 @@ module.exports = (Socket) => {
     const validation = helpers.validate(nickname);
 
     if (validation.isValid) {
-      return initUser(Socket, validation.nick);
+      return initUser(Socket, nickname);
     }
 
     return serverValidationEmit(Socket, validation.reason);

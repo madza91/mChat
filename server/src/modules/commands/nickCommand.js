@@ -5,20 +5,20 @@ const helpers           = require('../helpers');
 /**
  * User tries to change his nickname
  * @param User
- * @param params
+ * @param nick
  * @returns {void|*}
  */
-module.exports = (User, params) => {
-  const validation = helpers.validate(params);
+module.exports = (User, nick) => {
+  const validation = helpers.validate(nick);
 
   if (validation.isValid === true) {
     const oldNick = User.nick;
-    userList.changeUser(User.nick, {nick: validation.nick});
+    userList.changeUser(User.nick, { nick });
 
     return serverCommandEmit.toAll(User, 'nick', {
       id: User.id,
       oldNick,
-      newNick: validation.nick
+      newNick: nick
     })
   }
 

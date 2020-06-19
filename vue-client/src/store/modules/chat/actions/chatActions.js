@@ -1,3 +1,5 @@
+import detectMobileMixin from '../../../../mixins/DetectMobileMixin'
+
 export const chatActions = {
   setUserNick ({ commit }, nick) {
     commit('setNick', nick)
@@ -11,6 +13,10 @@ export const chatActions = {
     } else {
       chatWindow = getters.findUserById(data.id)
       commit('resetUserBadge', data.id)
+    }
+
+    if (!detectMobileMixin.methods.isMobile()) {
+      document.getElementById('message-to-send').focus()
     }
 
     commit('setSelectedChat', {

@@ -1,3 +1,6 @@
+/**
+ * @type {User}
+ */
 module.exports = class User {
   #_socket;
   #_isAdmin;

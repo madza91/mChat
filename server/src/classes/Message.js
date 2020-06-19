@@ -1,3 +1,6 @@
+/**
+ * @type {Message}
+ */
 module.exports = class Message {
   constructor(fromId, nick, message, to, type){
     this.messageId = ++incMessage;
