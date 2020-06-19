@@ -13,9 +13,13 @@
     >
       <div class="d-block us-none">
         <h2 class="mb-3 text-center">About</h2>
-        <p class="mb-4">
-          This is a tiny chat app that is using web sockets, nodeJs and it will have some interesting content. WIP :)
-        </p>
+        <b-form-textarea
+          id="textarea"
+          v-model="text"
+          rows="3"
+          max-rows="6"
+          readonly
+        ></b-form-textarea>
         <p class="build-number">Build: {{ getBuildDate }}</p>
 
         <b-form-group class="text-center">
@@ -40,8 +44,37 @@ export default {
       return moment(document.documentElement.dataset.buildTimestampUtc).format('D.MM.Y H:mm:ss')
     }
   },
+  data () {
+    return {
+      text: 'Hi! My name is Nemanja M. and this is my portfolio project.\n' +
+        'This is a tiny chat app that is using web sockets, nodeJs and VueJS.\n' +
+        'The main purpose of this project is to show best coding practices, coding standards, design patterns, handling sockets, using vuex, and other.\n' +
+        'This app also includes libraries developed by the following third parties:\n' +
+        '* vuex\n' +
+        '* vuex-persist\n' +
+        '* socket.io\n' +
+        '* express\n' +
+        '* bootstrap\n' +
+        '* bootstrap-vue\n' +
+        '* fontawesome' +
+        '* moment'
+    }
+  },
   methods: {
     ...mapActions(['aboutToggle'])
   }
 }
 </script>
+
+<style>
+  #textarea {
+    background-color: white;
+    font-size: 14px;
+  }
+  .build-number {
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: right;
+    color: silver;
+  }
+</style>

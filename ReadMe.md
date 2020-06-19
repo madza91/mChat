@@ -4,14 +4,19 @@ This is a very fast and tiny chat for group chat via web sockets.
 ### Features
 * Channels / Group chat
 * Private messaging
-* Search online users
+* Search for online users & channels
 * Notifications
 * 10 Commands (combined IRC and custom)
 * Responsive design & Progressive Web Application
 * Dark mode supported
 
 ### Installation
-* npm install
+Run these commands from project root:
+* `cd server; npm install`
+* `cd vue-client; npm install`
+
+### Setup
+Before starting server and client, you need to set up .env for both server and client folder
 
 ### Server start
 Run these commands from project root:
@@ -21,10 +26,8 @@ Run these commands from project root:
 ### Client build
 * `cd vue-client; npm run serve`
 
-### Chat commands
-In this chat you can use commands starting with slash (/).
-
-Available commands:
+### More
+For more detailed information, visit server/README.md and vue-client/README.md
 
 **Command**|**Description**
 -----|-----
