@@ -1,5 +1,6 @@
 const debugging          = require('../../modules/debugging');
 const commands           = require('../../modules/commands');
+const helpers            = require('../../modules/helpers');
 const Message            = require('../../classes/Message');
 const privateMessageEmit = require('../emit/privateMessageEmit');
 const channelMessageEmit = require('../emit/channelMessageEmit');
@@ -26,7 +27,8 @@ module.exports = (Socket, data) => {
       return commands(Socket, User, data);
     }
 
-    const messageData = new Message(User.id, nickname, message, data.to);
+    const newMessage = helpers.emojiconify(message);
+    const messageData = new Message(User.id, nickname, newMessage, data.to);
 
     if (data.attachment) {
       fileHandler(Socket, data, messageData.id);

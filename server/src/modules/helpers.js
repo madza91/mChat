@@ -1,3 +1,5 @@
+const Emojis = require('../data/emojis.json');
+
 /**
  * @type {{isMessageValid: (function(*=): boolean|boolean), isNickValid: isNickValid, validate(*=): ({reason: null, isValid: boolean})}}
  */
@@ -28,4 +30,11 @@ module.exports = {
   isMessageValid: (message) => {
     return (typeof message === 'object' && message !== null);
   },
+  emojiconify: (message) => {
+    Emojis.forEach(element => {
+      message = message.replace(element.shortcut, element.emoji);
+    })
+
+    return message;
+  }
 };
