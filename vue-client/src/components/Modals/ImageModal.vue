@@ -45,6 +45,8 @@ export default {
 
     .modal-content {
       width: unset;
+      background-color: unset;
+      border: unset;
     }
 
     .modal-dialog-centered {
