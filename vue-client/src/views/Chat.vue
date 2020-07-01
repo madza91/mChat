@@ -7,6 +7,7 @@
     <WelcomeModal />
     <AboutModal />
     <NoticeModal />
+    <ImageModal />
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import ContentWrapper from '../components/Main/ContentWrapper.vue'
 import WelcomeModal from '../components/Modals/WelcomeModal'
 import AboutModal from '../components/Modals/AboutModal'
 import NoticeModal from '../components/Modals/NoticeModal'
+import ImageModal from '../components/Modals/ImageModal'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('ui')
@@ -26,6 +28,7 @@ export default {
   components: {
     AboutModal,
     NoticeModal,
+    ImageModal,
     WelcomeModal,
     SideBar,
     ContentWrapper
