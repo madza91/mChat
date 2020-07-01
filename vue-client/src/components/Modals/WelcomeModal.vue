@@ -1,8 +1,7 @@
 <template>
   <div>
     <b-modal
-      id="modal-center"
-      title="BootstrapVue"
+      id="welcome-modal"
       centered
       no-close-on-esc
       no-close-on-backdrop

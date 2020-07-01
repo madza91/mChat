@@ -1,12 +1,13 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row v-if="attachment" class="pb-2">
+    <b-row v-if="attachment || attachmentError" class="pb-2">
       <font-awesome-icon
         icon="times"
         class="icon invisible"
       />
-      <div class="flex-grow-1 ml-2 mr-2">
-        <b-img :src="attachmentPreview" rounded class="attachment-preview" alt="Attachment image"></b-img>
+      <div class="flex-grow-1 ml-2 mr-2 m-auto">
+        <span v-if="attachmentError">{{ attachmentError }}</span>
+        <b-img v-if="attachmentPreview" :src="attachmentPreview" rounded class="attachment-preview" alt="Attachment image"></b-img>
       </div>
       <font-awesome-icon
         icon="times"
@@ -16,13 +17,14 @@
     </b-row>
     <b-row>
       <div class="attachment-wrapper">
-<!--        <input type="file" class="attachment-file" ref="file" accept="image/*" v-on:change="handleFileUpload()" />-->
-        <font-awesome-icon
-          icon="paperclip"
-          class="icon"
-          :class="{'disabled': !enabled || attachment || !settings.attachments }"
-          @click="noticeToggle"
-        />
+        <label class="file-label">
+          <input type="file" class="file-input" ref="file" accept="image/*" v-on:change="handleFileUpload()" />
+          <font-awesome-icon
+            icon="paperclip"
+            class="icon"
+            :class="{'disabled': attachment }"
+          />
+        </label>
       </div>
       <input
         name="message-to-send"
@@ -55,6 +57,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import apiMixin from '../../../mixins/ApiMixin'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -66,6 +69,7 @@ export default {
       default: false
     }
   },
+  mixins: [apiMixin],
   watch: {
     message: function (value) {
       this.selectedChat.data._input = value
@@ -81,9 +85,9 @@ export default {
     return {
       message: null,
       attachment: null,
+      attachmentError: null,
       attachmentPreview: null,
       settings: {
-        attachments: false, // Disabled feature
         voice: false // Disabled feature
       }
     }
@@ -94,7 +98,7 @@ export default {
     })
   },
   methods: {
-    ...mapUiActions(['sidebarState', 'noticeToggle']),
+    ...mapUiActions(['sidebarState']),
     sendMessage () {
       if (this.enabled && (this.message || this.attachment)) {
         this.checkFocus()
@@ -106,19 +110,24 @@ export default {
           attachment: this.attachment
         })
         this.message = ''
-        this.attachment = null
-        this.attachmentPreview = null
+        this.removeAttachment()
       }
     },
     handleFileUpload () {
       const files = this.$refs.file.files
 
       if (files.length === 1) {
+        this.uploadImage(files[0]).then((response) => {
+          this.attachment = response.data.data
+        }).catch(() => {
+          this.attachmentPreview = null
+          this.attachmentError = 'This image can not be uploaded, please try with another one.'
+        })
+
         const reader = new FileReader()
         reader.readAsDataURL(files[0])
         reader.onload = (e) => {
           this.attachmentPreview = e.target.result
-          this.attachment = files[0]
         }
       }
     },
@@ -138,6 +147,7 @@ export default {
     },
     removeAttachment () {
       this.attachment = null
+      this.attachmentError = null
       this.attachmentPreview = null
     }
   }
@@ -177,7 +187,7 @@ export default {
     }
   }
 
-  input {
+  #message-to-send {
     flex-grow: 1;
     padding: 8px 20px;
     font: 16px/22px "Lato", Arial, sans-serif;
@@ -224,15 +234,24 @@ export default {
     cursor: pointer;
   }
 
-  .attachment-file {
-    position: absolute;
+  .file-label {
+    align-items: stretch;
+    display: flex;
+    cursor: pointer;
+    justify-content: flex-start;
     overflow: hidden;
-    opacity: 0;
+    position: relative;
+  }
+
+  .file-input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
     top: 0;
-    bottom: 0;
-    width: 10px;
-    cursor: inherit;
-    display: block;
+    left: 0;
+    opacity: 0;
+    outline: 0;
+    z-index: -1;
   }
 
   .attachment-preview {

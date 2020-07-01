@@ -13,6 +13,7 @@
             :nick="data.nick"
             :right="isMyMessage(data.from)"
             :message="data.message"
+            :attachment="data.attachment"
             :shape="data.shape"
             :enable-html="isBotMessage(data.type)"
             :date="data.date"

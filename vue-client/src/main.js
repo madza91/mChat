@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
@@ -41,6 +43,8 @@ const socket = io(`${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCK
   path: process.env.VUE_APP_SOCKET_PATH,
   autoConnect: false
 })
+
+Vue.use(VueAxios, axios)
 
 Vue.use(VueSocketIOExt, socket, { store })
 

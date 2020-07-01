@@ -5,14 +5,21 @@
         <span class="message-data-name">{{ nick }}</span>
         <span class="message-data-time">{{ formattedTime }}</span>
       </div>
-      <span v-if="!enableHtml" class="message-data-text">{{ message }}</span>
-      <span v-else class="message-data-text" v-html="message"></span>
+      <div v-if="attachment" class="message-data-content" @click="imageToggle(attachment.image)">
+        <img v-if="attachment" class="message-data-image" :src="attachment.thumbnail" alt="attachment"/>
+      </div>
+      <div v-if="message">
+        <span v-if="!enableHtml" class="message-data-text">{{ message }}</span>
+        <span v-else class="message-data-text" v-html="message"></span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'UserMessage',
@@ -27,6 +34,9 @@ export default {
       return `${prefix}-message-shape-${shape}`
     }
   },
+  methods: {
+    ...mapUiActions(['imageToggle'])
+  },
   props: {
     nick: {
       type: String,
@@ -35,6 +45,9 @@ export default {
     message: {
       type: String,
       required: true
+    },
+    attachment: {
+      type: Object
     },
     right: {
       type: Boolean,
@@ -62,7 +75,7 @@ export default {
 .message {
   display: table;
   color: white;
-  padding: 3px 10px;
+  padding: 3px;
   line-height: 26px;
   font-size: 14px;
   margin-bottom: 5px;
@@ -79,9 +92,29 @@ export default {
   color: #ccc;
   font-size: 10px;
   line-height: 16px;
+  padding: 0 5px;
+}
+.message-data-content {
+  display: flex;
+  height: 150px;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+}
+.message-data-name {
+  padding-bottom: 5px;
 }
 .message-data-time {
   padding-left: 20px;
+}
+.message-data-image {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.message-data-text {
+  padding: 0 5px;
 }
 .left-message .message {
   background: #86BB71;
