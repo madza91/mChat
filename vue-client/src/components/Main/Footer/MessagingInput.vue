@@ -1,13 +1,14 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row v-if="attachment || attachmentError" class="pb-2">
+    <b-row v-if="attachment || attachmentProgress || attachmentError" class="pb-2">
       <font-awesome-icon
         icon="times"
         class="icon invisible"
       />
-      <div class="flex-grow-1 ml-2 mr-2 m-auto">
+      <div class="preview-wrapper flex-grow-1 ml-2 mr-2 m-auto">
         <span v-if="attachmentError">{{ attachmentError }}</span>
         <b-img v-if="attachmentPreview" :src="attachmentPreview" rounded class="attachment-preview" alt="Attachment image"></b-img>
+        <b-progress v-if="attachmentProgress < 100" :value="attachmentProgress" variant="success" :max="100" animated></b-progress>
       </div>
       <font-awesome-icon
         icon="times"
@@ -18,7 +19,7 @@
     <b-row>
       <div class="attachment-wrapper">
         <label class="file-label">
-          <input type="file" class="file-input" ref="file" accept="image/*" v-on:change="handleFileUpload()" />
+          <input type="file" class="file-input" ref="file" accept="image/*" @change="handleFileUpload" />
           <font-awesome-icon
             icon="paperclip"
             class="icon"
@@ -86,6 +87,7 @@ export default {
       message: null,
       attachment: null,
       attachmentError: null,
+      attachmentProgress: null,
       attachmentPreview: null,
       settings: {
         voice: false // Disabled feature
@@ -117,18 +119,23 @@ export default {
       const files = this.$refs.file.files
 
       if (files.length === 1) {
-        this.uploadImage(files[0]).then((response) => {
-          this.attachment = response.data.data
+        const file = files[0]
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          this.attachmentPreview = e.target.result
+        }
+
+        const onUploadProgress = progressEvent => {
+          this.attachmentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        }
+
+        this.uploadImage(file, onUploadProgress).then(response => {
+          this.attachment = response.data
         }).catch(() => {
           this.attachmentPreview = null
           this.attachmentError = 'This image can not be uploaded, please try with another one.'
         })
-
-        const reader = new FileReader()
-        reader.readAsDataURL(files[0])
-        reader.onload = (e) => {
-          this.attachmentPreview = e.target.result
-        }
       }
     },
     checkFocus () {
@@ -148,6 +155,7 @@ export default {
     removeAttachment () {
       this.attachment = null
       this.attachmentError = null
+      this.attachmentProgress = null
       this.attachmentPreview = null
     }
   }
@@ -232,6 +240,18 @@ export default {
   .attachment-wrapper {
     position: relative;
     cursor: pointer;
+  }
+
+  .preview-wrapper {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+  }
+
+  .progress {
+    flex-grow: 1;
+    margin: auto auto auto 20px;
+    max-width: 200px;
   }
 
   .file-label {

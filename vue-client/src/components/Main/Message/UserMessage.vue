@@ -5,8 +5,13 @@
         <span class="message-data-name">{{ nick }}</span>
         <span class="message-data-time">{{ formattedTime }}</span>
       </div>
-      <div v-if="attachment" class="message-data-content" @click="imageToggle(attachment.image)">
-        <img v-if="attachment" class="message-data-image" :src="attachment.thumbnail" alt="attachment"/>
+      <div
+        v-if="attachment"
+        class="message-data-image"
+        :style="imageStyle"
+        @click="imageToggle(attachment.image.url)"
+      >
+        <img v-if="attachment" :src="attachment.thumbnail.url" alt="attachment"/>
       </div>
       <div v-if="message">
         <span v-if="!enableHtml" class="message-data-text">{{ message }}</span>
@@ -32,6 +37,11 @@ export default {
       const shape = !this.shape.isLast ? 'first' : 'last'
 
       return `${prefix}-message-shape-${shape}`
+    },
+    imageStyle () {
+      return this.attachment
+        ? `height: ${this.attachment.thumbnail.dimensions.h}px; width: ${this.attachment.thumbnail.dimensions.w}px`
+        : ''
     }
   },
   methods: {
@@ -94,24 +104,22 @@ export default {
   line-height: 16px;
   padding: 0 5px;
 }
-.message-data-content {
+.message-data-image {
   display: flex;
-  height: 150px;
   margin: auto;
   align-items: center;
   justify-content: center;
+
+  img {
+    border-radius: 10px;
+    cursor: pointer;
+  }
 }
 .message-data-name {
   padding-bottom: 5px;
 }
 .message-data-time {
   padding-left: 20px;
-}
-.message-data-image {
-  max-width: 150px;
-  max-height: 150px;
-  border-radius: 10px;
-  cursor: pointer;
 }
 .message-data-text {
   padding: 0 5px;

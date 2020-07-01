@@ -5,11 +5,11 @@
       centered
       hide-header
       hide-footer
-      no-fade
       :visible="imageModal && true"
     >
       <div v-if="imageModal" class="d-block us-none">
-        <img :src="imageModal" alt="attachment"/>
+        <b-spinner v-if="!isLoaded" variant="success" label="Spinning"></b-spinner>
+        <img v-show="isLoaded" :src="imageModal" @load="handleLoad" alt="attachment"/>
       </div>
     </b-modal>
   </div>
@@ -24,15 +24,24 @@ export default {
   computed: {
     ...mapState(['imageModal'])
   },
+  data () {
+    return {
+      isLoaded: false
+    }
+  },
   mounted () {
     this.$root.$on('bv::modal::hide', (bvEvent) => {
       if (bvEvent.trigger) {
         this.imageToggle()
+        this.isLoaded = false
       }
     })
   },
   methods: {
-    ...mapActions(['imageToggle'])
+    ...mapActions(['imageToggle']),
+    handleLoad () {
+      this.isLoaded = true
+    }
   }
 }
 </script>
