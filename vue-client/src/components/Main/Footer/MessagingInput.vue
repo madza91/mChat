@@ -1,14 +1,14 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row v-if="attachment || attachmentProgress || attachmentError" class="pb-2">
+    <b-row v-if="attachment || attachmentProgress || attachmentError" class="pb-2 d-flex flex-nowrap">
       <font-awesome-icon
         icon="times"
         class="icon invisible"
       />
-      <div class="preview-wrapper flex-grow-1 ml-2 mr-2 m-auto">
+      <div class="preview-wrapper flex-grow-1 ml-2 mr-2">
+        <b-img v-if="attachmentPreview" :src="attachmentPreview" class="attachment-preview rounded" :class="{'attachment-transparent': !attachmentUploaded}" alt="Attachment image"></b-img>
         <span v-if="attachmentError">{{ attachmentError }}</span>
-        <b-img v-if="attachmentPreview" :src="attachmentPreview" rounded class="attachment-preview" alt="Attachment image"></b-img>
-        <b-progress v-if="attachmentProgress < 100" :value="attachmentProgress" variant="success" :max="100" animated></b-progress>
+        <b-progress v-if="attachmentProgress" :value="attachmentProgress" variant="success" :max="100" animated></b-progress>
       </div>
       <font-awesome-icon
         icon="times"
@@ -18,14 +18,19 @@
     </b-row>
     <b-row>
       <div class="attachment-wrapper">
-        <label class="file-label">
-          <input type="file" class="file-input" ref="file" accept="image/*" @change="handleFileUpload" />
+          <input
+            type="file"
+            class="d-none"
+            ref="file"
+            accept="image/*"
+            @change="handleFileUpload"
+          />
           <font-awesome-icon
             icon="paperclip"
             class="icon"
             :class="{'disabled': attachment }"
+            @click="$refs.file.click()"
           />
-        </label>
       </div>
       <input
         name="message-to-send"
@@ -89,6 +94,7 @@ export default {
       attachmentError: null,
       attachmentProgress: null,
       attachmentPreview: null,
+      attachmentUploaded: null,
       settings: {
         voice: false // Disabled feature
       }
@@ -132,8 +138,11 @@ export default {
 
         this.uploadImage(file, onUploadProgress).then(response => {
           this.attachment = response.data
+          this.attachmentUploaded = true
+          this.attachmentProgress = null
         }).catch(() => {
-          this.attachmentPreview = null
+          this.attachmentProgress = null
+          this.attachmentUploaded = null
           this.attachmentError = 'This image can not be uploaded, please try with another one.'
         })
       }
@@ -157,6 +166,7 @@ export default {
       this.attachmentError = null
       this.attachmentProgress = null
       this.attachmentPreview = null
+      this.attachmentUploaded = null
     }
   }
 }
@@ -246,6 +256,13 @@ export default {
     display: flex;
     flex-grow: 1;
     flex-direction: row;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    span {
+      margin: auto 20px;
+      font-size: 12px;
+    }
   }
 
   .progress {
@@ -254,28 +271,12 @@ export default {
     max-width: 200px;
   }
 
-  .file-label {
-    align-items: stretch;
-    display: flex;
-    cursor: pointer;
-    justify-content: flex-start;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .file-input {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    outline: 0;
-    z-index: -1;
-  }
-
   .attachment-preview {
     max-height: 50px;
+  }
+
+  .attachment-transparent {
+    opacity: 0.6;
   }
 
   .row {

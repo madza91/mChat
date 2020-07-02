@@ -130,6 +130,7 @@ export default {
     flex-direction: column;
     height: 100%;
     min-height: 100%;
+    min-width: 320px;
     transform: translate(var(--sidebar-width), 0);
     transition: transform .2s ease-in-out, margin .2s ease-in-out;
 

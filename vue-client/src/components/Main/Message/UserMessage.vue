@@ -9,9 +9,19 @@
         v-if="attachment"
         class="message-data-image"
         :style="imageStyle"
-        @click="imageToggle(attachment.image.url)"
       >
-        <img v-if="attachment" :src="attachment.thumbnail.url" alt="attachment"/>
+        <img
+          v-if="attachment && !attachmentError"
+          :src="attachment.thumbnail.url"
+          class="animation-fadein"
+          @error="attachmentError = true"
+          @click="imageToggle(attachment.image.url)"
+          alt="attachment"
+        />
+        <div v-if="attachmentError" class="attachment-error">
+          <b-icon icon="card-image"></b-icon>
+          <span>Broken image</span>
+        </div>
       </div>
       <div v-if="message">
         <span v-if="!enableHtml" class="message-data-text">{{ message }}</span>
@@ -42,6 +52,11 @@ export default {
       return this.attachment
         ? `height: ${this.attachment.thumbnail.dimensions.h}px; width: ${this.attachment.thumbnail.dimensions.w}px`
         : ''
+    }
+  },
+  data () {
+    return {
+      attachmentError: false
     }
   },
   methods: {
@@ -113,6 +128,16 @@ export default {
   img {
     border-radius: 10px;
     cursor: pointer;
+  }
+
+  .attachment-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .b-icon {
+      font-size: 22px;
+    }
   }
 }
 .message-data-name {

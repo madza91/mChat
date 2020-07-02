@@ -3,13 +3,19 @@
     <b-modal
       id="image-modal"
       centered
-      hide-header
       hide-footer
       :visible="imageModal && true"
     >
+      <template v-slot:modal-header="{ close }">
+        <b-icon icon="x-circle-fill" @click="close()"></b-icon>
+      </template>
       <div v-if="imageModal" class="d-block us-none">
         <b-spinner v-if="!isLoaded" variant="success" label="Spinning"></b-spinner>
-        <img v-show="isLoaded" :src="imageModal" @load="handleLoad" alt="attachment"/>
+        <!-- ToDo Make placeholder -->
+        <div v-if="error" class="modal-error">
+          {{ error }}
+        </div>
+        <img v-show="isLoaded && !error" :src="imageModal" @load="handleLoad" @error="handleLoadT" alt="attachment"/>
       </div>
     </b-modal>
   </div>
@@ -26,7 +32,8 @@ export default {
   },
   data () {
     return {
-      isLoaded: false
+      isLoaded: false,
+      error: null
     }
   },
   mounted () {
@@ -41,6 +48,11 @@ export default {
     ...mapActions(['imageToggle']),
     handleLoad () {
       this.isLoaded = true
+      this.error = null
+    },
+    handleLoadT (e) {
+      this.isLoaded = true
+      this.error = 'Image can not be loaded'
     }
   }
 }
@@ -48,6 +60,14 @@ export default {
 
 <style lang="scss">
   #image-modal {
+    .modal-header {
+      position: absolute;
+      z-index: 1;
+      border-bottom: unset;
+      right: 0;
+      top: 0;
+    }
+
     .modal-body {
       padding: 0;
     }
@@ -60,6 +80,22 @@ export default {
 
     .modal-dialog-centered {
       justify-content: center;
+    }
+
+    .modal-error {
+      display: flex;
+      min-height: 100px;
+      min-width: 300px;
+      background-color: white;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .b-icon {
+      color: white;
+      cursor: pointer;
+      font-size: 25px;
+      opacity: 0.5;
     }
 
     img {
