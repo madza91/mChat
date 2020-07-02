@@ -3,10 +3,11 @@
     <b-modal
       id="image-modal"
       centered
+      hide-header-close
       hide-footer
       :visible="imageModal && true"
     >
-      <template v-slot:modal-header="{ close }">
+      <template v-if="isLoaded" v-slot:modal-header="{ close }">
         <b-icon icon="x-circle-fill" @click="close()"></b-icon>
       </template>
       <div v-if="imageModal" class="d-block us-none">
