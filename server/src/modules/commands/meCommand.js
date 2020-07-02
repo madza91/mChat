@@ -18,7 +18,7 @@ module.exports = (User, data, params) => {
 
   if (foundUser) {
     const message = `${ User.nick } ${ params }`
-    const messageData = new Message(User.id, User.nick, message, foundUser.id);
+    const messageData = new Message(User.id, User.nick, message, null, foundUser.id);
 
     return privateSystemEmit(User, foundUser, messageData);
   }
