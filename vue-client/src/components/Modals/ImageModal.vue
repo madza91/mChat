@@ -12,7 +12,6 @@
       </template>
       <div v-if="imageModal" class="d-block us-none">
         <b-spinner v-if="!isLoaded" variant="success" label="Spinning"></b-spinner>
-        <!-- ToDo Make placeholder -->
         <div v-if="error" class="modal-error">
           {{ error }}
         </div>
@@ -51,7 +50,7 @@ export default {
       this.isLoaded = true
       this.error = null
     },
-    handleLoadT (e) {
+    handleLoadT () {
       this.isLoaded = true
       this.error = 'Image can not be loaded'
     }
@@ -93,7 +92,7 @@ export default {
     }
 
     .b-icon {
-      color: white;
+      color: #bbb;
       cursor: pointer;
       font-size: 25px;
       opacity: 0.5;

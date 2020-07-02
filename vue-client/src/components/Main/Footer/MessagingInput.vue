@@ -47,7 +47,7 @@
       <font-awesome-icon
         icon="paper-plane"
         class="icon"
-        :class="{'disabled': !enabled || !message }"
+        :class="{'disabled': !enabled || (!message && !attachmentUploaded) }"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
         :disabled="!enabled"
