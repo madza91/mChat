@@ -1,5 +1,5 @@
 <template>
-  <b-row class="d-flex pb-2">
+  <b-row class="d-flex pb-2" style="flex-flow:nowrap">
     <div class="content-wrapper mr-2">
       <img
         v-for="image in data"
@@ -47,10 +47,13 @@ export default {
   .content-wrapper {
     display: flex;
     flex-grow: 1;
+    overflow: auto;
+    white-space: nowrap;
 
     img {
+      cursor: pointer;
       height: 50px;
-      padding: 5px;
+      margin: 5px;
     }
   }
 </style>
