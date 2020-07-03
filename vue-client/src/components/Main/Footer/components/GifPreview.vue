@@ -56,4 +56,8 @@ export default {
       margin: 5px;
     }
   }
+
+  .content-wrapper::-webkit-scrollbar {
+    display: none;
+  }
 </style>

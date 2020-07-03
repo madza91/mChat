@@ -14,7 +14,7 @@
       @close="resetGifs"
       @send="sendGif"
     />
-    <b-row>
+    <b-row ref="footerInputWrapper">
       <div class="attachment-wrapper">
         <input
           type="file"
@@ -100,7 +100,7 @@ export default {
     GifPreview
   },
   mounted () {
-    this.$refs.footerWrapper.addEventListener('touchmove', (e) => {
+    this.$refs.footerInputWrapper.addEventListener('touchmove', (e) => {
       e.preventDefault()
     })
   },
@@ -147,7 +147,6 @@ export default {
       }
     },
     sendGif (value) {
-      console.log('send gif:', value)
       this.attachment = value
       this.message = ''
       this.sendMessage()
