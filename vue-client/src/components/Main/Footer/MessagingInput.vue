@@ -1,53 +1,34 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row v-if="attachment || attachmentProgress || attachmentError" class="pb-2 d-flex flex-nowrap">
-      <font-awesome-icon
-        icon="times"
-        class="icon invisible"
-      />
-      <div class="preview-wrapper flex-grow-1 ml-2 mr-2">
-        <b-img v-if="attachmentPreview" :src="attachmentPreview" class="attachment-preview rounded" :class="{'attachment-transparent': !attachmentUploaded}" alt="Attachment image"></b-img>
-        <span v-if="attachmentError">{{ attachmentError }}</span>
-        <b-progress v-if="attachmentProgress" :value="attachmentProgress" variant="success" :max="100" animated></b-progress>
-      </div>
-      <font-awesome-icon
-        icon="times"
-        class="icon"
-        v-touch:start="removeAttachment"
-      />
-    </b-row>
-    <b-row v-if="giphyList.length > 0" class="d-flex pb-2">
-      <div class="giphy-wrapper mr-2">
-        <img
-          v-for="image in giphyList"
-          :key="image.id"
-          :src="image.images.fixed_height_small.url"
-        />
-      </div>
-      <font-awesome-icon
-        icon="times"
-        class="icon"
-        v-touch:start="removeGiphy"
-      />
-    </b-row>
+    <AttachmentPreview
+      v-if="attachmentPreview"
+      :image-preview="attachmentPreview"
+      :upload-progress="attachmentProgress"
+      :uploaded="attachmentUploaded"
+      :error="attachmentError"
+      @close="removeAttachment"
+    />
+    <GifPreview
+      v-if="gifs.length > 0"
+      :data="gifs"
+      @close="resetGifs"
+      @send="sendGif"
+    />
     <b-row>
       <div class="attachment-wrapper">
-          <input
-            type="file"
-            class="d-none"
-            ref="file"
-            accept="image/*"
-            @change="handleFileUpload"
-          />
-          <font-awesome-icon
-            icon="paperclip"
-            class="icon"
-            :class="{'disabled': attachment }"
-            @click="$refs.file.click()"
-          />
+        <input
+          type="file"
+          class="d-none"
+          ref="file"
+          accept="image/*"
+          @change="handleFileUpload"
+        />
+        <FooterIcon
+          icon="paperclip"
+          @click="$refs.file.click()"
+        />
       </div>
       <input
-        name="message-to-send"
         id="message-to-send"
         class="ml-2 mr-2"
         placeholder="Type your message"
@@ -56,22 +37,15 @@
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
-        v-debounce="searchGiphy"
+        v-debounce="getGifs"
         type="text"
         autocomplete="off"
       >
-      <font-awesome-icon
+      <FooterIcon
         icon="paper-plane"
-        class="icon"
-        :class="{'disabled': !enabled || (!message && !attachmentUploaded) }"
+        :disabled="!enabled || (!message && !attachmentUploaded)"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
-        :disabled="!enabled"
-      />
-      <font-awesome-icon
-        icon="microphone"
-        class="icon"
-        :class="{'d-none': !enabled || !settings.voice }"
       />
     </b-row>
   </footer>
@@ -80,6 +54,9 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import apiMixin from '../../../mixins/ApiMixin'
+import AttachmentPreview from './components/AttachmentPreview'
+import GifPreview from './components/GifPreview'
+import FooterIcon from './components/FooterIcon'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -111,11 +88,16 @@ export default {
       attachmentProgress: null,
       attachmentPreview: null,
       attachmentUploaded: null,
-      giphyList: [],
+      gifs: [],
       settings: {
         voice: false // Disabled feature
       }
     }
+  },
+  components: {
+    FooterIcon,
+    AttachmentPreview,
+    GifPreview
   },
   mounted () {
     this.$refs.footerWrapper.addEventListener('touchmove', (e) => {
@@ -164,17 +146,24 @@ export default {
         })
       }
     },
-    searchGiphy (value) {
+    sendGif (value) {
+      console.log('send gif:', value)
+      this.attachment = value
+      this.message = ''
+      this.sendMessage()
+      this.resetGifs()
+    },
+    getGifs (value) {
       const command = '/giphy '
       if (value.substr(0, command.length) === command) {
         const query = value.split(' ')[1]
         this.giphySearch(query).then(results => {
-          this.giphyList = results.data.data
+          this.gifs = results.data.data
         })
       }
 
       if (value === '') {
-        this.removeGiphy()
+        this.resetGifs()
       }
     },
     checkFocus () {
@@ -198,8 +187,8 @@ export default {
       this.attachmentPreview = null
       this.attachmentUploaded = null
     },
-    removeGiphy () {
-      this.giphyList = []
+    resetGifs () {
+      this.gifs = []
     }
   }
 }
@@ -252,74 +241,13 @@ export default {
     @media screen and (prefers-color-scheme: dark) {
       color: white;
       background-color: #272729;
-      border: 1px solid var(--color-border-dark)
+      border: 1px solid var(--color-border-dark);
     }
 
     @include media-breakpoint-down(xs) {
       padding: 0 15px;
       height: $icon-size-mobile;
     }
-  }
-
-  .icon {
-    margin: auto;
-    width: $icon-size;
-    height: $icon-size;
-    padding: 8px;
-    cursor: pointer;
-
-    @include media-breakpoint-down(xs) {
-      width: $icon-size-mobile;
-      height: $icon-size-mobile;
-      padding: 4px;
-    }
-  }
-
-  .icon.disabled {
-    color: grey;
-    cursor: auto;
-  }
-
-  .attachment-wrapper {
-    position: relative;
-    cursor: pointer;
-  }
-
-  .preview-wrapper {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row;
-    margin-top: auto;
-    margin-bottom: auto;
-
-    span {
-      margin: auto 20px;
-      font-size: 12px;
-    }
-  }
-
-  .giphy-wrapper {
-    display: flex;
-    flex-grow: 1;
-
-    img {
-      height: 50px;
-      padding: 5px;
-    }
-  }
-
-  .progress {
-    flex-grow: 1;
-    margin: auto auto auto 20px;
-    max-width: 200px;
-  }
-
-  .attachment-preview {
-    max-height: 50px;
-  }
-
-  .attachment-transparent {
-    opacity: 0.6;
   }
 
   .row {
