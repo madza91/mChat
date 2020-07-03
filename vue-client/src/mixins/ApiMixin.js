@@ -10,6 +10,15 @@ export default {
         },
         onUploadProgress
       })
+    },
+    giphySearch (query) {
+      return this.axios.get(process.env.VUE_APP_GIPHY_HOST + '/v1/gifs/search', {
+        params: {
+          api_key: process.env.VUE_APP_GIPHY_KEY,
+          limit: 20,
+          q: query
+        }
+      })
     }
   }
 }

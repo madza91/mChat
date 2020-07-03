@@ -16,6 +16,20 @@
         v-touch:start="removeAttachment"
       />
     </b-row>
+    <b-row v-if="giphyList.length > 0" class="d-flex pb-2">
+      <div class="giphy-wrapper mr-2">
+        <img
+          v-for="image in giphyList"
+          :key="image.id"
+          :src="image.images.fixed_height_small.url"
+        />
+      </div>
+      <font-awesome-icon
+        icon="times"
+        class="icon"
+        v-touch:start="removeGiphy"
+      />
+    </b-row>
     <b-row>
       <div class="attachment-wrapper">
           <input
@@ -42,6 +56,8 @@
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
+        v-debounce="searchGiphy"
+        type="text"
         autocomplete="off"
       >
       <font-awesome-icon
@@ -95,6 +111,7 @@ export default {
       attachmentProgress: null,
       attachmentPreview: null,
       attachmentUploaded: null,
+      giphyList: [],
       settings: {
         voice: false // Disabled feature
       }
@@ -147,6 +164,19 @@ export default {
         })
       }
     },
+    searchGiphy (value) {
+      const command = '/giphy '
+      if (value.substr(0, command.length) === command) {
+        const query = value.split(' ')[1]
+        this.giphySearch(query).then(results => {
+          this.giphyList = results.data.data
+        })
+      }
+
+      if (value === '') {
+        this.removeGiphy()
+      }
+    },
     checkFocus () {
       if (this.$refs.footerWrapper.classList.contains('focused')) {
         this.$refs.footerInput.focus()
@@ -167,6 +197,9 @@ export default {
       this.attachmentProgress = null
       this.attachmentPreview = null
       this.attachmentUploaded = null
+    },
+    removeGiphy () {
+      this.giphyList = []
     }
   }
 }
@@ -262,6 +295,16 @@ export default {
     span {
       margin: auto 20px;
       font-size: 12px;
+    }
+  }
+
+  .giphy-wrapper {
+    display: flex;
+    flex-grow: 1;
+
+    img {
+      height: 50px;
+      padding: 5px;
     }
   }
 
