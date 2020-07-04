@@ -127,14 +127,10 @@ export default {
   .message-top {
     display: flex;
     justify-content: space-between;
-    color: #8e8c8c;
     font-size: 10px;
     line-height: 16px;
     padding: 0 5px;
-
-    @media screen and (prefers-color-scheme: dark) {
-      color: #ccc;
-    }
+    opacity: .6;
 
     .message-name {
       padding-bottom: 5px;

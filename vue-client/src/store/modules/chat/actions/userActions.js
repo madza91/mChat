@@ -50,7 +50,11 @@ export const userActions = {
 
     const selectedChat = getters.getSelectedChat
     if (toWindow !== (selectedChat.isChannel ? 0 : selectedChat.id)) {
-      notificationMixin.methods.sendNotification(data.message)
+      const selectedChat = {
+        id: toWindow,
+        isChannel: false
+      }
+      notificationMixin.methods.sendNotification(data.message, selectedChat)
       commit('incrementUserBadge', data)
     }
   },

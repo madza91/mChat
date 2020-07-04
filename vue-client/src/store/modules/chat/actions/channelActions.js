@@ -3,7 +3,11 @@ import { notificationMixin } from '../../../../mixins/NotificationMixin'
 export const channelActions = {
   insertChannelMessage ({ commit, getters }, data) {
     if (data.from !== getters.getLoggedInUser.id) {
-      notificationMixin.methods.sendNotification(data.message)
+      const selectedChat = {
+        id: data.to,
+        isChannel: true
+      }
+      notificationMixin.methods.sendNotification(data.message, selectedChat)
     }
 
     commit('insertChannelMessage', data)
