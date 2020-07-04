@@ -126,7 +126,7 @@ export default {
 
   .scrollable {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   .info {
