@@ -14,8 +14,9 @@
           v-if="attachment && !attachmentError"
           :src="attachment.thumbnail.url"
           class="animation-fadein"
+          :class="{'cursor-pointer': attachment.image}"
           @error="attachmentError = true"
-          @click="imageToggle(attachment.image.url)"
+          @click="openImage(attachment)"
           alt="attachment"
         />
         <div v-if="attachmentError" class="attachment-error">
@@ -60,7 +61,12 @@ export default {
     }
   },
   methods: {
-    ...mapUiActions(['imageToggle'])
+    ...mapUiActions(['imageToggle']),
+    openImage (attachment) {
+      if (attachment.image) {
+        this.imageToggle(attachment.image.url)
+      }
+    }
   },
   props: {
     nick: {
@@ -127,6 +133,9 @@ export default {
 
   img {
     border-radius: 10px;
+  }
+
+  .cursor-pointer {
     cursor: pointer;
   }
 

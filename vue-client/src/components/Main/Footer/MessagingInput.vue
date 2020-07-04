@@ -1,61 +1,52 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row v-if="attachment || attachmentProgress || attachmentError" class="pb-2 d-flex flex-nowrap">
-      <font-awesome-icon
-        icon="times"
-        class="icon invisible"
-      />
-      <div class="preview-wrapper flex-grow-1 ml-2 mr-2">
-        <b-img v-if="attachmentPreview" :src="attachmentPreview" class="attachment-preview rounded" :class="{'attachment-transparent': !attachmentUploaded}" alt="Attachment image"></b-img>
-        <span v-if="attachmentError">{{ attachmentError }}</span>
-        <b-progress v-if="attachmentProgress" :value="attachmentProgress" variant="success" :max="100" animated></b-progress>
-      </div>
-      <font-awesome-icon
-        icon="times"
-        class="icon"
-        v-touch:start="removeAttachment"
-      />
-    </b-row>
-    <b-row>
+    <AttachmentPreview
+      v-if="attachmentPreview"
+      :image-preview="attachmentPreview"
+      :upload-progress="attachmentProgress"
+      :uploaded="attachmentUploaded"
+      :error="attachmentError"
+      @close="resetAttachment"
+    />
+    <GifPreview
+      v-if="gifs.length > 0"
+      :data="gifs"
+      @close="resetGifs"
+      @send="sendGif"
+    />
+    <b-row ref="footerInputWrapper">
       <div class="attachment-wrapper">
-          <input
-            type="file"
-            class="d-none"
-            ref="file"
-            accept="image/*"
-            @change="handleFileUpload"
-          />
-          <font-awesome-icon
-            icon="paperclip"
-            class="icon"
-            :class="{'disabled': attachment }"
-            @click="$refs.file.click()"
-          />
+        <input
+          type="file"
+          class="d-none"
+          ref="file"
+          accept="image/*"
+          @change="handleFileUpload"
+        />
+        <FooterIcon
+          icon="paperclip"
+          @click="$refs.file.click()"
+        />
       </div>
       <input
-        name="message-to-send"
         id="message-to-send"
         class="ml-2 mr-2"
         placeholder="Type your message"
         ref="footerInput"
         @keyup.enter="sendMessage"
+        @keyup.esc="resetAllHints"
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
+        v-debounce="getHints"
+        type="text"
         autocomplete="off"
       >
-      <font-awesome-icon
+      <FooterIcon
         icon="paper-plane"
-        class="icon"
-        :class="{'disabled': !enabled || (!message && !attachmentUploaded) }"
+        :disabled="isSendUnavailable"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
-        :disabled="!enabled"
-      />
-      <font-awesome-icon
-        icon="microphone"
-        class="icon"
-        :class="{'d-none': !enabled || !settings.voice }"
       />
     </b-row>
   </footer>
@@ -64,6 +55,9 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import apiMixin from '../../../mixins/ApiMixin'
+import AttachmentPreview from './components/AttachmentPreview'
+import GifPreview from './components/GifPreview'
+import FooterIcon from './components/FooterIcon'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -85,7 +79,10 @@ export default {
     }
   },
   computed: {
-    ...mapChatState(['selectedChat'])
+    ...mapChatState(['selectedChat']),
+    isSendUnavailable () {
+      return !this.enabled || this.gifs.length > 0 || (!this.message && !this.attachment)
+    }
   },
   data () {
     return {
@@ -95,20 +92,26 @@ export default {
       attachmentProgress: null,
       attachmentPreview: null,
       attachmentUploaded: null,
+      gifs: [],
       settings: {
         voice: false // Disabled feature
       }
     }
   },
+  components: {
+    FooterIcon,
+    AttachmentPreview,
+    GifPreview
+  },
   mounted () {
-    this.$refs.footerWrapper.addEventListener('touchmove', (e) => {
+    this.$refs.footerInputWrapper.addEventListener('touchmove', (e) => {
       e.preventDefault()
     })
   },
   methods: {
     ...mapUiActions(['sidebarState']),
     sendMessage () {
-      if (this.enabled && (this.message || this.attachment)) {
+      if (!this.isSendUnavailable) {
         this.checkFocus()
 
         this.$socket.client.emit('message', {
@@ -118,7 +121,7 @@ export default {
           attachment: this.attachment
         })
         this.message = ''
-        this.removeAttachment()
+        this.resetAttachment()
       }
     },
     handleFileUpload () {
@@ -130,6 +133,7 @@ export default {
         reader.readAsDataURL(file)
         reader.onload = (e) => {
           this.attachmentPreview = e.target.result
+          this.resetGifs()
         }
 
         const onUploadProgress = progressEvent => {
@@ -147,6 +151,32 @@ export default {
         })
       }
     },
+    sendGif (value) {
+      this.attachment = value
+      this.message = ''
+      this.resetGifs()
+      this.sendMessage()
+    },
+    getHints (value) {
+      const isCommand = value.charAt(0) === '/'
+
+      if (isCommand) {
+        const command = value.substr(1).split(' ')[0]
+        const params = value.substr(2).substr(command.length)
+
+        switch (command) {
+          case 'giphy':
+            this.resetAttachment()
+            this.giphySearch(params).then(results => {
+              this.gifs = results.data.data
+            })
+        }
+      }
+
+      if (value === '') {
+        this.resetGifs()
+      }
+    },
     checkFocus () {
       if (this.$refs.footerWrapper.classList.contains('focused')) {
         this.$refs.footerInput.focus()
@@ -161,12 +191,23 @@ export default {
       const container = document.getElementById('container-fluid')
       container.scrollTop = container.scrollHeight
     },
-    removeAttachment () {
+    resetAttachment () {
       this.attachment = null
       this.attachmentError = null
       this.attachmentProgress = null
       this.attachmentPreview = null
       this.attachmentUploaded = null
+      this.$refs.file.value = ''
+    },
+    resetGifs () {
+      if (this.gifs.length > 0) {
+        this.gifs = []
+        this.message = ''
+      }
+    },
+    resetAllHints () {
+      this.resetAttachment()
+      this.resetGifs()
     }
   }
 }
@@ -219,64 +260,13 @@ export default {
     @media screen and (prefers-color-scheme: dark) {
       color: white;
       background-color: #272729;
-      border: 1px solid var(--color-border-dark)
+      border: 1px solid var(--color-border-dark);
     }
 
     @include media-breakpoint-down(xs) {
       padding: 0 15px;
       height: $icon-size-mobile;
     }
-  }
-
-  .icon {
-    margin: auto;
-    width: $icon-size;
-    height: $icon-size;
-    padding: 8px;
-    cursor: pointer;
-
-    @include media-breakpoint-down(xs) {
-      width: $icon-size-mobile;
-      height: $icon-size-mobile;
-      padding: 4px;
-    }
-  }
-
-  .icon.disabled {
-    color: grey;
-    cursor: auto;
-  }
-
-  .attachment-wrapper {
-    position: relative;
-    cursor: pointer;
-  }
-
-  .preview-wrapper {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row;
-    margin-top: auto;
-    margin-bottom: auto;
-
-    span {
-      margin: auto 20px;
-      font-size: 12px;
-    }
-  }
-
-  .progress {
-    flex-grow: 1;
-    margin: auto auto auto 20px;
-    max-width: 200px;
-  }
-
-  .attachment-preview {
-    max-height: 50px;
-  }
-
-  .attachment-transparent {
-    opacity: 0.6;
   }
 
   .row {
