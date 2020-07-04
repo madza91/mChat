@@ -31,9 +31,11 @@ module.exports = {
     return (typeof message === 'object' && message !== null);
   },
   emojiconify: (message) => {
-    Emojis.forEach(element => {
-      message = message.replace(element.shortcut, element.emoji);
-    })
+    if (message) {
+      Emojis.forEach(element => {
+        message = message.replace(element.shortcut, element.emoji);
+      })
+    }
 
     return message;
   }

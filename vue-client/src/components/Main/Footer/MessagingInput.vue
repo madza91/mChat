@@ -1,55 +1,52 @@
 <template>
   <footer class="main-footer" ref="footerWrapper">
-    <b-row v-if="attachment || attachmentError" class="pb-2">
-      <font-awesome-icon
-        icon="times"
-        class="icon invisible"
-      />
-      <div class="flex-grow-1 ml-2 mr-2 m-auto">
-        <span v-if="attachmentError">{{ attachmentError }}</span>
-        <b-img v-if="attachmentPreview" :src="attachmentPreview" rounded class="attachment-preview" alt="Attachment image"></b-img>
-      </div>
-      <font-awesome-icon
-        icon="times"
-        class="icon"
-        v-touch:start="removeAttachment"
-      />
-    </b-row>
-    <b-row>
+    <AttachmentPreview
+      v-if="attachmentPreview"
+      :image-preview="attachmentPreview"
+      :upload-progress="attachmentProgress"
+      :uploaded="attachmentUploaded"
+      :error="attachmentError"
+      @close="resetAttachment"
+    />
+    <GifPreview
+      v-if="gifs.length > 0"
+      :data="gifs"
+      @close="resetGifs"
+      @send="sendGif"
+    />
+    <b-row ref="footerInputWrapper">
       <div class="attachment-wrapper">
-        <label class="file-label">
-          <input type="file" class="file-input" ref="file" accept="image/*" v-on:change="handleFileUpload()" />
-          <font-awesome-icon
-            icon="paperclip"
-            class="icon"
-            :class="{'disabled': attachment }"
-          />
-        </label>
+        <input
+          type="file"
+          class="d-none"
+          ref="file"
+          accept="image/*"
+          @change="handleFileUpload"
+        />
+        <FooterIcon
+          icon="paperclip"
+          @click="$refs.file.click()"
+        />
       </div>
       <input
-        name="message-to-send"
         id="message-to-send"
         class="ml-2 mr-2"
         placeholder="Type your message"
         ref="footerInput"
         @keyup.enter="sendMessage"
+        @keyup.esc="resetAllHints"
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
+        v-debounce="getHints"
+        type="text"
         autocomplete="off"
       >
-      <font-awesome-icon
+      <FooterIcon
         icon="paper-plane"
-        class="icon"
-        :class="{'disabled': !enabled || !message }"
+        :disabled="isSendUnavailable"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
-        :disabled="!enabled"
-      />
-      <font-awesome-icon
-        icon="microphone"
-        class="icon"
-        :class="{'d-none': !enabled || !settings.voice }"
       />
     </b-row>
   </footer>
@@ -58,6 +55,10 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import apiMixin from '../../../mixins/ApiMixin'
+import detectMobileMixin from '../../../mixins/DetectMobileMixin'
+import AttachmentPreview from './components/AttachmentPreview'
+import GifPreview from './components/GifPreview'
+import FooterIcon from './components/FooterIcon'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -69,7 +70,7 @@ export default {
       default: false
     }
   },
-  mixins: [apiMixin],
+  mixins: [apiMixin, detectMobileMixin],
   watch: {
     message: function (value) {
       this.selectedChat.data._input = value
@@ -79,28 +80,36 @@ export default {
     }
   },
   computed: {
-    ...mapChatState(['selectedChat'])
+    ...mapChatState(['selectedChat']),
+    isSendUnavailable () {
+      return !this.enabled || this.gifs.length > 0 || (!this.message && !this.attachment)
+    }
   },
   data () {
     return {
       message: null,
+      gifs: [],
       attachment: null,
       attachmentError: null,
+      attachmentProgress: null,
       attachmentPreview: null,
-      settings: {
-        voice: false // Disabled feature
-      }
+      attachmentUploaded: null
     }
   },
+  components: {
+    FooterIcon,
+    AttachmentPreview,
+    GifPreview
+  },
   mounted () {
-    this.$refs.footerWrapper.addEventListener('touchmove', (e) => {
+    this.$refs.footerInputWrapper.addEventListener('touchmove', (e) => {
       e.preventDefault()
     })
   },
   methods: {
     ...mapUiActions(['sidebarState']),
     sendMessage () {
-      if (this.enabled && (this.message || this.attachment)) {
+      if (!this.isSendUnavailable) {
         this.checkFocus()
 
         this.$socket.client.emit('message', {
@@ -110,25 +119,68 @@ export default {
           attachment: this.attachment
         })
         this.message = ''
-        this.removeAttachment()
+        this.resetAttachment()
       }
     },
     handleFileUpload () {
       const files = this.$refs.file.files
 
       if (files.length === 1) {
-        this.uploadImage(files[0]).then((response) => {
-          this.attachment = response.data.data
-        }).catch(() => {
-          this.attachmentPreview = null
-          this.attachmentError = 'This image can not be uploaded, please try with another one.'
-        })
-
+        const file = files[0]
         const reader = new FileReader()
-        reader.readAsDataURL(files[0])
+        reader.readAsDataURL(file)
         reader.onload = (e) => {
           this.attachmentPreview = e.target.result
+          this.resetGifs()
+
+          if (!this.isMobile()) {
+            this.$refs.footerInput.focus()
+          }
         }
+
+        const onUploadProgress = progressEvent => {
+          this.attachmentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        }
+
+        this.uploadImage(file, onUploadProgress).then(response => {
+          this.attachment = response.data
+          this.attachmentUploaded = true
+          this.attachmentProgress = null
+        }).catch(() => {
+          this.attachmentProgress = null
+          this.attachmentUploaded = null
+          this.attachmentError = 'This image can not be uploaded, please try with another one.'
+        })
+      }
+    },
+    sendGif (value) {
+      this.attachment = value
+      this.message = ''
+      this.resetGifs()
+      this.sendMessage()
+
+      if (!this.isMobile()) {
+        this.$refs.footerInput.focus()
+      }
+    },
+    getHints (value) {
+      const isCommand = value.charAt(0) === '/'
+
+      if (isCommand) {
+        const command = value.substr(1).split(' ')[0]
+        const params = value.substr(2).substr(command.length)
+
+        switch (command) {
+          case 'giphy':
+            this.resetAttachment()
+            this.giphySearch(params).then(results => {
+              this.gifs = results.data.data
+            })
+        }
+      }
+
+      if (value === '') {
+        this.resetGifs()
       }
     },
     checkFocus () {
@@ -145,10 +197,23 @@ export default {
       const container = document.getElementById('container-fluid')
       container.scrollTop = container.scrollHeight
     },
-    removeAttachment () {
+    resetAttachment () {
       this.attachment = null
       this.attachmentError = null
+      this.attachmentProgress = null
       this.attachmentPreview = null
+      this.attachmentUploaded = null
+      this.$refs.file.value = ''
+    },
+    resetGifs () {
+      if (this.gifs.length > 0) {
+        this.gifs = []
+        this.message = ''
+      }
+    },
+    resetAllHints () {
+      this.resetAttachment()
+      this.resetGifs()
     }
   }
 }
@@ -201,61 +266,13 @@ export default {
     @media screen and (prefers-color-scheme: dark) {
       color: white;
       background-color: #272729;
-      border: 1px solid var(--color-border-dark)
+      border: 1px solid var(--color-border-dark);
     }
 
     @include media-breakpoint-down(xs) {
       padding: 0 15px;
       height: $icon-size-mobile;
     }
-  }
-
-  .icon {
-    margin: auto;
-    width: $icon-size;
-    height: $icon-size;
-    padding: 8px;
-    cursor: pointer;
-
-    @include media-breakpoint-down(xs) {
-      width: $icon-size-mobile;
-      height: $icon-size-mobile;
-      padding: 4px;
-    }
-  }
-
-  .icon.disabled {
-    color: grey;
-    cursor: auto;
-  }
-
-  .attachment-wrapper {
-    position: relative;
-    cursor: pointer;
-  }
-
-  .file-label {
-    align-items: stretch;
-    display: flex;
-    cursor: pointer;
-    justify-content: flex-start;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .file-input {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    outline: 0;
-    z-index: -1;
-  }
-
-  .attachment-preview {
-    max-height: 50px;
   }
 
   .row {

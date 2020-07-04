@@ -1,4 +1,5 @@
 // define a mixin object
+import store from '../store/index'
 export const notificationMixin = {
   methods: {
     changeTitle (number) {
@@ -9,9 +10,8 @@ export const notificationMixin = {
       const audio = new Audio('./audio/new_message.mp3')
       audio.play()
     },
-    sendNotification (message, totalNew) {
+    sendNotification (message, selectedWindowData) {
       this.playSound()
-      // this.changeTitle(totalNew)
 
       // eslint-disable-next-line no-constant-condition
       if (window.Notification) {
@@ -25,10 +25,20 @@ export const notificationMixin = {
           const title = process.env.VUE_APP_TITLE
           // var icon = 'http://madza.rs/templates/portfolio/img/logo.png'
           const notification = new Notification(title, {
-            body: message
+            body: message,
+            icon: '/img/icons/android-chrome-192x192.png',
+            data: {
+              window: selectedWindowData
+            }
           })
 
           notification.addEventListener('click', function (e) {
+            const data = e.currentTarget.data
+
+            if (data.window) {
+              store.dispatch('chat/setSelectedChat', data.window)
+            }
+
             parent.focus()
             window.focus()
             e.target.close()
