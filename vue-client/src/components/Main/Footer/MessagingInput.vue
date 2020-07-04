@@ -55,6 +55,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import apiMixin from '../../../mixins/ApiMixin'
+import detectMobileMixin from '../../../mixins/DetectMobileMixin'
 import AttachmentPreview from './components/AttachmentPreview'
 import GifPreview from './components/GifPreview'
 import FooterIcon from './components/FooterIcon'
@@ -69,7 +70,7 @@ export default {
       default: false
     }
   },
-  mixins: [apiMixin],
+  mixins: [apiMixin, detectMobileMixin],
   watch: {
     message: function (value) {
       this.selectedChat.data._input = value
@@ -87,15 +88,12 @@ export default {
   data () {
     return {
       message: null,
+      gifs: [],
       attachment: null,
       attachmentError: null,
       attachmentProgress: null,
       attachmentPreview: null,
-      attachmentUploaded: null,
-      gifs: [],
-      settings: {
-        voice: false // Disabled feature
-      }
+      attachmentUploaded: null
     }
   },
   components: {
@@ -134,6 +132,10 @@ export default {
         reader.onload = (e) => {
           this.attachmentPreview = e.target.result
           this.resetGifs()
+
+          if (!this.isMobile()) {
+            this.$refs.footerInput.focus()
+          }
         }
 
         const onUploadProgress = progressEvent => {
@@ -156,6 +158,10 @@ export default {
       this.message = ''
       this.resetGifs()
       this.sendMessage()
+
+      if (!this.isMobile()) {
+        this.$refs.footerInput.focus()
+      }
     },
     getHints (value) {
       const isCommand = value.charAt(0) === '/'
