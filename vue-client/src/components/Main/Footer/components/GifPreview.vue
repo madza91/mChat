@@ -5,6 +5,8 @@
         v-for="image in data"
         :key="image.id"
         :src="image.images.fixed_height_small.url"
+        :width="image.images.fixed_height_small.width / 2"
+        :title="image.title"
         alt="gif image"
         @click="emitGif(image.images.fixed_height_small)"
       />
@@ -53,7 +55,7 @@ export default {
     img {
       cursor: pointer;
       height: 50px;
-      margin: 5px;
+      margin: 0 5px;
     }
   }
 

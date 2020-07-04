@@ -6,7 +6,7 @@
       :upload-progress="attachmentProgress"
       :uploaded="attachmentUploaded"
       :error="attachmentError"
-      @close="removeAttachment"
+      @close="resetAttachment"
     />
     <GifPreview
       v-if="gifs.length > 0"
@@ -18,7 +18,6 @@
       <div class="attachment-wrapper">
         <input
           type="file"
-          class="d-none"
           ref="file"
           accept="image/*"
           @change="handleFileUpload"
@@ -34,16 +33,17 @@
         placeholder="Type your message"
         ref="footerInput"
         @keyup.enter="sendMessage"
+        @keyup.esc="resetAllHints"
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
-        v-debounce="getGifs"
+        v-debounce="getHints"
         type="text"
         autocomplete="off"
       >
       <FooterIcon
         icon="paper-plane"
-        :disabled="!enabled || (!message && !attachmentUploaded)"
+        :disabled="isSendUnavailable"
         v-touch:start="sendMessage"
         v-touch:end="(e) => e.preventDefault()"
       />
@@ -78,7 +78,10 @@ export default {
     }
   },
   computed: {
-    ...mapChatState(['selectedChat'])
+    ...mapChatState(['selectedChat']),
+    isSendUnavailable () {
+      return !this.enabled || this.gifs.length > 0 || (!this.message && !this.attachment)
+    }
   },
   data () {
     return {
@@ -107,7 +110,7 @@ export default {
   methods: {
     ...mapUiActions(['sidebarState']),
     sendMessage () {
-      if (this.enabled && (this.message || this.attachment)) {
+      if (!this.isSendUnavailable) {
         this.checkFocus()
 
         this.$socket.client.emit('message', {
@@ -117,7 +120,7 @@ export default {
           attachment: this.attachment
         })
         this.message = ''
-        this.removeAttachment()
+        this.resetAttachment()
       }
     },
     handleFileUpload () {
@@ -129,6 +132,7 @@ export default {
         reader.readAsDataURL(file)
         reader.onload = (e) => {
           this.attachmentPreview = e.target.result
+          this.resetGifs()
         }
 
         const onUploadProgress = progressEvent => {
@@ -149,16 +153,23 @@ export default {
     sendGif (value) {
       this.attachment = value
       this.message = ''
-      this.sendMessage()
       this.resetGifs()
+      this.sendMessage()
     },
-    getGifs (value) {
-      const command = '/giphy '
-      if (value.substr(0, command.length) === command) {
-        const query = value.split(' ')[1]
-        this.giphySearch(query).then(results => {
-          this.gifs = results.data.data
-        })
+    getHints (value) {
+      const isCommand = value.charAt(0) === '/'
+
+      if (isCommand) {
+        const command = value.substr(1).split(' ')[0]
+        const params = value.substr(2).substr(command.length)
+
+        switch (command) {
+          case 'giphy':
+            this.resetAttachment()
+            this.giphySearch(params).then(results => {
+              this.gifs = results.data.data
+            })
+        }
       }
 
       if (value === '') {
@@ -179,7 +190,7 @@ export default {
       const container = document.getElementById('container-fluid')
       container.scrollTop = container.scrollHeight
     },
-    removeAttachment () {
+    resetAttachment () {
       this.attachment = null
       this.attachmentError = null
       this.attachmentProgress = null
@@ -187,7 +198,14 @@ export default {
       this.attachmentUploaded = null
     },
     resetGifs () {
-      this.gifs = []
+      if (this.gifs.length > 0) {
+        this.gifs = []
+        this.message = ''
+      }
+    },
+    resetAllHints () {
+      this.resetAttachment()
+      this.resetGifs()
     }
   }
 }
