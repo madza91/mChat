@@ -18,6 +18,7 @@
       <div class="attachment-wrapper">
         <input
           type="file"
+          class="d-none"
           ref="file"
           accept="image/*"
           @change="handleFileUpload"
@@ -196,6 +197,7 @@ export default {
       this.attachmentProgress = null
       this.attachmentPreview = null
       this.attachmentUploaded = null
+      this.$refs.file.value = ''
     },
     resetGifs () {
       if (this.gifs.length > 0) {
