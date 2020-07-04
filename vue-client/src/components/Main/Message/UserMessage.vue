@@ -1,13 +1,13 @@
 <template>
   <div :class="[right ? 'right-message' : 'left-message']">
-    <div class="message" :class="formattedShape">
-      <div class="message-data-top" :class="{'d-none': !shape.isFirst}">
-        <span class="message-data-name">{{ nick }}</span>
-        <span class="message-data-time">{{ formattedTime }}</span>
+    <div class="message-content" :class="formattedShape">
+      <div class="message-top" :class="{'d-none': !shape.isFirst}">
+        <span class="message-name">{{ nick }}</span>
+        <span class="message-time">{{ formattedTime }}</span>
       </div>
       <div
         v-if="attachment"
-        class="message-data-image"
+        class="message-attachment"
         :style="imageStyle"
       >
         <img
@@ -25,8 +25,8 @@
         </div>
       </div>
       <div v-if="message">
-        <span v-if="!enableHtml" class="message-data-text">{{ message }}</span>
-        <span v-else class="message-data-text" v-html="message"></span>
+        <span v-if="!enableHtml" class="message-text">{{ message }}</span>
+        <span v-else class="message-text" v-html="message"></span>
       </div>
     </div>
   </div>
@@ -103,81 +103,114 @@ export default {
 <style scoped lang="scss">
 @import '../../../assets/styles';
 
-.message {
+.message-content {
   display: table;
-  color: white;
-  padding: 3px;
+  color: black;
+  padding: 2px;
   line-height: 26px;
   font-size: 14px;
   margin-bottom: 5px;
   min-width: 100px;
   max-width: 50%;
+  -webkit-box-shadow: 5px 5px 6px -5px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 5px 5px 6px -5px rgba(0, 0, 0, 0.3);
+  box-shadow: 5px 5px 6px -5px rgba(0, 0, 0, 0.3);
+
+  @media screen and (prefers-color-scheme: dark) {
+    color: white;
+  }
 
   @include media-breakpoint-down(xs) {
     max-width: 90%;
   }
-}
-.message-data-top {
-  display: flex;
-  justify-content: space-between;
-  color: #ccc;
-  font-size: 10px;
-  line-height: 16px;
-  padding: 0 5px;
-}
-.message-data-image {
-  display: flex;
-  margin: auto;
-  align-items: center;
-  justify-content: center;
 
-  img {
-    border-radius: 10px;
-  }
-
-  .cursor-pointer {
-    cursor: pointer;
-  }
-
-  .attachment-error {
+  .message-top {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
+    color: #8e8c8c;
+    font-size: 10px;
+    line-height: 16px;
+    padding: 0 5px;
 
-    .b-icon {
-      font-size: 22px;
+    @media screen and (prefers-color-scheme: dark) {
+      color: #ccc;
+    }
+
+    .message-name {
+      padding-bottom: 5px;
+    }
+
+    .message-time {
+      padding-left: 20px;
+    }
+  }
+
+  .message-attachment {
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      border-radius: 10px;
+    }
+
+    .cursor-pointer {
+      cursor: pointer;
+    }
+
+    .attachment-error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .b-icon {
+        font-size: 22px;
+      }
+    }
+  }
+
+  .message-text {
+    padding: 0 5px;
+  }
+}
+
+.left-message {
+  .message-content {
+    background: #EFEFEF;
+
+    @media screen and (prefers-color-scheme: dark) {
+      background: #525054;
     }
   }
 }
-.message-data-name {
-  padding-bottom: 5px;
-}
-.message-data-time {
-  padding-left: 20px;
-}
-.message-data-text {
-  padding: 0 5px;
-}
-.left-message .message {
-  background: #86BB71;
-}
+
 .right-message {
   display: flex;
   justify-content: flex-end;
+
+  .message-content {
+    background: #D6F6BE;
+
+    @media screen and (prefers-color-scheme: dark) {
+      background: #185f54;
+    }
+  }
 }
-.right-message .message {
-  background: #94C2ED;
-}
+
 .left-message-shape-full, .left-message-shape-last {
   border-radius: 0 10px 10px;
 }
+
 .left-message-shape-first, .left-message-shape-mid {
   border-radius: 0 10px 10px 0;
   margin-bottom: 2px;
 }
+
 .right-message-shape-full, .right-message-shape-last {
   border-radius: 10px 0 10px 10px;
 }
+
 .right-message-shape-first, .right-message-shape-mid {
   border-radius: 10px 0 0 10px;
   margin-bottom: 2px;
