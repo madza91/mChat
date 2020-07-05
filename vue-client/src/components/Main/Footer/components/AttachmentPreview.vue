@@ -23,6 +23,7 @@
 
 <script>
 import FooterIcon from './FooterIcon'
+import ScrollingMixin from '../../../../mixins/ScrollingMixin'
 
 export default {
   name: 'AttachmentPreview',
@@ -41,8 +42,12 @@ export default {
       type: String
     }
   },
+  mixins: [ScrollingMixin],
   components: {
     FooterIcon
+  },
+  mounted () {
+    this.scrollMessagesDown()
   }
 }
 </script>

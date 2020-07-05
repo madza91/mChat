@@ -16,6 +16,7 @@
 
 <script>
 import FooterIcon from './FooterIcon'
+import ScrollingMixin from '../../../../mixins/ScrollingMixin'
 
 export default {
   name: 'GifPreview',
@@ -25,8 +26,12 @@ export default {
       required: true
     }
   },
+  mixins: [ScrollingMixin],
   components: {
     FooterIcon
+  },
+  mounted () {
+    this.scrollMessagesDown()
   },
   methods: {
     emitGif (image) {
@@ -46,6 +51,7 @@ export default {
 
 <style scoped lang="scss">
   .content-wrapper {
+    height: 50px;
     display: flex;
     flex-grow: 1;
     overflow: auto;
