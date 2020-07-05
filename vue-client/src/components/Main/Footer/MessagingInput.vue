@@ -59,6 +59,7 @@ import detectMobileMixin from '../../../mixins/DetectMobileMixin'
 import AttachmentPreview from './components/AttachmentPreview'
 import GifPreview from './components/GifPreview'
 import FooterIcon from './components/FooterIcon'
+import ScrollingMixin from '../../../mixins/ScrollingMixin'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -70,7 +71,7 @@ export default {
       default: false
     }
   },
-  mixins: [apiMixin, detectMobileMixin],
+  mixins: [apiMixin, detectMobileMixin, ScrollingMixin],
   watch: {
     message: function (value) {
       this.selectedChat.data._input = value
@@ -194,8 +195,7 @@ export default {
     },
     onBlur () {
       this.$refs.footerWrapper.classList.remove('focused')
-      const container = document.getElementById('container-fluid')
-      container.scrollTop = container.scrollHeight
+      this.scrollMessagesDown()
     },
     resetAttachment () {
       this.attachment = null

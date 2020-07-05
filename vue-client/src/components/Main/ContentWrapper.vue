@@ -6,7 +6,7 @@
       id="container-fluid"
       v-touch:tap="touchHandler"
     >
-      <ul class="list">
+      <ul class="messages">
         <li v-for="(data, index) in currentMessages" :key="index">
           <UserMessage
             v-if="isUserMessage(data.type) || isBotMessage(data.type)"
@@ -43,6 +43,7 @@ import MainHeader from './Header/MainHeader'
 import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
 import ButtonMessage from './Message/ButtonMessage'
+import ScrollingMixin from '../../mixins/ScrollingMixin'
 const { mapActions: mapChatActions, mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters, mapState: mapUiState } = createNamespacedHelpers('ui')
 
@@ -76,6 +77,7 @@ export default {
       return this.selectedChat.data && this.selectedChat.data._status === 'offline'
     }
   },
+  mixins: [ScrollingMixin],
   components: {
     ButtonMessage,
     UserMessage,
@@ -84,8 +86,7 @@ export default {
     MainHeader
   },
   updated () {
-    const container = this.$el.querySelector('#container-fluid')
-    container.scrollTop = container.scrollHeight
+    this.scrollMessagesDown()
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'sidebarState']),
@@ -147,7 +148,7 @@ export default {
       }
     }
   }
-  .list {
+  .messages {
     list-style: none;
     padding-bottom: 10px;
     margin: auto;
