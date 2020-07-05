@@ -1,9 +1,9 @@
 const debugging          = require('../../modules/debugging');
 const commands           = require('../../modules/commands');
+const helpers            = require('../../modules/helpers');
 const Message            = require('../../classes/Message');
 const privateMessageEmit = require('../emit/privateMessageEmit');
 const channelMessageEmit = require('../emit/channelMessageEmit');
-const fileHandler        = require('../../modules/fileHandler');
 
 /**
  * When new User sends a message
@@ -13,7 +13,9 @@ const fileHandler        = require('../../modules/fileHandler');
  */
 module.exports = (Socket, data) => {
   const User = userList.findBySocket(Socket.id);
-  data.message = data.message.trim();
+  if (data.message) {
+    data.message = data.message.trim();
+  }
 
   if (User && data && (data.message || data.attachment)) {
     const nickname  = User.nick;
@@ -26,11 +28,8 @@ module.exports = (Socket, data) => {
       return commands(Socket, User, data);
     }
 
-    const messageData = new Message(User.id, nickname, message, data.to);
-
-    if (data.attachment) {
-      fileHandler(Socket, data, messageData.id);
-    }
+    const newMessage = helpers.emojiconify(message);
+    const messageData = new Message(User.id, nickname, newMessage, data.attachment, data.to);
 
     if (isChannel) {
       const Channel = channelList.findById(data.to);

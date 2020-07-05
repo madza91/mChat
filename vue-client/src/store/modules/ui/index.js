@@ -4,6 +4,7 @@ const state = {
   settingsBar: false,
   aboutModal: false,
   noticeModal: false,
+  imageModal: false,
   server: {
     build: null,
     prevIds: []
@@ -47,6 +48,9 @@ const actions = {
   },
   noticeToggle ({ commit }, data) {
     commit('setNoticeModalState', data)
+  },
+  imageToggle ({ commit }, data) {
+    commit('setImageModalState', data)
   }
 }
 
@@ -77,6 +81,9 @@ const mutations = {
   },
   setNoticeModalState (state) {
     state.noticeModal = !state.noticeModal
+  },
+  setImageModalState (state, image) {
+    state.imageModal = image
   }
 }
 

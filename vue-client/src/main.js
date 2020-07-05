@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import VueDebounce from 'vue-debounce'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
@@ -42,6 +45,8 @@ const socket = io(`${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCK
   autoConnect: false
 })
 
+Vue.use(VueAxios, axios)
+Vue.use(VueDebounce)
 Vue.use(VueSocketIOExt, socket, { store })
 
 new Vue({

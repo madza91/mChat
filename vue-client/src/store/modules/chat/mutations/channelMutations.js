@@ -5,7 +5,7 @@ export const channelMutations = {
   },
 
   // Insert user message to channel
-  insertChannelMessage (state, { to, from, nick, messageId, message, type, date }) {
+  insertChannelMessage (state, { to, from, nick, messageId, message, attachment, type, date }) {
     const Channel = state.channels.find(channel => channel._id === to)
 
     if (Channel) {
@@ -14,6 +14,7 @@ export const channelMutations = {
         nick,
         messageId,
         message,
+        attachment,
         type,
         date
       })
