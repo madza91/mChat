@@ -60,34 +60,38 @@ export default {
 
 <style lang="scss">
   #image-modal {
-    .modal-header {
-      position: absolute;
-      z-index: 1;
-      border-bottom: unset;
-      right: 0;
-      top: 0;
-    }
+    .modal-dialog {
+      max-width: unset;
 
-    .modal-body {
-      padding: 0;
-    }
+      .modal-content {
+        width: unset;
+        background-color: unset;
+        border: unset;
 
-    .modal-content {
-      width: unset;
-      background-color: unset;
-      border: unset;
+        .modal-header {
+          position: absolute;
+          z-index: 1;
+          border-bottom: unset;
+          right: 0;
+          top: 0;
+        }
+
+        .modal-body {
+          padding: 0;
+
+          .modal-error {
+            display: flex;
+            min-height: 100px;
+            min-width: 300px;
+            background-color: white;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
     }
 
     .modal-dialog-centered {
-      justify-content: center;
-    }
-
-    .modal-error {
-      display: flex;
-      min-height: 100px;
-      min-width: 300px;
-      background-color: white;
-      align-items: center;
       justify-content: center;
     }
 
