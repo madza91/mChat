@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { createNamespacedHelpers } from 'vuex'
 import MessagingInput from './Footer/MessagingInput'
 import MainHeader from './Header/MainHeader'
@@ -64,8 +65,8 @@ export default {
           return {
             ...item,
             shape: {
-              isFirst: !prevItem || item.from !== prevItem.from,
-              isLast: !nextItem || item.from !== nextItem.from
+              isFirst: !prevItem || item.from !== prevItem.from || !moment(prevItem.date).isSame(item.date, 'minute'),
+              isLast: !nextItem || item.from !== nextItem.from || !moment(item.date).isSame(nextItem.date, 'minute')
             }
           }
         }
