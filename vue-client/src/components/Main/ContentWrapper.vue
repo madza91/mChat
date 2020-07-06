@@ -4,6 +4,7 @@
     <div
       class="container-fluid"
       id="container-fluid"
+      ref="container"
       v-touch:tap="touchHandler"
     >
       <ul class="messages">
@@ -31,6 +32,10 @@
           />
         </li>
       </ul>
+      <ScrollDownButton
+        v-if="displayDownButton"
+        @click="handleScrollButton"
+      />
     </div>
     <MessagingInput :enabled="connected && !isCurrentUserOffline" />
   </div>
@@ -45,6 +50,7 @@ import UserMessage from './Message/UserMessage'
 import SystemMessage from './Message/SystemMessage'
 import ButtonMessage from './Message/ButtonMessage'
 import ScrollingMixin from '../../mixins/ScrollingMixin'
+import ScrollDownButton from './ScrollDownButton'
 const { mapActions: mapChatActions, mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters, mapState: mapUiState } = createNamespacedHelpers('ui')
 
@@ -60,6 +66,11 @@ export default {
       return currentMessages.map((item, i) => {
         const prevItem = currentMessages[i - 1]
         const nextItem = currentMessages[i + 1]
+
+        // Scroll to the bottom only if user is not scrolling or he received somebodies message
+        if (!nextItem) {
+          this.isScrollNeeded = this.isDown() || this.isMyMessage(item.from)
+        }
 
         if (['bot', 'user'].includes(item.type)) {
           return {
@@ -78,16 +89,31 @@ export default {
       return this.selectedChat.data && this.selectedChat.data._status === 'offline'
     }
   },
+  data () {
+    return {
+      displayDownButton: false,
+      isScrollNeeded: false
+    }
+  },
   mixins: [ScrollingMixin],
   components: {
+    ScrollDownButton,
     ButtonMessage,
     UserMessage,
     SystemMessage,
     MessagingInput,
     MainHeader
   },
+  mounted () {
+    this.$refs.container.addEventListener('scroll', () => {
+      this.displayDownButton = !this.isDown()
+    })
+  },
   updated () {
-    this.scrollMessagesDown()
+    if (this.isScrollNeeded) {
+      this.scrollMessagesDown()
+      this.isScrollNeeded = false
+    }
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'sidebarState']),
@@ -119,6 +145,9 @@ export default {
     },
     closeWindow () {
       this.userRemove(this.selectedChat.data._id)
+    },
+    handleScrollButton () {
+      this.scrollMessagesDown()
     }
   }
 }

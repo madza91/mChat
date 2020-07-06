@@ -168,6 +168,7 @@ export default {
 
   .message-text {
     padding: 0 5px;
+    word-break: break-word;
   }
 }
 
