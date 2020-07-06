@@ -24,9 +24,8 @@
           <span>Broken image</span>
         </div>
       </div>
-      <div v-if="message">
-        <span v-if="!enableHtml" class="message-text">{{ message }}</span>
-        <span v-else class="message-text" v-html="message"></span>
+      <div v-if="message" :class="{'text-center': centeredText}">
+        <span class="message-text" v-html="emojiMessage"></span>
       </div>
     </div>
   </div>
@@ -35,10 +34,17 @@
 <script>
 import moment from 'moment'
 import { createNamespacedHelpers } from 'vuex'
+import EmojiMixin from '../../../mixins/EmojiMixin'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'UserMessage',
+  mixins: [EmojiMixin],
+  mounted () {
+    const emojifiedMessage = this.emojifyMessage(this.message)
+    this.emojiMessage = emojifiedMessage.message
+    this.centeredText = emojifiedMessage.onlyEmoji
+  },
   computed: {
     formattedTime () {
       return moment(this.date).format('H:mm')
@@ -57,6 +63,8 @@ export default {
   },
   data () {
     return {
+      emojiMessage: '',
+      centeredText: false,
       attachmentError: false
     }
   },
@@ -66,6 +74,9 @@ export default {
       if (attachment.image) {
         this.imageToggle(attachment.image.url)
       }
+    },
+    setCentered (value) {
+      this.centeredText = value
     }
   },
   props: {

@@ -10,3 +10,12 @@
 .blur {
     filter: blur(5px);
 }
+
+.emoji {
+    padding: 0 2px;
+
+    &.big {
+        font-size: 50px;
+        line-height: 60px;
+    }
+}
