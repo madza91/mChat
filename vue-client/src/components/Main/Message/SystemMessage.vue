@@ -1,8 +1,8 @@
 <template>
-  <div class="message-data text-center">
+  <div class="message-wrapper">
     <div class="message-info">
-      <span class="message-data-name" v-html="message"></span>
-      <span class="message-data-time">{{ formattedTime }}</span>
+      <span class="message-name" v-html="message"></span>
+      <span v-if="showTime" class="message-time">{{ formattedTime }}</span>
     </div>
   </div>
 </template>
@@ -22,6 +22,10 @@ export default {
       type: String,
       required: true
     },
+    showTime: {
+      type: Boolean,
+      default: true
+    },
     date: {
       type: Number,
       required: false
@@ -31,7 +35,8 @@ export default {
 </script>
 
 <style scoped>
-  .message-data {
+  .message-wrapper {
+    text-align: center;
     margin: 4px 0 9px;
     font-size: 12px;
   }
@@ -51,7 +56,7 @@ export default {
     padding: 1px 5px;
   }
 
-  .message-data-time {
+  .message-time {
     color: #a8aab1;
     padding-left: 6px;
     font-size: 10px;

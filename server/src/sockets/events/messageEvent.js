@@ -1,3 +1,4 @@
+const escapeHtml         = require('escape-html');
 const debugging          = require('../../modules/debugging');
 const commands           = require('../../modules/commands');
 const helpers            = require('../../modules/helpers');
@@ -14,7 +15,7 @@ const channelMessageEmit = require('../emit/channelMessageEmit');
 module.exports = (Socket, data) => {
   const User = userList.findBySocket(Socket.id);
   if (data.message) {
-    data.message = data.message.trim();
+    data.message = escapeHtml(data.message.trim());
   }
 
   if (User && data && (data.message || data.attachment)) {
