@@ -20,6 +20,11 @@ $mColorUserStatusAway: #DA9D3E;
 $mColorUserStatusOffline: #B9B8B9;
 $mColorUserStatusBusy: #E86709;
 
+$mColorMessageLeft: #EFEFEF;
+$mColorMessageLeftDark: #525054;
+$mColorMessageRight: #D6F6BE;
+$mColorMessageRightDark: #185F54;
+
 $theme-colors: () !default;
 $theme-colors: map-merge(
 (
@@ -32,6 +37,10 @@ $theme-colors: map-merge(
   'color-user-status-away': $mColorUserStatusAway,
   'color-user-status-busy': $mColorUserStatusBusy,
   'color-user-status-offline': $mColorUserStatusOffline,
+  'color-message-left': $mColorMessageLeft,
+  'color-message-left-dark': $mColorMessageLeftDark,
+  'color-message-right': $mColorMessageRight,
+  'color-message-right-dark': $mColorMessageRightDark,
 ),
 $theme-colors
 );

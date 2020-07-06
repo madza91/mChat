@@ -174,10 +174,10 @@ export default {
 
 .left-message {
   .message-content {
-    background: #EFEFEF;
+    background: var(--color-message-left);
 
     @media screen and (prefers-color-scheme: dark) {
-      background: #525054;
+      background: var(--color-message-left-dark);
     }
   }
 }
@@ -187,10 +187,10 @@ export default {
   justify-content: flex-end;
 
   .message-content {
-    background: #D6F6BE;
+    background: var(--color-message-right);
 
     @media screen and (prefers-color-scheme: dark) {
-      background: #185f54;
+      background: var(--color-message-right-dark);
     }
   }
 }
