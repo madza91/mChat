@@ -15,7 +15,7 @@ const channelMessageEmit = require('../emit/channelMessageEmit');
 module.exports = (Socket, data) => {
   const User = userList.findBySocket(Socket.id);
   if (data.message) {
-    data.message = escapeHtml(data.message.trim());
+    data.message = prepareMessage(data.message);
   }
 
   if (User && data && (data.message || data.attachment)) {
@@ -29,8 +29,7 @@ module.exports = (Socket, data) => {
       return commands(Socket, User, data);
     }
 
-    const newMessage = helpers.emojiconify(message);
-    const messageData = new Message(User.id, nickname, newMessage, data.attachment, data.to);
+    const messageData = new Message(User.id, nickname, message, data.attachment, data.to);
 
     if (isChannel) {
       const Channel = channelList.findById(data.to);
@@ -52,4 +51,16 @@ module.exports = (Socket, data) => {
   }
 
   debugging.log(`Message from ${ User.nick } is empty.`)
+}
+
+/**
+ * Prepare message for processing
+ * @param message
+ * @returns {*}
+ */
+prepareMessage = (message) => {
+  message.trim();
+  message = helpers.emojiconify(message);
+
+  return escapeHtml(message);
 }
