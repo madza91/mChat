@@ -18,7 +18,8 @@ import {
   faHashtag,
   faCircle,
   faTimes,
-  faRobot
+  faRobot,
+  faAngleDown
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue2TouchEvents from 'vue2-touch-events'
@@ -38,6 +39,7 @@ library.add(faHashtag)
 library.add(faCircle)
 library.add(faTimes)
 library.add(faRobot)
+library.add(faAngleDown)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 const socket = io(`${process.env.VUE_APP_SOCKET_HOST}:${process.env.VUE_APP_SOCKET_PORT}`, {

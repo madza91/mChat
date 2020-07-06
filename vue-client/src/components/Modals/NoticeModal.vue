@@ -8,7 +8,7 @@
       hide-header
       hide-footer
       no-fade
-      :visible="noticeModal"
+      :visible="authenticated && noticeModal"
     >
       <div class="d-block us-none">
         <h2 class="mb-3 text-center">Notice</h2>
@@ -26,11 +26,13 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+const { mapState: mapChatState } = createNamespacedHelpers('chat')
 const { mapState, mapActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'NoticeModal',
   computed: {
+    ...mapChatState(['authenticated']),
     ...mapState(['noticeModal'])
   },
   methods: {

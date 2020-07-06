@@ -5,7 +5,7 @@
       centered
       hide-header-close
       hide-footer
-      :visible="imageModal && true"
+      :visible="authenticated && imageModal && true"
     >
       <template v-if="isLoaded" v-slot:modal-header="{ close }">
         <b-icon icon="x-circle-fill" @click="close()"></b-icon>
@@ -23,11 +23,13 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+const { mapState: mapChatState } = createNamespacedHelpers('chat')
 const { mapState, mapActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'ImageModal',
   computed: {
+    ...mapChatState(['authenticated']),
     ...mapState(['imageModal'])
   },
   data () {
