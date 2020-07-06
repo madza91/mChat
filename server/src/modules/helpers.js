@@ -33,7 +33,8 @@ module.exports = {
   emojiconify: (message) => {
     if (message) {
       Emojis.forEach(element => {
-        message = message.replace(element.shortcut, element.emoji);
+        const escaped = element.shortcut.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        message = message.replace(new RegExp(escaped, 'g'), element.emoji);
       })
     }
 
