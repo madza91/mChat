@@ -25,8 +25,7 @@
         </div>
       </div>
       <div v-if="message">
-        <span v-if="!enableHtml" class="message-text">{{ message }}</span>
-        <span v-else class="message-text" v-html="message"></span>
+        <span class="message-text" v-html="formattedMessage"></span>
       </div>
     </div>
   </div>
@@ -34,12 +33,26 @@
 
 <script>
 import moment from 'moment'
+import emojiRegex from 'emoji-regex'
+import gemoji from 'gemoji'
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'UserMessage',
   computed: {
+    formattedMessage () {
+      const filtered = gemoji.filter(emoji => {
+        return emoji.tags.includes('hah')
+      })
+      console.log('filtered', filtered)
+
+      const isOnlyEmoji = this.message.length === 2
+      return this.message.replace(emojiRegex(), match => {
+        const bigEmojiClass = isOnlyEmoji ? ' big' : ''
+        return `<span role="img" class="emoji ${bigEmojiClass}">${match}</span>`
+      })
+    },
     formattedTime () {
       return moment(this.date).format('H:mm')
     },
