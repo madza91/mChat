@@ -34,13 +34,14 @@ export const userMutations = {
    * @param state
    * @param data
    */
-  insertUserMessage (state, { to, from, message, attachment, nick, date, type }) {
+  insertUserMessage (state, { to, from, message, messageId, attachment, nick, date, type }) {
     const User = state.users.find(user => user._id === to)
 
     if (User) {
       User._history.push({
         from,
         message,
+        messageId,
         attachment,
         nick,
         to,

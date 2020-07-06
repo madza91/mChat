@@ -8,7 +8,7 @@
       v-touch:tap="touchHandler"
     >
       <ul class="messages">
-        <li v-for="(data, index) in currentMessages" :key="index">
+        <li v-for="data in currentMessages" :key="data.messageId">
           <UserMessage
             v-if="isUserMessage(data.type) || isBotMessage(data.type)"
             :nick="data.nick"
