@@ -24,8 +24,8 @@
           <span>Broken image</span>
         </div>
       </div>
-      <div v-if="message">
-        <span class="message-text" v-html="formattedMessage"></span>
+      <div v-if="message" :class="{'text-center': centeredText}">
+        <span class="message-text" v-html="emojiMessage"></span>
       </div>
     </div>
   </div>
@@ -33,26 +33,19 @@
 
 <script>
 import moment from 'moment'
-import emojiRegex from 'emoji-regex'
-import gemoji from 'gemoji'
 import { createNamespacedHelpers } from 'vuex'
+import EmojiMixin from '../../../mixins/EmojiMixin'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 
 export default {
   name: 'UserMessage',
+  mixins: [EmojiMixin],
+  mounted () {
+    const emojifiedMessage = this.emojifyMessage(this.message)
+    this.emojiMessage = emojifiedMessage.message
+    this.centeredText = emojifiedMessage.onlyEmoji
+  },
   computed: {
-    formattedMessage () {
-      const filtered = gemoji.filter(emoji => {
-        return emoji.tags.includes('hah')
-      })
-      console.log('filtered', filtered)
-
-      const isOnlyEmoji = this.message.length === 2
-      return this.message.replace(emojiRegex(), match => {
-        const bigEmojiClass = isOnlyEmoji ? ' big' : ''
-        return `<span role="img" class="emoji ${bigEmojiClass}">${match}</span>`
-      })
-    },
     formattedTime () {
       return moment(this.date).format('H:mm')
     },
@@ -70,6 +63,8 @@ export default {
   },
   data () {
     return {
+      emojiMessage: '',
+      centeredText: false,
       attachmentError: false
     }
   },
@@ -79,6 +74,9 @@ export default {
       if (attachment.image) {
         this.imageToggle(attachment.image.url)
       }
+    },
+    setCentered (value) {
+      this.centeredText = value
     }
   },
   props: {
