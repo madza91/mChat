@@ -265,7 +265,7 @@ export default {
 
     @media screen and (prefers-color-scheme: dark) {
       color: white;
-      background-color: #272729;
+      background-color: var(--color-sidebar-background-dark);
       border: 1px solid var(--color-border-dark);
     }
 

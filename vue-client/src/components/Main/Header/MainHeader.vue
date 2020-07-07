@@ -28,8 +28,8 @@
         @click="setNotAuthenticated">
       </b-icon>
     </div>
-    <div class="icon-wrapper">
-      <b-icon icon="info-circle-fill" @click="aboutToggle"></b-icon>
+    <div class="icon-wrapper" @click="aboutToggle">
+      <b-icon icon="info-circle-fill"></b-icon>
     </div>
 
     <div class="icon-wrapper" v-if="settings.rightMenu">

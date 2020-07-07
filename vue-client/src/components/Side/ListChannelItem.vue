@@ -42,17 +42,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .list-item-channel {
+    display: flex;
     padding: 2px 15px;
-  }
 
-  .list-item-channel.active {
-    background: rgba(0,0,0,0.5);
-  }
+    &.active {
+      background-color: rgba(0,0,0,0.5);
+    }
 
-  .list-item-channel:hover {
-    cursor: pointer;
-    background: rgba(0,0,0,0.5);
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0,0,0,0.5);
+    }
   }
 </style>
