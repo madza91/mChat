@@ -158,8 +158,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import '../../assets/styles';
-
   .content-wrapper {
     display: flex;
     flex-direction: column;

@@ -73,8 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/styles';
-
   .sidebar-nav {
     list-style: none;
     padding: 0 0 10px;
