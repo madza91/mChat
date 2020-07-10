@@ -10,6 +10,14 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'black-translucent'
   },
 
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: '@import "@/assets/styles/index.scss";'
+      }
+    }
+  },
+
   configureWebpack: {
     resolve: {
       alias: {

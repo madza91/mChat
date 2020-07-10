@@ -112,7 +112,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../assets/styles';
 .message-content {
   display: table;
   color: black;
