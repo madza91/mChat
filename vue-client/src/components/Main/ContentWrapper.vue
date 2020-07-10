@@ -114,6 +114,10 @@ export default {
       this.scrollMessagesDown()
       this.isScrollNeeded = false
     }
+
+    if (this.isDown()) {
+      this.displayDownButton = false
+    }
   },
   methods: {
     ...mapUiActions(['sidebarToggle', 'sidebarState']),
