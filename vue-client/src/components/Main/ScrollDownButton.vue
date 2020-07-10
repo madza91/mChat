@@ -11,6 +11,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../assets/styles';
 .down-button {
   display: flex;
   position: sticky;

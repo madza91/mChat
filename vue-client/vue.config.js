@@ -16,14 +16,5 @@ module.exports = {
         '@': path.resolve(__dirname, 'src/')
       }
     }
-  },
-
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: '@import "@/assets/styles/index.scss";'
-      }
-    },
-    sourceMap: true
   }
 }
