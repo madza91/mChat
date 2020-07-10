@@ -9,7 +9,6 @@ import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueSocketIOExt from 'vue-socket.io-extended'
 import io from 'socket.io-client'
-import './assets/styles/index.scss'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faPaperPlane,
