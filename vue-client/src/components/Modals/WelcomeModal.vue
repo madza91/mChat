@@ -31,7 +31,11 @@
             </b-form-group>
 
             <b-form-group class="text-center">
-              <b-button block @click="connect" variant="success" :disabled="!isValid()">Get in</b-button>
+              <b-button block @click="connect" variant="success" :disabled="!isValid() || loading">
+                <b-spinner v-if="loading" class="mr-2" small></b-spinner>
+                <span v-if="loading">Getting in...</span>
+                <span v-else>Get in</span>
+              </b-button>
             </b-form-group>
           </b-col>
         </b-row>
@@ -59,7 +63,8 @@ export default {
   data () {
     return {
       nickname: '',
-      validationMessage: null
+      validationMessage: null,
+      loading: false
     }
   },
   watch: {
@@ -74,6 +79,11 @@ export default {
       } else {
         this.validationMessage = ''
       }
+    },
+    authenticated: function (value) {
+      if (value === false) {
+        this.loading = false
+      }
     }
   },
   methods: {
@@ -82,6 +92,7 @@ export default {
     ...mapChatActions(['resetValidation']),
     ...mapChatGetters(['getValidation']),
     connect () {
+      this.loading = true
       this.setChosenNick(this.nickname)
       this.$socket.client.io.opts.query = `nick=${this.nickname}`
       this.$socket.client.open()
