@@ -3,7 +3,7 @@ module.exports = {
   pwa: {
     name: 'mChat',
     themeColor: '#4DBA87',
-    msTileColor: '#000000',
+    msTileColor: '#00a300',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black-translucent'
   }
