@@ -220,7 +220,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import '../../../assets/styles';
   $padding: 10px;
   $icon-size: 40px;
   $icon-size-mobile: 28px;
@@ -265,7 +264,7 @@ export default {
 
     @media screen and (prefers-color-scheme: dark) {
       color: white;
-      background-color: #272729;
+      background-color: var(--color-sidebar-background-dark);
       border: 1px solid var(--color-border-dark);
     }
 

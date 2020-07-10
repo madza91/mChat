@@ -9,8 +9,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../assets/styles';
-
 .connection_info {
   text-align: center;
   position: absolute;

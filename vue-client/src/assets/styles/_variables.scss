@@ -25,6 +25,9 @@ $mColorMessageLeftDark: #525054;
 $mColorMessageRight: #D6F6BE;
 $mColorMessageRightDark: #185F54;
 
+$mColorSidebarBackground: #444753;
+$mColorSidebarBackgroundDark: #272729;
+
 $theme-colors: () !default;
 $theme-colors: map-merge(
 (
@@ -41,6 +44,8 @@ $theme-colors: map-merge(
   'color-message-left-dark': $mColorMessageLeftDark,
   'color-message-right': $mColorMessageRight,
   'color-message-right-dark': $mColorMessageRightDark,
+  'color-sidebar-background': $mColorSidebarBackground,
+  'color-sidebar-background-dark': $mColorSidebarBackgroundDark,
 ),
 $theme-colors
 );

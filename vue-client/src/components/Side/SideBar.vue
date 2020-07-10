@@ -46,10 +46,16 @@ export default {
   computed: {
     ...mapState(['users', 'channels', 'selectedChat']),
     filteredChannels () {
-      return this.channels && this.channels.filter(channel => channel._title.toLowerCase().includes(this.filterTerm.toLowerCase()))
+      return this.channels &&
+        this.channels.filter(
+          channel => channel._title.toLowerCase().includes(this.filterTerm.toLowerCase())
+        )
     },
     filteredUsers () {
-      return this.users && this.users.filter(user => user._nick.toLowerCase().includes(this.filterTerm.toLowerCase()))
+      return this.users &&
+        this.users.filter(
+          user => user._nick.toLowerCase().includes(this.filterTerm.toLowerCase())
+        )
     }
   },
   data () {
@@ -67,8 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/styles';
-
   .sidebar-nav {
     list-style: none;
     padding: 0 0 10px;
@@ -84,9 +88,13 @@ export default {
     height: 100%;
     min-height: 100%;
     width: var(--sidebar-width);
-    background-color: #444753;
+    background-color: var(--color-sidebar-background);
     z-index: 810;
     transition: transform .2s ease-in-out, width .2s ease-in-out;
+
+    @media screen and (prefers-color-scheme: dark) {
+      background-color: var(--color-sidebar-background-dark);
+    }
 
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
       width: 250px;
@@ -106,34 +114,30 @@ export default {
   .search-wrapper {
     text-align: center;
     padding: 10px;
-  }
 
-  .search-wrapper input {
-    width: 90%;
-    font-size: 12px;
-    border: 1px solid black;
-    border-radius: 20px;
-    background-color: #444753;
-    padding: 4px 10px;
-    color: white;
-    text-align: center;
-  }
+    input {
+      width: 90%;
+      font-size: 12px;
+      border: 1px solid black;
+      border-radius: 20px;
+      background-color: var(--color-sidebar-background);
+      padding: 4px 10px;
+      color: white;
+      text-align: center;
 
-  .search-wrapper input::placeholder {
-    font-size: 10px;
-    text-align: center;
+      @media screen and (prefers-color-scheme: dark) {
+        background-color: var(--color-sidebar-background-dark);
+      }
+    }
+
+    input::placeholder {
+      font-size: 10px;
+      text-align: center;
+    }
   }
 
   .scrollable {
     flex-grow: 1;
     overflow-y: auto;
-  }
-
-  .info {
-    color: deepskyblue;
-  }
-
-  .me {
-    color: #94C2ED;
   }
 </style>

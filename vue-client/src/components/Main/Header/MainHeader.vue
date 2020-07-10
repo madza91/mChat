@@ -28,8 +28,8 @@
         @click="setNotAuthenticated">
       </b-icon>
     </div>
-    <div class="icon-wrapper">
-      <b-icon icon="info-circle-fill" @click="aboutToggle"></b-icon>
+    <div class="icon-wrapper" @click="aboutToggle">
+      <b-icon icon="info-circle-fill"></b-icon>
     </div>
 
     <div class="icon-wrapper" v-if="settings.rightMenu">
@@ -87,8 +87,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  @import '../../../assets/styles';
-
   .icon-wrapper {
     display: flex;
     position: relative;
