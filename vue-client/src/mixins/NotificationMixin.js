@@ -2,10 +2,6 @@
 import store from '../store/index'
 export const notificationMixin = {
   methods: {
-    changeTitle (number) {
-      const title = process.env.VUE_APP_TITLE
-      document.title = number > 0 ? `(${number}) ${title}` : title
-    },
     playSound () {
       const audio = new Audio('./audio/new_message.mp3')
       audio.play()
