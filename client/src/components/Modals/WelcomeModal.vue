@@ -31,7 +31,7 @@
             </b-form-group>
 
             <b-form-group class="text-center">
-              <b-button block @click="connect" variant="success" :disabled="!isValid() || loading">
+              <b-button block @click="connect" variant="success" :disabled="!isValid() || getValidationMessage || loading">
                 <b-spinner v-if="loading" class="mr-2" small></b-spinner>
                 <span v-if="loading">Getting in...</span>
                 <span v-else>Get in</span>
@@ -46,11 +46,13 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import notificationMixin from '../../mixins/NotificationMixin'
 const { mapState, mapGetters: mapChatGetters, mapActions: mapChatActions } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 
 export default {
   name: 'WelcomeModal',
+  mixins: [notificationMixin],
   computed: {
     ...mapState(['authenticated']),
     getValidationMessage () {
@@ -82,6 +84,13 @@ export default {
     },
     authenticated: function (value) {
       if (value === false) {
+        this.loading = false
+      } else {
+        notificationMixin.methods.requestPermission()
+      }
+    },
+    getValidationMessage: function (value) {
+      if (value) {
         this.loading = false
       }
     }
