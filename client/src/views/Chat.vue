@@ -15,9 +15,6 @@
 import SideBar from '../components/Side/SideBar.vue'
 import ContentWrapper from '../components/Main/ContentWrapper.vue'
 import WelcomeModal from '../components/Modals/WelcomeModal'
-import AboutModal from '../components/Modals/AboutModal'
-import NoticeModal from '../components/Modals/NoticeModal'
-import ImageModal from '../components/Modals/ImageModal'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('ui')
@@ -26,12 +23,12 @@ const { mapState: mapChatState } = createNamespacedHelpers('chat')
 export default {
   name: 'Chat',
   components: {
-    AboutModal,
-    NoticeModal,
-    ImageModal,
     WelcomeModal,
     SideBar,
-    ContentWrapper
+    ContentWrapper,
+    AboutModal: () => import('../components/Modals/AboutModal'),
+    NoticeModal: () => import('../components/Modals/NoticeModal'),
+    ImageModal: () => import('../components/Modals/ImageModal')
   },
   computed: {
     ...mapState(['sidebar']),

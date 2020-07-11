@@ -114,7 +114,7 @@ export default {
   mounted () {
     this.$refs.container.addEventListener('scroll', () => {
       this.displayDownButton = !this.isDown()
-    })
+    }, { passive: true })
   },
   updated () {
     if (this.isScrollNeeded) {
@@ -174,6 +174,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import '../../assets/styles';
   .content-wrapper {
     display: flex;
     flex-direction: column;

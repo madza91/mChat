@@ -1,11 +1,11 @@
-<template>
+<template functional>
   <div class="channel-title-wrapper">
     <font-awesome-icon
       icon="hashtag"
       class="icon channel-icon"
     />
-    <div class="channel-title" :class="{'channel-title-dark': dark}">
-      <span>{{ title }}</span>
+    <div class="channel-title" :class="{'channel-title-dark': props.dark}">
+      <span>{{ props.title }}</span>
     </div>
   </div>
 </template>

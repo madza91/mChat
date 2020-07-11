@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   // ...other vue-cli plugin options...
@@ -10,15 +11,19 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'black-translucent'
   },
 
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: '@import "@/assets/styles/index.scss";'
-      }
-    }
+  chainWebpack: config => {
+    config.performance
+      .maxEntrypointSize(400000)
+      .maxAssetSize(400000)
   },
 
   configureWebpack: {
+    plugins: [
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/
+      })
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src/')
