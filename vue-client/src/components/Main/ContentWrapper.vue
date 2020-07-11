@@ -9,6 +9,11 @@
     >
       <ul class="messages">
         <li v-for="data in currentMessages" :key="data.messageId">
+          <SystemMessage
+            v-if="isDateNotSameAsPrevious(data)"
+            :message="getFormattedDate(data.date)"
+            :show-time="false"
+          />
           <UserMessage
             v-if="isUserMessage(data.type) || isBotMessage(data.type)"
             :nick="data.nick"
@@ -51,6 +56,7 @@ import SystemMessage from './Message/SystemMessage'
 import ButtonMessage from './Message/ButtonMessage'
 import ScrollingMixin from '../../mixins/ScrollingMixin'
 import ScrollDownButton from './ScrollDownButton'
+import DateMixin from '../../mixins/DateMixin'
 const { mapActions: mapChatActions, mapState: mapChatState, mapGetters: mapChatGetters } = createNamespacedHelpers('chat')
 const { mapActions: mapUiActions, mapGetters: mapUiGetters, mapState: mapUiState } = createNamespacedHelpers('ui')
 
@@ -78,7 +84,8 @@ export default {
             shape: {
               isFirst: !prevItem || item.from !== prevItem.from || !moment(prevItem.date).isSame(item.date, 'minute'),
               isLast: !nextItem || item.from !== nextItem.from || !moment(item.date).isSame(nextItem.date, 'minute')
-            }
+            },
+            prevItemDate: prevItem && prevItem.date
           }
         }
 
@@ -95,7 +102,7 @@ export default {
       isScrollNeeded: false
     }
   },
-  mixins: [ScrollingMixin],
+  mixins: [ScrollingMixin, DateMixin],
   components: {
     ScrollDownButton,
     ButtonMessage,
@@ -132,6 +139,15 @@ export default {
     },
     isUserMessage (messageType) {
       return messageType === 'user'
+    },
+    isDateNotSameAsPrevious (message) {
+      const prevItemDate = message.prevItemDate
+
+      if (prevItemDate) {
+        return !moment(prevItemDate).isSame(message.date, 'day')
+      }
+
+      return false
     },
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
