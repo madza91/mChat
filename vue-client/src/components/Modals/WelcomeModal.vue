@@ -31,7 +31,7 @@
             </b-form-group>
 
             <b-form-group class="text-center">
-              <b-button block @click="connect" variant="success" :disabled="!isValid() || loading">
+              <b-button block @click="connect" variant="success" :disabled="!isValid() || getValidationMessage || loading">
                 <b-spinner v-if="loading" class="mr-2" small></b-spinner>
                 <span v-if="loading">Getting in...</span>
                 <span v-else>Get in</span>
@@ -82,6 +82,11 @@ export default {
     },
     authenticated: function (value) {
       if (value === false) {
+        this.loading = false
+      }
+    },
+    getValidationMessage: function (value) {
+      if (value) {
         this.loading = false
       }
     }
