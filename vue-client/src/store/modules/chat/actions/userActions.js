@@ -1,4 +1,4 @@
-import { notificationMixin } from '../../../../mixins/NotificationMixin'
+import notificationMixin from '../../../../mixins/NotificationMixin'
 
 export const userActions = {
   userLeave ({ commit, getters }, data) {
@@ -54,7 +54,8 @@ export const userActions = {
         id: toWindow,
         isChannel: false
       }
-      notificationMixin.methods.sendNotification(data.message, selectedChat)
+      const notificationTitle = `${data.nick} (private)`
+      notificationMixin.methods.sendNotification(notificationTitle, data.message, selectedChat)
       commit('incrementUserBadge', data)
     }
   },

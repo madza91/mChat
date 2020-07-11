@@ -1,4 +1,4 @@
-import { notificationMixin } from '../../../../mixins/NotificationMixin'
+import notificationMixin from '../../../../mixins/NotificationMixin'
 
 export const channelActions = {
   insertChannelMessage ({ commit, getters }, data) {
@@ -7,7 +7,7 @@ export const channelActions = {
         id: data.to,
         isChannel: true
       }
-      notificationMixin.methods.sendNotification(data.message, selectedChat)
+      notificationMixin.methods.sendNotification(data.nick, data.message, selectedChat)
     }
 
     commit('insertChannelMessage', data)

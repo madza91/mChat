@@ -3,6 +3,7 @@ import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueDebounce from 'vue-debounce'
+import VueNativeNotification from 'vue-native-notification'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
@@ -29,6 +30,8 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 Vue.use(Vue2TouchEvents)
+
+Vue.use(VueNativeNotification)
 
 /* FA Icons */
 library.add(faPaperPlane)
