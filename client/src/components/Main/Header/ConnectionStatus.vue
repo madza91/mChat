@@ -1,4 +1,4 @@
-<template>
+<template functional>
     <div class="connection_info">There is no server connection. Please, try again later.</div>
 </template>
 

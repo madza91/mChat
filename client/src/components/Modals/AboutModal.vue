@@ -67,7 +67,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   #textarea {
     background-color: white;
     font-size: 14px;

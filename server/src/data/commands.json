@@ -18,6 +18,12 @@
     "permission":"All users"
   },
   {
+    "command":"online",
+    "params":null,
+    "description":"Brings back to online if the user was away.",
+    "permission":"All users"
+  },
+  {
     "command":"me",
     "params":"{message}",
     "description":"Sends an action message to the current channel or private window",
@@ -57,6 +63,12 @@
     "command":"about",
     "params":null,
     "description":"Returns short note about mChat",
+    "permission":"All users"
+  },
+  {
+    "command":"giphy",
+    "params":"{term}",
+    "description":"Search for any gif animation by query term",
     "permission":"All users"
   }
 ]

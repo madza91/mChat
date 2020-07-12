@@ -1,7 +1,7 @@
 @import './variables';
 @import './normalize';
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-vue/src/index.scss';
+@import './reset';
+@import './bootstrap';
 @import './global.scss';
 @import './modal.scss';
 @import './animations';
