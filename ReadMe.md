@@ -1,7 +1,7 @@
 # mChat
 Very fast and light chat application written in NodeJS and VueJS, using SocketIO for connection.
 
-### Features
+## Features
 * Channels / Group chat
 * Private chat
 * Search for online users & channels
@@ -12,26 +12,31 @@ Very fast and light chat application written in NodeJS and VueJS, using SocketIO
 * Chatbot (assistant)
 * Responsive design
 * Progressive Web Application
-* Native emoji support
+* Emoji support
 * Dark mode support
 
-### Installation
+## Server requirements
+* Apache
+* Node / NPM
+* WebSockets enabled on server
+
+## Installation
 You have to install both `client` and `server` in their directories:
 * `npm install`
 
-### Setup
+## Setup
 Before starting the server and client, you need to set up .env for both server and client directory.
 
-### Server & client start
+## Server & client start
 Run these commands from project root:
 * `server` directory: `npm start`
 * `client` directory: `npm run serve`
 
-### Client build
+## Client build
 * `client` directory: `npm run build`
 
-### More
-For more detailed information, visit server/README.md and client/README.md
+## Commands
+The list of all available user commands that can do various things, as changing his nickname, status, or even channels topic.
 
 **Command**|**Description**|**Destination**
 -----|-----|-----
@@ -47,13 +52,38 @@ For more detailed information, visit server/README.md and client/README.md
 `/about`|Returns short note about mChat|server
 `/giphy`|Search for any gif animation by query term|client
 
-### Requirements - Server
-* Apache
-* Node / NPM
-* WebSockets enabled on server
+## Socket messages
+The server and client communicate with socket messages and every message has its unique type.
 
-### Helpful links
-* [Visit chat online](https://chat.madza.rs)
+#### Server &#x27A1; Client
+**Type**|**Sent to**|**Description**|**On event**
+-----|:-----:|-----|:-----:
+`channel_join`|Channel|Informs users that new user has joined channel|Join
+`channel_leave`|Channel|Informs users that new user has left channel|Leave
+`channel_message`|Channel|Sends a message to all users in selected channel|Message
+`channel_system`|Channel|Sends system message to the Channel|System
+`channel_topic`|Channel|Sends new channel topic information|System
+`private_message`|User|Sends privately a message to selected user|Message
+`private_system`|User|Sends privately a system message to selected user|Message
+`server_channels`|User|Sends list of all channels|Connect
+`server_command`|All/User|Sends specific command to user or all users|Command
+`server_join`|All Users|Informs users that new user has joined mChat|Join
+`server_leave`|All Users|Informs users that users has left mChat|Leave
+`server_users`|User|Sends list of all online users|Connect
+`server_validation`|User|Sends invalid nickname message|Connect
+`server_welcome`|User|Welcomes new user with generated SocketID and chosen Nickname|Connect
 
-### Credits
+#### Client &#x27A1; Server
+**Type**|**Description**
+----|----
+`message`|Sends a command or message to channel/user
+
+## More
+For more information, visit `server/README.md` and `client/README.md`
+
+## Helpful links
+* [Chat demo](https://chat.madza.rs)
+* [Official webpage](https://madza.rs)
+
+## Credits
 Written by Nemanja Madžovski (nemanja at madza dot rs)
