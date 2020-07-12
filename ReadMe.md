@@ -1,51 +1,56 @@
-# websocketChat
-This is a very fast and tiny chat for group chat via web sockets.
+# mChat
+Very fast and light chat application written in NodeJS and VueJS, using SocketIO for connection.
 
 ### Features
 * Channels / Group chat
-* Private messaging
+* Private chat
 * Search for online users & channels
-* Notifications
-* 10 Commands (combined IRC and custom)
-* Responsive design & Progressive Web Application
-* Dark mode supported
+* Native Web Notifications
+* Commands (server & client)
+* Animated Gifs (Giphy)
+* Sending images (from device)
+* Chatbot (assistant)
+* Responsive design
+* Progressive Web Application
+* Native emoji support
+* Dark mode support
 
 ### Installation
-Run these commands from project root:
-* `cd server; npm install`
-* `cd vue-client; npm install`
+You have to install both `client` and `server` in their directories:
+* `npm install`
 
 ### Setup
-Before starting server and client, you need to set up .env for both server and client folder
+Before starting the server and client, you need to set up .env for both server and client directory.
 
-### Server start
+### Server & client start
 Run these commands from project root:
-* `cd server; npm start` or `forever start server/src/app.js`
-* `cd vue-client; npm run serve`
+* `server` directory: `npm start`
+* `client` directory: `npm run serve`
 
 ### Client build
-* `cd vue-client; npm run serve`
+* `client` directory: `npm run build`
 
 ### More
-For more detailed information, visit server/README.md and vue-client/README.md
+For more detailed information, visit server/README.md and client/README.md
 
-**Command**|**Description**
------|-----
-`/nick`|Allows you to change your chat nickname
-`/whois`|Returns all available information about the user
-`/away`|Changes your status to away with the message. If {message} is omitted, the away status is removed
-`/me`|Sends an action message to the current channel or private window
-`/hello`|Sends notice with shake animation to the user. If {nick} is omitted, it will be sent to all users
-`/topic`|Allows you to set the channel topic
-`/help`|Returns usage and description about command. If {command} is omitted, return all available commands
-`/quit`|Disconnects you from chat. Aliases: disconnect, offline, exit
-`/version`|Returns information about server build number
-`/about`|Returns short note about mChat
+**Command**|**Description**|**Destination**
+-----|-----|-----
+`/nick`|Allows you to change your chat nickname|server
+`/whois`|Returns all available information about the user|server
+`/away`|Changes your status to away with the message. If {message} is omitted, the away status is removed|server
+`/me`|Sends an action message to the current channel or private window|server
+`/hello`|Sends notice with shake animation to the user. If {nick} is omitted, it will be sent to all users|server
+`/topic`|Allows you to set the channel topic|server
+`/help`|Returns usage and description about command. If {command} is omitted, return all available commands|server
+`/quit`|Disconnects you from chat. Aliases: `disconnect`, `offline`, `exit`|server
+`/version`|Returns information about server build number|server
+`/about`|Returns short note about mChat|server
+`/giphy`|Search for any gif animation by query term|client
 
 ### Requirements - Server
-* apache
-* node
-* Websockets enabled on server
+* Apache
+* Node / NPM
+* WebSockets enabled on server
 
 ### Helpful links
 * [Visit chat online](https://chat.madza.rs)

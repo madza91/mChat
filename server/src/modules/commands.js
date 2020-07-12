@@ -1,5 +1,6 @@
 const aboutCommand      = require('./commands/aboutCommand');
 const awayCommand       = require('./commands/awayCommand');
+const onlineCommand     = require('./commands/onlineCommand');
 const disconnectCommand = require('./commands/disconnectCommand');
 const dieCommand        = require('./commands/dieCommand');
 const helloCommand      = require('./commands/helloCommand');
@@ -34,6 +35,8 @@ module.exports = (Socket, User, data) => {
         return whoisCommand(User, params);
       case 'away':
         return awayCommand(User, params);
+      case 'online':
+        return onlineCommand(User);
       case 'me':
         return meCommand(User, data, params);
       case 'topic':
