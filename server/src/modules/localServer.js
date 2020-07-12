@@ -1,15 +1,16 @@
 const expressApp = require('express')();
 const config     = require('./config');
+const debugging  = require('./debugging');
 
 /**
  * Local API for external APIs
  */
 module.exports = {
   run: () => {
-    // Route
-    expressApp.get('/user-check/:socketId', (req, res) => {
-        const { socketId } = req.params;
-        const isUser = !!userList.findBySocket(socketId)
+    // Check for online user by SocketID
+    expressApp.get('/user-check/:socketID', (req, res) => {
+        const { socketID } = req.params;
+        const isUser = !!userList.findBySocket(socketID)
         const status = isUser ? 200 : 404;
 
         res.json({ isUser }, status)
@@ -17,7 +18,7 @@ module.exports = {
     )
 
     expressApp.listen(config.LOCAL_API_PORT, () => {
-      console.log(`Listening port ${config.LOCAL_API_PORT}`)
+      debugging.log(`Started local API server on port ${ config.LOCAL_API_PORT }`);
     })
   }
 }
