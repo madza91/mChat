@@ -1,4 +1,5 @@
 const expressApp = require('express')();
+const localServer = require('./localServer');
 const http       = require('http');
 const https      = require('https');
 const fs         = require('fs');
@@ -11,6 +12,8 @@ const debugging  = require('./debugging');
  * @returns {Server|undefined}
  */
 module.exports = () => {
+  localServer.run()
+
   return socketIO(server(), {
     path: '/',
     serveClient: false
@@ -28,12 +31,6 @@ server = () => {
    * Create HTTP(S) server
    */
   if (config.SERVER_SSL_KEY && config.SERVER_SSL_CERT) {
-    // ToDo Make server for serving images
-    // expressApp.get('/', (req, res) => res.send('Hello world'))
-    // expressApp.listen(4000, () => {
-    //   console.log('Listening port 4000')
-    // })
-
     server = https.createServer({
       key: fs.readFileSync(config.SERVER_SSL_KEY),
       cert: fs.readFileSync(config.SERVER_SSL_CERT)

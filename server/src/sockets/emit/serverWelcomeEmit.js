@@ -10,7 +10,8 @@ module.exports = (socketID, User) => {
       id: User.id,
       nick: User.nick,
       status: User.status,
-      statusMessage: User.statusMessage
+      statusMessage: User.statusMessage,
+      socket: User.socket
     },
     server: {
       build: serverBuild.getTime()

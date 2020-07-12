@@ -18,7 +18,6 @@ const eventMessage = require('./sockets/events/messageEvent');
 const eventLeave   = require('./sockets/events/leaveEvent');
 
 // Globals
-global.io                = require('./modules/server')();
 global.commandIdentifier = '/';
 global.incMessage        = 0;
 global.incChannel        = 0;
@@ -27,6 +26,7 @@ global.serverBuild       = new Date();
 global.userList          = new Users();
 global.channelList       = new Channels();
 global.commandsList      = Commands;
+global.io                = require('./modules/server')();
 
 /**
  * New Client connection
