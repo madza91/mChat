@@ -10,7 +10,9 @@ module.exports = {
     expressApp.get('/user-check/:socketId', (req, res) => {
         const { socketId } = req.params;
         const isUser = !!userList.findBySocket(socketId)
-        res.json({ isUser })
+        const status = isUser ? 200 : 404;
+
+        res.json({ isUser }, status)
       }
     )
 

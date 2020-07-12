@@ -1,8 +1,15 @@
+import { createNamespacedHelpers } from 'vuex'
+const { mapState: mapChatState } = createNamespacedHelpers('chat')
+
 export default {
+  computed: {
+    ...mapChatState(['loggedInUser'])
+  },
   methods: {
     uploadImage (file, onUploadProgress) {
       const formData = new FormData()
       formData.append('image', file)
+      formData.append('user', this.loggedInUser.socket)
 
       return this.axios.post(process.env.VUE_APP_API_HOST + '/mchat/image', formData, {
         headers: {
