@@ -81,7 +81,7 @@ module.exports = class Users {
    */
   findById(value) {
     return this.users.find(user => {
-      return user._id === value;
+      return user._id === parseInt(value);
     });
   }
 
