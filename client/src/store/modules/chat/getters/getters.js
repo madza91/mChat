@@ -50,5 +50,8 @@ export const getters = {
   },
   findChannelByTitle: (state) => (channelTitle) => {
     return state.channels.find(channel => channel._title === channelTitle)
+  },
+  getSettingsCommands (state) {
+    return state.settings.commands
   }
 }

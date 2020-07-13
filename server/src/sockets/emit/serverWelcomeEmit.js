@@ -15,6 +15,9 @@ module.exports = (socketID, User) => {
     },
     server: {
       build: serverBuild.getTime()
+    },
+    settings: {
+      commands: commandsList
     }
   });
 }

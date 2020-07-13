@@ -25,7 +25,7 @@ export default {
       }
 
       const notification = new Notification(title, {
-        body: message,
+        body: message.replace(/(<([^>]+)>)/ig, ''),
         icon: '/img/icons/android-chrome-192x192.png',
         data: {
           window: selectedWindowData
