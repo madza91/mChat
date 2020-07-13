@@ -40,7 +40,7 @@
         placeholder="Type your message"
         ref="footerInput"
         @keyup.enter="sendMessage"
-        @keyup.esc="resetAllHints"
+        @keyup.esc="resetAllHints(true)"
         v-model="message"
         @focus="onFocus"
         @blur="onBlur"
@@ -146,8 +146,8 @@ export default {
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = (e) => {
+          this.resetAllHints()
           this.attachmentPreview = e.target.result
-          this.resetGifs()
 
           if (!this.isMobile()) {
             this.$refs.footerInput.focus()
@@ -187,12 +187,13 @@ export default {
 
         switch (command) {
           case 'giphy':
-            this.resetAttachment()
+            this.resetAllHints()
             this.giphySearch(params).then(results => {
               this.gifs = results.data.data
             })
             break
           default:
+            this.resetAllHints()
             this.commands = this.getCommands(this.message)
         }
       }
@@ -223,22 +224,27 @@ export default {
       this.attachmentUploaded = null
       this.$refs.file.value = ''
     },
-    resetGifs () {
+    resetGifs (resetMessage) {
       if (this.gifs.length > 0) {
         this.gifs = []
-        this.message = ''
+        this.resetMessage(resetMessage)
       }
     },
-    resetCommands () {
+    resetCommands (resetMessage) {
       if (this.commands.length > 0) {
         this.commands = []
+        this.resetMessage(resetMessage)
+      }
+    },
+    resetMessage (isForced) {
+      if (isForced === true) {
         this.message = ''
       }
     },
-    resetAllHints () {
+    resetAllHints (resetMessage) {
       this.resetAttachment()
-      this.resetGifs()
-      this.resetCommands()
+      this.resetGifs(resetMessage)
+      this.resetCommands(resetMessage)
     }
   }
 }
