@@ -103,6 +103,7 @@ export default {
     return {
       message: null,
       gifs: [],
+      gifsResultsQuery: null,
       commands: [],
       attachment: null,
       attachmentError: null,
@@ -187,10 +188,13 @@ export default {
 
         switch (command) {
           case 'giphy':
-            this.resetAllHints()
-            this.giphySearch(params).then(results => {
-              this.gifs = results.data.data
-            })
+            if (this.gifsResultsQuery !== params) {
+              this.resetAllHints()
+              this.giphySearch(params).then(results => {
+                this.gifsResultsQuery = params
+                this.gifs = results.data.data
+              })
+            }
             break
           default:
             this.resetAllHints()
@@ -227,6 +231,7 @@ export default {
     resetGifs (resetMessage) {
       if (this.gifs.length > 0) {
         this.gifs = []
+        this.gifsResultsQuery = null
         this.resetMessage(resetMessage)
       }
     },
