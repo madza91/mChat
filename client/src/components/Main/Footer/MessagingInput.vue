@@ -14,6 +14,12 @@
       @close="resetGifs"
       @send="sendGif"
     />
+    <CommandHelperPreview
+      v-if="commands.length > 0"
+      :data="commands"
+      :value="message"
+      @close="resetCommands"
+    />
     <b-row ref="footerInputWrapper">
       <div class="attachment-wrapper">
         <input
@@ -57,9 +63,11 @@ import { createNamespacedHelpers } from 'vuex'
 import apiMixin from '../../../mixins/ApiMixin'
 import detectMobileMixin from '../../../mixins/DetectMobileMixin'
 import AttachmentPreview from './components/AttachmentPreview'
+import CommandHelperPreview from './components/CommandHelperPreview'
 import GifPreview from './components/GifPreview'
 import FooterIcon from './components/FooterIcon'
 import ScrollingMixin from '../../../mixins/ScrollingMixin'
+import commandsMixin from '../../../mixins/CommandsMixin'
 const { mapActions: mapUiActions } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
@@ -71,7 +79,12 @@ export default {
       default: false
     }
   },
-  mixins: [apiMixin, detectMobileMixin, ScrollingMixin],
+  mixins: [
+    apiMixin,
+    detectMobileMixin,
+    commandsMixin,
+    ScrollingMixin
+  ],
   watch: {
     message: function (value) {
       this.selectedChat.data._input = value
@@ -90,6 +103,7 @@ export default {
     return {
       message: null,
       gifs: [],
+      commands: [],
       attachment: null,
       attachmentError: null,
       attachmentProgress: null,
@@ -98,6 +112,7 @@ export default {
     }
   },
   components: {
+    CommandHelperPreview,
     FooterIcon,
     AttachmentPreview,
     GifPreview
@@ -139,11 +154,7 @@ export default {
           }
         }
 
-        const onUploadProgress = progressEvent => {
-          this.attachmentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-        }
-
-        this.uploadImage(file, onUploadProgress).then(response => {
+        this.uploadImage(file, this.handleFileUploadProgress).then(response => {
           this.attachment = response.data
           this.attachmentUploaded = true
           this.attachmentProgress = null
@@ -153,6 +164,9 @@ export default {
           this.attachmentError = 'This image can not be uploaded, please try with another one.'
         })
       }
+    },
+    handleFileUploadProgress (progressEvent) {
+      this.attachmentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
     },
     sendGif (value) {
       this.attachment = value
@@ -177,11 +191,15 @@ export default {
             this.giphySearch(params).then(results => {
               this.gifs = results.data.data
             })
+            break
+          default:
+            this.commands = this.getCommands(this.message)
         }
       }
 
       if (value === '') {
         this.resetGifs()
+        this.resetCommands()
       }
     },
     checkFocus () {
@@ -211,9 +229,16 @@ export default {
         this.message = ''
       }
     },
+    resetCommands () {
+      if (this.commands.length > 0) {
+        this.commands = []
+        this.message = ''
+      }
+    },
     resetAllHints () {
       this.resetAttachment()
       this.resetGifs()
+      this.resetCommands()
     }
   }
 }
@@ -257,7 +282,7 @@ export default {
     padding: 8px 20px;
     font: 16px/22px "Lato", Arial, sans-serif;
     border-radius: 15px;
-    border: 1px solid #e3e3e3;
+    border: 1px solid var(--color-border);
     resize: none;
     -webkit-appearance: none;
     -moz-appearance: none;

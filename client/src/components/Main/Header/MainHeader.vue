@@ -40,8 +40,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import MainHeaderChannelItem from './MainHeaderChannelItem'
-import MainHeaderUserItem from './MainHeaderUserItem'
+import MainHeaderChannelItem from './components/MainHeaderChannelItem'
+import MainHeaderUserItem from './components/MainHeaderUserItem'
 const { mapActions: mapUiActions, mapGetters: mapUiGetters } = createNamespacedHelpers('ui')
 const { mapState: mapChatState, mapGetters: mapChatGetters, mapMutations: mapChatMutations } = createNamespacedHelpers('chat')
 

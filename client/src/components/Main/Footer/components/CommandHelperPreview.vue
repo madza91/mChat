@@ -2,8 +2,16 @@
   <b-row class="d-flex pb-2" style="flex-flow:nowrap">
     <FooterIcon icon="times" invisible />
     <div class="content-wrapper mr-2">
-      <span v-for="(item, index) in searchEmojis('')" :key="index">
-        {{ item.emoji }}
+      <div
+        v-for="(item, index) in data"
+        :key="index"
+        class="command"
+      >
+        <span>/{{ item.command }}</span>
+        <span class="command-param" v-if="description">{{ item.params }}</span>
+      </div>
+      <span class="description">
+        {{ description }}
       </span>
     </div>
     <FooterIcon icon="times" v-touch:start="() => $emit('close')" />
@@ -12,11 +20,24 @@
 
 <script>
 import FooterIcon from './FooterIcon'
-import EmojiMixin from '../../../../mixins/EmojiMixin'
 
 export default {
   name: 'CommandHelperPreview',
-  mixins: [EmojiMixin],
+  props: {
+    data: {
+      type: Array,
+      required: true
+    },
+    value: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    description () {
+      return this.data.length === 1 ? this.data[0].description : ''
+    }
+  },
   components: {
     FooterIcon
   }
@@ -30,10 +51,28 @@ export default {
     overflow: auto;
     white-space: nowrap;
 
-    span {
-      cursor: pointer;
-      margin: auto 10px;
+    .command {
+      margin: auto 5px;
       font-size: 12px;
+      padding: 5px 15px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+
+      @media screen and (prefers-color-scheme: dark) {
+        color: white;
+        background-color: var(--color-sidebar-background-dark);
+        border: 1px solid var(--color-border-dark);
+      }
+
+      .command-param:before {
+        content: ' '
+      }
+    }
+
+    .description {
+      margin: auto 20px;
+      font-size: 12px;
+      opacity: 0.8;
     }
   }
 

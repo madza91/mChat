@@ -17,6 +17,10 @@ export const chatMutations = {
     state.loggedInUser = userData
   },
 
+  setSettings (state, settingsData) {
+    state.settings = settingsData
+  },
+
   setNotAuthenticated (state) {
     state.authenticated = false
   },

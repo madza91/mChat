@@ -21,6 +21,9 @@ const state = {
   validation: null,
   channels: [],
   users: [],
+  settings: {
+    commands: {}
+  },
   selectedChat: {
     id: 1,
     isChannel: true,

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import UserItem from '../../Global/UserItem'
+import UserItem from '../../../Global/UserItem'
 
 export default {
   name: 'MainHeaderUserItem',

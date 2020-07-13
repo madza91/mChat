@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ChannelItem from '../../Global/ChannelItem'
+import ChannelItem from '../../../Global/ChannelItem'
 
 export default {
   name: 'MainHeaderChannelItem',

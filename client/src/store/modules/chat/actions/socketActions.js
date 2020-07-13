@@ -41,6 +41,7 @@ export const socketActions = {
 
   socket_serverWelcome ({ commit, dispatch }, data) {
     commit('setAuthenticated', data.user)
+    commit('setSettings', data.settings)
     dispatch('ui/insertHistoryUserID', data, { root: true })
   },
 
