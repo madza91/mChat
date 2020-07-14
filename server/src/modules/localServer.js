@@ -13,7 +13,7 @@ module.exports = {
         const isUser = !!userList.findBySocket(socketID)
         const status = isUser ? 200 : 404;
 
-        res.json({ isUser }, status)
+        res.status(status).json({ isUser })
       }
     )
 

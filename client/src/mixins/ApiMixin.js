@@ -9,10 +9,10 @@ export default {
     uploadImage (file, onUploadProgress) {
       const formData = new FormData()
       formData.append('image', file)
-      formData.append('user', this.loggedInUser.socket)
 
       return this.axios.post(process.env.VUE_APP_API_HOST + '/mchat/image', formData, {
         headers: {
+          Authorization: this.loggedInUser.socket,
           'Content-Type': 'multipart/form-data'
         },
         onUploadProgress
