@@ -143,11 +143,11 @@ export default {
     isDateNotSameAsPrevious (message) {
       const prevItemDate = message.prevItemDate
 
-      if (prevItemDate) {
-        return !moment(prevItemDate).isSame(message.date, 'day')
+      if (!prevItemDate && message.type === 'user') {
+        return true
       }
 
-      return false
+      return !moment(prevItemDate).isSame(message.date, 'day')
     },
     swipeHandler (direction) {
       const sideBar = this.getSidebar()
