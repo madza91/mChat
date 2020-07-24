@@ -26,6 +26,7 @@ global.serverBuild       = new Date();
 global.userList          = new Users();
 global.channelList       = new Channels();
 global.commandsList      = Commands;
+global.oAuthToken        = require('./modules/oauth')();
 global.io                = require('./modules/server')();
 
 /**
