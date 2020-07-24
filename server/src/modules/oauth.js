@@ -9,10 +9,12 @@ const { ClientCredentials } = require('simple-oauth2');
 module.exports = () => {
   debugging.log('Getting oAuth access token...')
   getOAuthToken().then((accessToken) => {
-    debugging.log('Successfully received oAuth Token');
+    if (accessToken) {
+      debugging.log('Successfully received oAuth Token');
 
-    // Set global variable
-    global.oAuthToken = accessToken
+      // Set global variable
+      global.oAuthToken = accessToken
+    }
   })
 }
 
@@ -33,6 +35,6 @@ getOAuthToken = async () => {
       scope: '*',
     })
   } catch (error) {
-    debugging.log('Error getting oAuth token:', error.message);
+    console.log('Error getting oAuth token:', error.code);
   }
 }
