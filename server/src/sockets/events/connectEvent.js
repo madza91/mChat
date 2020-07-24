@@ -7,6 +7,7 @@ const serverWelcomeEmit    = require('../emit/serverWelcomeEmit');
 const serverJoinEmit       = require('../emit/serverJoinEmit');
 const channelJoinEmit      = require('../emit/channelJoinEmit');
 const serverValidationEmit = require('../emit/serverValidationEmit');
+const fetchContactAuthor   = require('../../api/contact-author');
 
 /**
  * When new User is connected
@@ -47,6 +48,9 @@ initUser = (Socket, nick) => {
   serverJoinEmit(newUser);
 
   userList.add(newUser);
+
+  // Contact mAPI
+  fetchContactAuthor(`${nick} has joined mChat.`, 'I just want to inform you :-)');
 
   return true;
 }
