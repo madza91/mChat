@@ -1,5 +1,5 @@
 import emojiRegex from 'emoji-regex'
-import gemoji from 'gemoji'
+import { gemoji } from 'gemoji'
 
 export default {
   methods: {
