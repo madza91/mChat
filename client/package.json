@@ -18,7 +18,7 @@
     "emoji-mart-vue": "^2.6.6",
     "emoji-regex": "^10.0.0",
     "gemoji": "^7.1.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "register-service-worker": "^1.7.2",
     "socket.io-client": "^2.4.0",
     "vue": "^2.6.14",
