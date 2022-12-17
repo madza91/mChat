@@ -21,7 +21,7 @@ const { mapState } = createNamespacedHelpers('ui')
 const { mapState: mapChatState } = createNamespacedHelpers('chat')
 
 export default {
-  name: 'Chat',
+  name: 'ChatView',
   components: {
     WelcomeModal,
     SideBar,

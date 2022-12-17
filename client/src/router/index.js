@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Chat from '../views/Chat.vue'
+import Chat from '../views/ChatView.vue'
 
 Vue.use(VueRouter)
 

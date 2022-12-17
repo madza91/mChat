@@ -30,12 +30,11 @@ export default {
 <style scoped lang="scss">
   @import '../../../../assets/styles';
   $padding: 10px;
-  $icon-size: 40px;
+  $icon-size: 25px;
   $icon-size-mobile: 28px;
 
   .icon {
     margin: auto;
-    width: $icon-size;
     height: $icon-size;
     padding: 8px;
     cursor: pointer;
