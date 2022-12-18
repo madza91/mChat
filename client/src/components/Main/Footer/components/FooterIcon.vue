@@ -31,7 +31,7 @@ export default {
   @import '../../../../assets/styles';
   $padding: 10px;
   $icon-size: 25px;
-  $icon-size-mobile: 28px;
+  $icon-size-mobile: 20px;
 
   .icon {
     margin: auto;
