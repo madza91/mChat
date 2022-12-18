@@ -29,6 +29,7 @@ export default {
 <style scoped lang="scss">
   .channel-title-wrapper {
     display: flex;
+    flex-grow: 1;
   }
 
   .channel-icon {
@@ -37,7 +38,7 @@ export default {
     margin: auto;
 
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-      color: #86BB71;
+      color: var(--color-user-status-online);
     }
   }
 
