@@ -9,7 +9,7 @@
 }
 
 /* Custom colors */
-$mColorPrimary: #88c871;
+$mColorPrimary: #88C871;
 $mColorDefault: #F4F4F4;
 $mColorDefaultDark: #161616;
 $mColorBorder: #DBDBDB;
@@ -27,6 +27,9 @@ $mColorMessageRightDark: #185F54;
 
 $mColorSidebarBackground: #444753;
 $mColorSidebarBackgroundDark: #272729;
+
+$mColorModalBackground: #F4F4F4;
+$mColorModalBackgroundDark: #272729;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -46,6 +49,8 @@ $theme-colors: map-merge(
   'color-message-right-dark': $mColorMessageRightDark,
   'color-sidebar-background': $mColorSidebarBackground,
   'color-sidebar-background-dark': $mColorSidebarBackgroundDark,
+  'color-modal-background': $mColorModalBackground,
+  'color-modal-background-dark': $mColorModalBackgroundDark,
 ),
 $theme-colors
 );

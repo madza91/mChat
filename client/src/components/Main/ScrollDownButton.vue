@@ -29,7 +29,7 @@ export default {
   box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.3);
 
   @media screen and (prefers-color-scheme: dark) {
-    color: white;
+    color: var(--color-default);
     background-color: var(--color-message-left-dark);
   }
 }

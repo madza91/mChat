@@ -85,7 +85,7 @@ export default {
             display: flex;
             min-height: 100px;
             min-width: 300px;
-            background-color: white;
+            background-color: var(--color-default);
             align-items: center;
             justify-content: center;
           }
@@ -98,7 +98,6 @@ export default {
     }
 
     .b-icon {
-      color: #bbb;
       cursor: pointer;
       font-size: 25px;
       opacity: 0.5;

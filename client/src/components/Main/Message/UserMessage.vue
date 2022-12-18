@@ -115,7 +115,7 @@ export default {
 @import '../../../assets/styles';
 .message-content {
   display: table;
-  color: black;
+  color: var(--color-default-dark);
   padding: 2px;
   line-height: 26px;
   font-size: 14px;
@@ -127,7 +127,7 @@ export default {
   box-shadow: 5px 5px 6px -5px rgba(0, 0, 0, 0.3);
 
   @media screen and (prefers-color-scheme: dark) {
-    color: white;
+    color: var(--color-default);
   }
 
   @include media-breakpoint-down(xs) {

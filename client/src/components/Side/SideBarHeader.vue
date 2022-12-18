@@ -36,7 +36,7 @@ export default {
     padding: 10px;
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
     }
   }
 
@@ -56,7 +56,7 @@ export default {
   }
 
   .user-fullname {
-    color: white;
+    color: var(--color-default);
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;

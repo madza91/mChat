@@ -1,11 +1,11 @@
-<template functional>
+<template>
   <div class="channel-title-wrapper">
     <font-awesome-icon
       icon="hashtag"
       class="icon channel-icon"
     />
-    <div class="channel-title" :class="{'channel-title-dark': props.dark}">
-      <span>{{ props.title }}</span>
+    <div class="channel-title" :class="{ 'channel-title-dark': dark }">
+      <span>{{ title }}</span>
     </div>
   </div>
 </template>
@@ -38,12 +38,12 @@ export default {
     margin: auto;
 
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-      color: var(--color-user-status-online);
+      color: #86BB71;
     }
   }
 
   .channel-title {
-    color: white;
+    color: var(--color-default);
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
@@ -52,10 +52,10 @@ export default {
   }
 
   .channel-title-dark {
-    color: black;
+    color: var(--color-default-dark);
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
     }
   }
 </style>

@@ -267,9 +267,9 @@ export default {
     border-top: 1px solid var(--color-border);
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
       border-top: 1px solid var(--color-border-dark);
-      background-color: var(--color-default-dark)
+      background-color: var(--color-default-dark);
     }
 
     @include media-breakpoint-down(xs) {
@@ -300,7 +300,7 @@ export default {
     appearance: none;
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
       background-color: var(--color-sidebar-background-dark);
       border: 1px solid var(--color-border-dark);
     }

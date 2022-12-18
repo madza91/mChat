@@ -34,7 +34,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .message-wrapper {
     text-align: center;
     margin: 4px 0 9px;
@@ -50,14 +50,14 @@ export default {
   }
 
   .message-info a {
-    color: black;
+    color: var(--color-default-dark);
     border-radius: 5px;
-    background-color: #cfd0c9;
+    background-color: #CFD0C9;
     padding: 1px 5px;
   }
 
   .message-time {
-    color: #a8aab1;
+    color: #A8AAB1;
     padding-left: 6px;
     font-size: 10px;
   }

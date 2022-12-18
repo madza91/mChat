@@ -123,7 +123,7 @@ export default {
       border-radius: 20px;
       background-color: var(--color-sidebar-background);
       padding: 4px 10px;
-      color: white;
+      color: var(--color-default);
       text-align: center;
 
       @media screen and (prefers-color-scheme: dark) {

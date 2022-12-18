@@ -67,11 +67,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   #textarea {
-    background-color: white;
+    background-color: var(--color-default);
     font-size: 14px;
   }
+
   .build-number {
     margin-top: 5px;
     font-size: 12px;

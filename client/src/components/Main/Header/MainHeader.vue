@@ -141,9 +141,9 @@ export default {
     }
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
       border-bottom: 1px solid var(--color-border-dark);
-      background-color: var(--color-default-dark)
+      background-color: var(--color-default-dark);
     }
 
     @include media-breakpoint-down(xs) {

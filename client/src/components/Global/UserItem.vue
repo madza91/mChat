@@ -54,7 +54,7 @@ export default {
   }
 
   .user-name {
-    color: white;
+    color: var(--color-default);
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
@@ -62,15 +62,15 @@ export default {
     padding-left: 4px;
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
     }
   }
 
   .user-name-dark {
-    color: black;
+    color: var(--color-default-dark);
 
     @media screen and (prefers-color-scheme: dark) {
-      color: white;
+      color: var(--color-default);
     }
   }
 

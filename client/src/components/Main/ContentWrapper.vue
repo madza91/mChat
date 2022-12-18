@@ -220,7 +220,7 @@ export default {
     background-image: url('../../assets/images/sports.png');
 
     @media screen and (prefers-color-scheme: dark) {
-      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/sports.png')
+      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../../assets/images/sports.png');
     }
   }
 </style>

@@ -35,7 +35,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .control-sidebar {
     position: absolute;
     height: 100%;
@@ -43,8 +43,8 @@ export default {
     right: calc(-1 * var(--sidebar-width));
     width: var(--sidebar-width);
     transition: right .2s ease-in-out;
-    color: white;
-    background-color: #222d32;
+    color: var(--color-default);
+    background-color: #222D32;
     z-index: 1050;
   }
 
